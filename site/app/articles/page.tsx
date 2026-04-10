@@ -244,7 +244,7 @@ function ArticleRow({ article }: { article: typeof ARTICLES[0] }) {
       onMouseEnter={e => {
         const el = e.currentTarget as HTMLElement
         el.style.background = 'var(--bg-surface)'
-        el.style.borderLeftColor = clusterConfig?.color + '60' ?? 'var(--border-base)'
+        el.style.borderLeftColor = (clusterConfig?.color ?? '#D4845A') + '60'
       }}
       onMouseLeave={e => {
         const el = e.currentTarget as HTMLElement
