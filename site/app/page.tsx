@@ -25,6 +25,17 @@ const ENTRY_POINTS = [
     meta: '8 concepts · ~40 min',
   },
   {
+    eyebrow: 'For administrators',
+    title: 'Setting up for your team?',
+    description: "You've been asked to get Claude working for the whole organization. Evaluation, deployment, and ongoing management — in the right order.",
+    cta: 'Admin learning path',
+    href: '/learn/claude-for-admins',
+    accent: '#5B8DD9',
+    accentBg: 'rgba(91,141,217,0.08)',
+    icon: '◫',
+    meta: '10 concepts · ~54 min',
+  },
+  {
     eyebrow: 'Going deeper',
     title: 'Already using AI at work?',
     description: 'Decision guides and failure patterns for operators past the basics — when to build vs. buy, what actually goes wrong, and what good looks like.',
@@ -123,7 +134,7 @@ export default async function HomePage() {
           Where do you want to start?
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }} className="entry-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }} className="entry-grid">
           {ENTRY_POINTS.map(ep => (
             <Link
               key={ep.href}
@@ -251,10 +262,10 @@ export default async function HomePage() {
       </section>
 
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
           .entry-grid { grid-template-columns: 1fr !important; }
         }
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media (min-width: 641px) and (max-width: 1100px) {
           .entry-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         .entry-card:hover {
