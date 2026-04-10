@@ -22,6 +22,7 @@ export type ArticleAngle =
   | 'role'
   | 'absence'
   | 'history'
+  | 'field-note'
 
 export type Term = {
   id: string
@@ -52,7 +53,9 @@ export type Article = {
   title: string
   angle: ArticleAngle
   body: string
+  excerpt: string | null
   read_time: number
+  tier: number
   published: boolean
   created_at: string
 }

@@ -3,12 +3,9 @@ import type { Metadata } from 'next'
 import { CLUSTER_MAP, AUDIENCE_LABELS, ANGLE_LABELS } from '@/lib/clusters'
 import type { Term } from '@/lib/types'
 
-import { getTerm, getRelatedTerms, getTermSlugs } from '@/lib/db'
+import { getTerm, getRelatedTerms } from '@/lib/db'
 
-export async function generateStaticParams() {
-  const slugs = await getTermSlugs()
-  return slugs.map(slug => ({ slug }))
-}
+export const dynamic = 'force-dynamic'
 
 // ── Metadata ───────────────────────────────────────────────
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -83,7 +80,7 @@ function RelatedTermCard({ term }: { term: Pick<Term, 'slug' | 'name' | 'cluster
         textDecoration: 'none',
         transition: 'border-color 120ms ease',
       }}
-      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = config?.color + '50' ?? 'var(--border-base)' }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = (config?.color ?? '#D4845A') + '50' }}
       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-base)' }}
     >
       <span
