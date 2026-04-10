@@ -6,7 +6,6 @@ import { getArticle, getArticlesForTerm } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
-// Configure marked for safe output
 marked.setOptions({ breaks: true })
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -41,7 +40,12 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   const otherArticles = relatedArticles.filter(a => a.slug !== article.slug)
   const clusterConfig = CLUSTER_MAP[article.cluster]
   const angleLabel = ANGLE_LABELS[article.angle] ?? article.angle
-  const bodyHtml = marked(article.body ?? '') as string
+  const rawHtml = marked(article.body ?? '') as string
+  // Open external links in new tab
+  const bodyHtml = rawHtml.replace(
+    /<a href="(https?:\/\/[^"]+)"/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer"'
+  )
 
   return (
     <div style={{ width: 'var(--container-wide)', margin: '0 auto', padding: 'clamp(40px, 6vw, 72px) 0 var(--section-y)' }}>

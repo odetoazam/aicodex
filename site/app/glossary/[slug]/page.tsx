@@ -2,7 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { CLUSTER_MAP, AUDIENCE_LABELS, ANGLE_LABELS } from '@/lib/clusters'
 import RelatedTermCard from '@/components/RelatedTermCard'
-import { getTerm, getRelatedTerms } from '@/lib/db'
+import { getTerm, getRelatedTerms, getArticlesForTerm } from '@/lib/db'
+import { OFFICIAL_RESOURCES, getSourceLabel } from '@/lib/resources'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,7 +62,11 @@ export default async function TermPage({ params }: { params: { slug: string } })
     )
   }
 
-  const relatedTerms = await getRelatedTerms(term.related_terms)
+  const [relatedTerms, termArticles] = await Promise.all([
+    getRelatedTerms(term.related_terms),
+    getArticlesForTerm(term.id),
+  ])
+  const officialResources = OFFICIAL_RESOURCES[term.slug] ?? []
   const clusterConfig = CLUSTER_MAP[term.cluster]
 
   return (
@@ -124,22 +129,54 @@ export default async function TermPage({ params }: { params: { slug: string } })
             </p>
           </div>
 
-          {/* Articles per angle */}
-          {term.angles.filter(a => a !== 'def').map(angle => (
-            <section key={angle} style={{ marginBottom: '48px' }}>
+          {/* Articles */}
+          {termArticles.length > 0 && (
+            <section style={{ marginBottom: '48px' }}>
               <h2
                 style={{
                   fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', color: 'var(--text-primary)',
-                  marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid var(--border-muted)',
+                  marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--border-muted)',
                 }}
               >
-                {ANGLE_LABELS[angle] ?? angle}
+                Articles
               </h2>
-              <div style={{ padding: '24px', borderRadius: '8px', border: '1px dashed var(--border-base)', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontSize: '14px', textAlign: 'center' as const }}>
-                Article coming soon
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '12px' }}>
+                {termArticles.map(a => {
+                  const aCluster = CLUSTER_MAP[a.cluster]
+                  const aAngle = ANGLE_LABELS[a.angle] ?? a.angle
+                  return (
+                    <Link
+                      key={a.slug}
+                      href={`/articles/${a.slug}`}
+                      style={{ textDecoration: 'none', display: 'block' }}
+                    >
+                      <div style={{
+                        padding: '18px 20px', borderRadius: '8px', border: '1px solid var(--border-base)',
+                        background: 'var(--bg-surface)', borderLeft: `3px solid ${aCluster?.color ?? 'var(--accent)'}40`,
+                        transition: 'border-left-color 120ms ease, background 120ms ease',
+                      }}>
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'center' }}>
+                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+                            {aAngle}
+                          </span>
+                          <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>·</span>
+                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)' }}>{a.read_time} min</span>
+                        </div>
+                        <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.25, margin: '0 0 6px' }}>
+                          {a.title}
+                        </p>
+                        {a.excerpt && (
+                          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.55, margin: 0 }}>
+                            {a.excerpt}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                })}
               </div>
             </section>
-          ))}
+          )}
         </article>
 
         {/* Sidebar */}
@@ -168,6 +205,35 @@ export default async function TermPage({ params }: { params: { slug: string } })
               </p>
               <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '6px' }}>
                 {relatedTerms.map(t => <RelatedTermCard key={t.slug} term={t} />)}
+              </div>
+            </div>
+          )}
+
+          {/* Official resources */}
+          {officialResources.length > 0 && (
+            <div style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '12px' }}>
+                Official resources
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
+                {officialResources.map(r => (
+                  <a
+                    key={r.url}
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', display: 'block' }}
+                  >
+                    <div style={{ padding: '10px 12px', borderRadius: '6px', border: '1px solid var(--border-muted)', background: 'var(--bg-subtle)' }}>
+                      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '2px', textTransform: 'uppercase' as const, letterSpacing: '0.04em' }}>
+                        {getSourceLabel(r.source)}
+                      </p>
+                      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent)', margin: 0 }}>
+                        {r.label} ↗
+                      </p>
+                    </div>
+                  </a>
+                ))}
               </div>
             </div>
           )}
