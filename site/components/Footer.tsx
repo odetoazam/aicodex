@@ -10,8 +10,8 @@ const FOOTER_LINKS = {
   ],
   'Learn': [
     { label: 'Newsletter', href: '/newsletter' },
-    { label: 'Courses', href: '/courses' },
-    { label: 'From the Field', href: '/articles?type=field-notes' },
+    { label: 'Updates', href: '/updates' },
+    { label: 'From the Field', href: '/articles?angle=field-note' },
   ],
   'About': [
     { label: 'About', href: '/about' },
