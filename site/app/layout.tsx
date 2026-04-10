@@ -5,11 +5,11 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'AI Codex — The knowledge graph for building with AI',
+    default: 'AI Codex — Learn to operate with AI',
     template: '%s | AI Codex',
   },
   description:
-    'A structured knowledge graph mapping AI concepts to business decisions. Built for founders, operators, and teams who need to understand and adopt AI without the hype.',
+    'Clear explanations of every AI concept that matters, and what each one means for your work. Built for operators, founders, and teams putting AI to use.',
   metadataBase: new URL('https://aicodex.to'),
   openGraph: {
     type: 'website',

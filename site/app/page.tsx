@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import NewsletterCTA from '@/components/NewsletterCTA'
-import ClusterCard from '@/components/ClusterCard'
 import ArticleCard from '@/components/ArticleCard'
 import { CLUSTERS } from '@/lib/clusters'
 import { getFeaturedArticles, getFieldNotes, getClusterCounts } from '@/lib/db'
@@ -9,7 +8,7 @@ import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Codex — The knowledge graph for building with AI',
+  title: 'AI Codex — Learn to operate with AI',
 }
 
 export default async function HomePage() {
@@ -29,8 +28,6 @@ export default async function HomePage() {
           padding: 'clamp(72px, 12vw, 140px) 0 clamp(64px, 10vw, 112px)',
         }}
       >
-        <p className="eyebrow" style={{ marginBottom: '24px' }}>Knowledge Graph</p>
-
         <h1
           style={{
             fontFamily: 'var(--font-serif)',
@@ -43,7 +40,7 @@ export default async function HomePage() {
             marginBottom: '24px',
           }}
         >
-          Learn to build<br />
+          Learn to operate<br />
           <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>with</em> AI.
         </h1>
 
@@ -52,13 +49,13 @@ export default async function HomePage() {
             fontFamily: 'var(--font-sans)',
             fontSize: 'var(--text-lg)',
             color: 'var(--text-muted)',
-            maxWidth: '50ch',
+            maxWidth: '48ch',
             lineHeight: 1.65,
             marginBottom: '40px',
           }}
         >
-          A structured knowledge graph mapping AI concepts to business decisions.
-          No hype — just what you actually need to know, and how it connects.
+          Clear explanations of every AI concept that matters —
+          and what each one actually means for your work.
         </p>
 
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -78,7 +75,7 @@ export default async function HomePage() {
               fontWeight: 500,
             }}
           >
-            Browse the glossary <span>→</span>
+            Browse the glossary →
           </Link>
           <Link
             href="/articles"
@@ -98,48 +95,43 @@ export default async function HomePage() {
             Read articles
           </Link>
         </div>
-
-        <div
-          style={{
-            display: 'flex',
-            gap: '32px',
-            marginTop: '56px',
-            paddingTop: '40px',
-            borderTop: '1px solid var(--border-muted)',
-            flexWrap: 'wrap',
-          }}
-        >
-          {[
-            { value: '150+', label: 'Terms mapped' },
-            { value: '8', label: 'Clusters' },
-            { value: 'Claude', label: 'First' },
-          ].map(stat => (
-            <div key={stat.label}>
-              <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
-                {stat.value}
-              </p>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
       </section>
 
-      {/* ── Browse by Cluster ─────────────────────────────── */}
+      {/* ── Browse by Topic ───────────────────────────────── */}
       <section style={{ width: 'var(--container)', margin: '0 auto', paddingBottom: 'var(--section-y)' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '32px' }}>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-2xl)', color: 'var(--text-primary)' }}>
-            Browse by cluster
-          </h2>
-          <Link href="/glossary" style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+            Browse by topic
+          </p>
+          <Link href="/glossary" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent)', textDecoration: 'none' }}>
             View all →
           </Link>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '12px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {CLUSTERS.map(cluster => (
-            <ClusterCard key={cluster.name} cluster={cluster} count={clusterCounts[cluster.name] ?? 0} />
+            <Link
+              key={cluster.name}
+              href={`/glossary?cluster=${encodeURIComponent(cluster.name)}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '7px 14px',
+                borderRadius: '6px',
+                border: '1px solid var(--border-base)',
+                background: 'var(--bg-surface)',
+                textDecoration: 'none',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+                color: 'var(--text-secondary)',
+                transition: 'border-color 150ms ease, color 150ms ease',
+              }}
+              className="cluster-pill"
+            >
+              <span style={{ color: cluster.color, fontSize: '12px' }}>{cluster.icon}</span>
+              {cluster.name}
+            </Link>
           ))}
         </div>
       </section>
@@ -212,3 +204,5 @@ export default async function HomePage() {
     </div>
   )
 }
+
+
