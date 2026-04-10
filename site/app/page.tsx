@@ -35,7 +35,7 @@ export default async function HomePage() {
           style={{
             fontFamily: 'var(--font-serif)',
             fontSize: 'var(--text-4xl)',
-            fontWeight: 400,
+            fontWeight: 600,
             color: 'var(--text-primary)',
             lineHeight: 1.05,
             letterSpacing: '-0.02em',
@@ -115,7 +115,7 @@ export default async function HomePage() {
             { value: 'Claude', label: 'First' },
           ].map(stat => (
             <div key={stat.label}>
-              <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', color: 'var(--text-primary)', marginBottom: '4px' }}>
+              <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
                 {stat.value}
               </p>
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>

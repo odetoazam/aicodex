@@ -100,7 +100,7 @@ export default async function TermPage({ params }: { params: { slug: string } })
               ))}
             </div>
 
-            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-3xl)', fontWeight: 400, color: 'var(--text-primary)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '24px' }}>
+            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-3xl)', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '24px' }}>
               {term.name}
             </h1>
 

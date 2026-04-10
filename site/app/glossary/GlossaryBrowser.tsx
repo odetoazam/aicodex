@@ -65,7 +65,7 @@ function TermRow({ term }: { term: Term }) {
               fontFamily: 'var(--font-serif)',
               fontSize: '17px',
               color: 'var(--text-primary)',
-              fontWeight: 400,
+              fontWeight: 600,
             }}
           >
             {term.name}
@@ -176,7 +176,7 @@ export default function GlossaryBrowser({ terms }: { terms: Term[] }) {
           style={{
             fontFamily: 'var(--font-serif)',
             fontSize: 'var(--text-3xl)',
-            fontWeight: 400,
+            fontWeight: 600,
             color: 'var(--text-primary)',
             lineHeight: 1.1,
             letterSpacing: '-0.02em',

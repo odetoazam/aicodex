@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* ── Reset ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,7 +41,7 @@ a { color: inherit; }
   --c-tools:      #D4A45A;
 
   /* Typography */
-  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans:  'Inter', system-ui, sans-serif;
   --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
 
@@ -60,10 +60,35 @@ a { color: inherit; }
   --container-wide: min(1200px, 100% - clamp(40px, 10vw, 96px));
   --section-y: clamp(64px, 10vw, 120px);
 
+  /* Nav */
+  --nav-bg: rgba(12,12,11,0.88);
+
   /* Motion */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 120ms;
   --duration-base: 200ms;
+}
+
+/* ── Light mode ─────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-base:     #F7F6F2;
+  --bg-surface:  #EEECEA;
+  --bg-subtle:   #E5E3DF;
+  --bg-overlay:  #DCDAD6;
+
+  --border-base:  #D0CEC9;
+  --border-muted: #DAD8D3;
+
+  --text-primary:   #1A1916;
+  --text-secondary: #4A4845;
+  --text-muted:     #9A9891;
+  --text-inverse:   #F7F6F2;
+
+  --accent:       #C4723A;
+  --accent-muted: rgba(196,114,58,0.12);
+  --accent-hover: #B36530;
+
+  --nav-bg: rgba(247,246,242,0.92);
 }
 
 /* ── Base ───────────────────────────────────────────────── */
@@ -78,7 +103,7 @@ html, body {
 /* ── Typography ─────────────────────────────────────────── */
 h1, h2, h3, h4 {
   font-family: var(--font-serif);
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.01em;
   color: var(--text-primary);

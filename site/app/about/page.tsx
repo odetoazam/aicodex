@@ -22,7 +22,7 @@ export default function AboutPage() {
         style={{
           fontFamily: 'var(--font-serif)',
           fontSize: 'var(--text-3xl)',
-          fontWeight: 400,
+          fontWeight: 600,
           color: 'var(--text-primary)',
           lineHeight: 1.1,
           letterSpacing: '-0.02em',

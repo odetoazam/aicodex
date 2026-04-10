@@ -58,7 +58,7 @@ export default function ArticleRow({ article }: { article: Article }) {
             {new Date(article.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} · {article.read_time} min
           </span>
         </div>
-        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 400, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: '8px' }}>
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.3, marginBottom: '8px' }}>
           {article.title}
         </h3>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>

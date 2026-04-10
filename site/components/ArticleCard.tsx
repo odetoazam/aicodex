@@ -59,7 +59,7 @@ export default function ArticleCard({ article }: { article: Article }) {
           {tierLabel}
         </span>
       </div>
-      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 400, color: 'var(--text-primary)', lineHeight: 1.3 }}>
+      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.3 }}>
         {article.title}
       </h3>
       <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0, flex: 1 }}>

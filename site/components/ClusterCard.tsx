@@ -43,7 +43,7 @@ export default function ClusterCard({
         style={{
           fontFamily: 'var(--font-serif)',
           fontSize: '16px',
-          fontWeight: 400,
+          fontWeight: 600,
           color: 'var(--text-primary)',
           marginBottom: '8px',
           lineHeight: 1.3,

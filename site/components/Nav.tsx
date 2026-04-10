@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import ThemeToggle from './ThemeToggle'
 
 const NAV_LINKS = [
   { label: 'Glossary', href: '/glossary' },
@@ -22,7 +23,7 @@ export default function Nav() {
         top: 0,
         zIndex: 50,
         borderBottom: '1px solid var(--border-muted)',
-        background: 'rgba(12,12,11,0.85)',
+        background: 'var(--nav-bg)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
       }}
@@ -114,6 +115,8 @@ export default function Nav() {
               </Link>
             )
           })}
+
+          <ThemeToggle />
 
           <Link
             href="/newsletter"
