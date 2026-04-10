@@ -83,6 +83,31 @@ export const OFFICIAL_RESOURCES: Record<string, ExternalResource[]> = {
   'hallucination': [
     { label: 'Reducing hallucinations', url: 'https://docs.anthropic.com/en/docs/test-and-evaluate/strengthen-guardrails/reduce-hallucinations', source: 'docs' },
   ],
+  'managed-agents': [
+    { label: 'Managed Agents docs', url: 'https://docs.anthropic.com/en/docs/agents-and-tools/managed-agents', source: 'docs' },
+  ],
+  'claude-cowork': [
+    { label: 'Cowork overview', url: 'https://support.anthropic.com/en/articles/claude-cowork', source: 'support' },
+  ],
+  'dispatch': [
+    { label: 'Dispatch overview', url: 'https://support.anthropic.com/en/articles/claude-dispatch', source: 'support' },
+  ],
+  'claude-memory': [
+    { label: 'Memory in Claude', url: 'https://support.anthropic.com/en/articles/claude-memory', source: 'support' },
+  ],
+  'deep-research': [
+    { label: 'Deep Research', url: 'https://support.anthropic.com/en/articles/claude-deep-research', source: 'support' },
+  ],
+  'computer-use': [
+    { label: 'Computer Use docs', url: 'https://docs.anthropic.com/en/docs/agents-and-tools/computer-use', source: 'docs' },
+  ],
+  'claude-plans': [
+    { label: 'Claude pricing', url: 'https://claude.ai/pricing', source: 'docs' },
+    { label: 'Claude for Teams', url: 'https://www.anthropic.com/claude/team', source: 'docs' },
+  ],
+  'token': [
+    { label: 'Models and pricing', url: 'https://docs.anthropic.com/en/docs/about-claude/models/overview', source: 'docs' },
+  ],
 }
 
 const SOURCE_LABELS: Record<ExternalResource['source'], string> = {
