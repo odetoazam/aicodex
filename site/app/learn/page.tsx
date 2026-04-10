@@ -17,8 +17,8 @@ const PATHS = [
     icon: '◐',
     steps: 7,
     time: '~35 min',
-    tag: 'Coming soon',
-    disabled: true,
+    tag: 'Available now',
+    disabled: false,
   },
   {
     href: '/learn/getting-your-team-started',
