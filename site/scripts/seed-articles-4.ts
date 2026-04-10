@@ -526,7 +526,7 @@ None of these habits are technically sophisticated. They're operational discipli
 
 async function main() {
   console.log('Fetching terms...')
-  const termNames = [...new Set(ARTICLES.map(a => a.termName))]
+  const termNames = Array.from(new Set(ARTICLES.map(a => a.termName)))
   const { data: terms, error: tErr } = await sb
     .from('terms')
     .select('id, slug, name, cluster')

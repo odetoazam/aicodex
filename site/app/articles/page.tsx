@@ -2,20 +2,30 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import ArticleRow from '@/components/ArticleRow'
 import { getAllArticles } from '@/lib/db'
+import type { Article } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Articles — AI Codex',
-  description: 'Cross-concept deep dives, operator dispatches, and the questions nobody else is asking about AI.',
+  description: 'Decision guides, failure patterns, and what implementing AI actually looks like. Written for operators, not engineers.',
 }
+
+// Pinned slugs — always surface these first
+const PINNED = ['claude-operator-habits', 'running-your-first-ai-pilot']
 
 export default async function ArticlesPage() {
   const articles = await getAllArticles()
 
-  const absence     = articles.filter(a => a.tier === 5)
-  const crossConcept = articles.filter(a => a.tier === 3)
-  const field       = articles.filter(a => a.angle === 'field-note')
+  const bySlug = Object.fromEntries(articles.map(a => [a.slug, a]))
+
+  const pinned   = PINNED.map(s => bySlug[s]).filter(Boolean) as Article[]
+  const role     = articles.filter(a => a.angle === 'role'      && !PINNED.includes(a.slug))
+  const failure  = articles.filter(a => a.angle === 'failure'   && !PINNED.includes(a.slug))
+  const field    = articles.filter(a => a.angle === 'field-note'&& !PINNED.includes(a.slug))
+  const concepts = articles.filter(a =>
+    ['def', 'process', 'history', 'cross', 'absence'].includes(a.angle) && !PINNED.includes(a.slug)
+  )
 
   return (
     <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(48px, 8vw, 96px) 0 var(--section-y)' }}>
@@ -32,13 +42,14 @@ export default async function ArticlesPage() {
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
             marginBottom: '16px',
-            maxWidth: '16ch',
+            maxWidth: '18ch',
           }}
         >
-          Beyond the definition
+          Practical AI for operators.
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-muted)', maxWidth: '52ch', lineHeight: 1.65 }}>
-          Cross-concept deep dives, operator dispatches, and the questions nobody else is asking. This is where the glossary becomes judgment.
+          Decision guides, failure patterns, and what implementing AI actually looks like.
+          Written for people doing the work, not people writing about it.
         </p>
       </div>
 
@@ -48,71 +59,105 @@ export default async function ArticlesPage() {
         </p>
       )}
 
-      {/* Absence — flagship */}
-      {absence.length > 0 && (
-        <section style={{ marginBottom: '72px' }}>
-          <SectionHeader
-            badge="Absence"
-            badgeColor="#D45A7B"
-            badgeBg="rgba(212,90,123,0.1)"
-            description="What the AI industry doesn't measure or say"
-          />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            {absence.map(a => <ArticleRow key={a.slug} article={a} />)}
-          </div>
-        </section>
+      {/* Start here */}
+      {pinned.length > 0 && (
+        <Section
+          label="Start here"
+          description="If you're new to implementing AI at your company, read these first."
+          accent="#D4845A"
+          accentBg="rgba(212,132,90,0.1)"
+        >
+          {pinned.map(a => <ArticleRow key={a.slug} article={a} featured />)}
+        </Section>
       )}
 
-      {/* Cross-Concept */}
-      {crossConcept.length > 0 && (
-        <section style={{ marginBottom: '72px' }}>
-          <SectionHeader
-            badge="Cross-Concept"
-            badgeColor="#5AAFD4"
-            badgeBg="rgba(90,175,212,0.1)"
-            description="Where two concepts meet and something new emerges"
-          />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            {crossConcept.map(a => <ArticleRow key={a.slug} article={a} />)}
-          </div>
-        </section>
+      {/* Making the call */}
+      {role.length > 0 && (
+        <Section
+          label="Making the call"
+          description="Decision guides for the questions that actually matter."
+          accent="#5AAFD4"
+          accentBg="rgba(90,175,212,0.1)"
+        >
+          {role.map(a => <ArticleRow key={a.slug} article={a} />)}
+        </Section>
       )}
 
-      {/* From the Field */}
+      {/* What goes wrong */}
+      {failure.length > 0 && (
+        <Section
+          label="What goes wrong"
+          description="The failure patterns that catch most teams off guard."
+          accent="#D45A7B"
+          accentBg="rgba(212,90,123,0.1)"
+        >
+          {failure.map(a => <ArticleRow key={a.slug} article={a} />)}
+        </Section>
+      )}
+
+      {/* In practice */}
       {field.length > 0 && (
-        <section>
-          <SectionHeader
-            badge="From the Field"
-            badgeColor="var(--accent)"
-            badgeBg="var(--accent-muted)"
-            description="Operator dispatches — what it actually looks like to build with AI"
-          />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            {field.map(a => <ArticleRow key={a.slug} article={a} />)}
-          </div>
-        </section>
+        <Section
+          label="In practice"
+          description="What it actually looks like when teams implement AI."
+          accent="#4CAF7D"
+          accentBg="rgba(76,175,125,0.1)"
+        >
+          {field.map(a => <ArticleRow key={a.slug} article={a} />)}
+        </Section>
       )}
+
+      {/* The concepts */}
+      {concepts.length > 0 && (
+        <Section
+          label="The concepts"
+          description="Clear explanations of the ideas behind the tools."
+          accent="var(--text-muted)"
+          accentBg="var(--bg-subtle)"
+          muted
+        >
+          {concepts.map(a => <ArticleRow key={a.slug} article={a} />)}
+        </Section>
+      )}
+
     </div>
   )
 }
 
-function SectionHeader({ badge, badgeColor, badgeBg, description }: {
-  badge: string; badgeColor: string; badgeBg: string; description: string
+function Section({
+  label, description, accent, accentBg, muted = false, children,
+}: {
+  label: string
+  description: string
+  accent: string
+  accentBg: string
+  muted?: boolean
+  children: React.ReactNode
 }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-      <span
-        style={{
+    <section style={{ marginBottom: '72px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+        <span style={{
           padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500,
           letterSpacing: '0.05em', textTransform: 'uppercase' as const,
-          color: badgeColor, background: badgeBg, fontFamily: 'var(--font-sans)',
-        }}
-      >
-        {badge}
-      </span>
-      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
+          color: accent, background: accentBg, fontFamily: 'var(--font-sans)',
+        }}>
+          {label}
+        </span>
+      </div>
+      <p style={{
+        fontFamily: 'var(--font-sans)', fontSize: '13px',
+        color: 'var(--text-muted)', marginBottom: '24px', lineHeight: 1.5,
+      }}>
         {description}
       </p>
-    </div>
+      <div style={{
+        borderLeft: muted ? '1px solid var(--border-muted)' : `2px solid ${accentBg}`,
+        paddingLeft: '0',
+        display: 'flex', flexDirection: 'column', gap: '2px',
+      }}>
+        {children}
+      </div>
+    </section>
   )
 }
