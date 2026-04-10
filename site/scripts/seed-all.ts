@@ -23,38 +23,38 @@ function slugify(s: string) {
     .trim()
 }
 
+/** RFC-4180 compliant CSV row parser — handles quoted fields with commas inside. */
+function parseCSVRow(line: string): string[] {
+  const fields: string[] = []
+  let current = ''
+  let inQuotes = false
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') { current += '"'; i++ } // escaped ""
+      else inQuotes = !inQuotes
+    } else if (ch === ',' && !inQuotes) {
+      fields.push(current.trim())
+      current = ''
+    } else {
+      current += ch
+    }
+  }
+  fields.push(current.trim())
+  return fields
+}
+
 function parseTerms() {
   const csv = readFileSync(
     resolve(process.cwd(), '../ai-field-guide-kg.csv'),
     'utf-8'
   )
   const lines = csv.split('\n').filter(Boolean)
-  const headers = lines[0].split(',').map(h => h.trim())
 
   return lines.slice(1).map(line => {
-    // CSV may have commas inside quoted fields — simple split is fine here
-    // because only the definition field uses quotes and it's last
-    const firstCommaAt = (n: number) => {
-      let count = 0
-      for (let i = 0; i < line.length; i++) {
-        if (line[i] === ',') count++
-        if (count === n) return i
-      }
-      return line.length
-    }
-
-    const fields: string[] = []
-    let remaining = line
-    // Fields 0-9 are comma-delimited, field 10 (definition) may contain commas
-    for (let i = 0; i < 10; i++) {
-      const idx = remaining.indexOf(',')
-      if (idx === -1) { fields.push(remaining); remaining = ''; break }
-      fields.push(remaining.slice(0, idx).trim())
-      remaining = remaining.slice(idx + 1)
-    }
-    // Whatever's left is the definition (strip surrounding quotes)
-    fields.push(remaining.replace(/^"|"$/g, '').trim())
-
+    const fields = parseCSVRow(line)
+    // term,aliases,cluster,scope,lifecycle_stage,audience,tier,angles,related_terms,claude_specific,definition
     const name     = fields[0]
     const aliases  = fields[1] ? fields[1].split('|').map(s => s.trim()).filter(Boolean) : []
     const cluster  = fields[2]
