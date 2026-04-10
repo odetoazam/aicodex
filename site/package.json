@@ -10,7 +10,7 @@
     "seed": "npx tsx supabase/seed.ts"
   },
   "dependencies": {
-    "next": "14.2.0",
+    "next": "14.2.30",
     "react": "^18",
     "react-dom": "^18",
     "@supabase/supabase-js": "^2",
