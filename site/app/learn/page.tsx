@@ -30,8 +30,8 @@ const PATHS = [
     icon: '⬡',
     steps: 6,
     time: '~30 min',
-    tag: 'Coming soon',
-    disabled: true,
+    tag: 'Available now',
+    disabled: false,
   },
   {
     href: '/learn/claude',
