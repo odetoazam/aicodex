@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation'
 import ThemeToggle from './ThemeToggle'
 
 const NAV_LINKS = [
+  { label: 'Learn', href: '/learn' },
   { label: 'Glossary', href: '/glossary' },
   { label: 'Articles', href: '/articles' },
-  { label: 'Newsletter', href: '/newsletter' },
   { label: 'About', href: '/about' },
 ]
 
