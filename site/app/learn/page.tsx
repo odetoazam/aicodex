@@ -3,29 +3,30 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Learn — AI Codex',
-  description: 'Structured paths for understanding and using AI — no prior technical knowledge required.',
+  description: 'Structured learning paths for operators, founders, and teams implementing AI at work.',
 }
 
 const PATHS = [
   {
-    href: '/learn/claude',
-    eyebrow: 'Start here',
-    title: 'Using Claude',
-    description: 'Everything you need to get real work done with Claude — how it thinks, how to direct it, and how to trust its output.',
+    href: '/learn/ai-for-your-company',
+    eyebrow: 'For founders & ops leaders',
+    title: 'Figuring out AI for your company',
+    description: 'Is AI right for you right now? Where to start, how to run a pilot, what most teams get wrong, and how to build the internal case — without needing a technical co-founder to explain it.',
     accent: '#D4845A',
     accentBg: 'rgba(212,132,90,0.1)',
-    icon: '◈',
-    steps: 8,
-    time: '~40 min',
-    tag: 'Most popular',
+    icon: '◐',
+    steps: 7,
+    time: '~35 min',
+    tag: 'Coming soon',
+    disabled: true,
   },
   {
-    href: '/learn/agents',
-    eyebrow: 'Going deeper',
-    title: 'AI Agents',
-    description: 'What it means when AI stops answering questions and starts taking actions — and how to build workflows that actually work.',
-    accent: '#7B8FD4',
-    accentBg: 'rgba(123,143,212,0.1)',
+    href: '/learn/getting-your-team-started',
+    eyebrow: 'For department heads',
+    title: 'Getting your team actually using AI',
+    description: "Setting up Claude for your team, writing prompts that work consistently, the most valuable use cases for CS, ops, and marketing — and what to do when it doesn't go as planned.",
+    accent: '#4CAF7D',
+    accentBg: 'rgba(76,175,125,0.1)',
     icon: '⬡',
     steps: 6,
     time: '~30 min',
@@ -33,17 +34,17 @@ const PATHS = [
     disabled: true,
   },
   {
-    href: '/learn/for-operators',
-    eyebrow: 'Non-technical',
-    title: 'AI for Operators',
-    description: 'How to think about AI adoption for your team — where it helps, where it fails, and how to make confident decisions without a technical background.',
-    accent: '#5AAFD4',
-    accentBg: 'rgba(90,175,212,0.1)',
-    icon: '◐',
-    steps: 7,
-    time: '~35 min',
-    tag: 'Coming soon',
-    disabled: true,
+    href: '/learn/claude',
+    eyebrow: 'For daily Claude users',
+    title: 'Getting more out of Claude',
+    description: 'How Claude actually thinks, how to direct it precisely, when to trust its output, and the features most people never discover — from Projects to extended thinking.',
+    accent: '#7B8FD4',
+    accentBg: 'rgba(123,143,212,0.1)',
+    icon: '◈',
+    steps: 8,
+    time: '~40 min',
+    tag: 'Available now',
+    disabled: false,
   },
 ]
 
@@ -62,14 +63,14 @@ export default function LearnPage() {
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
             marginBottom: '16px',
-            maxWidth: '18ch',
+            maxWidth: '22ch',
           }}
         >
-          Start where it matters.
+          Pick the path that fits where you are.
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-muted)', maxWidth: '52ch', lineHeight: 1.65 }}>
-          Structured paths through the concepts that actually change how you work with AI.
-          Each one builds understanding step by step — no jargon, no assumed knowledge.
+          Each path is built around a specific situation — not a product, not a topic.
+          Start with the one that matches what you're actually trying to do.
         </p>
       </div>
 
@@ -78,6 +79,13 @@ export default function LearnPage() {
           <PathCard key={path.href} path={path} />
         ))}
       </div>
+
+      <style>{`
+        .path-card:hover {
+          background: var(--bg-subtle) !important;
+          border-left-color: currentColor;
+        }
+      `}</style>
     </div>
   )
 }
@@ -89,20 +97,24 @@ function PathCard({ path }: { path: typeof PATHS[0] }) {
         padding: '28px 32px',
         borderRadius: '12px',
         border: `1px solid var(--border-base)`,
-        borderLeft: `3px solid ${path.disabled ? 'var(--border-base)' : path.accent}`,
+        borderLeft: `3px solid ${path.disabled ? 'var(--border-muted)' : path.accent}`,
         background: 'var(--bg-surface)',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'space-between',
         gap: '24px',
-        opacity: path.disabled ? 0.5 : 1,
-        transition: 'border-color 150ms ease, background 150ms ease',
+        opacity: path.disabled ? 0.55 : 1,
+        transition: 'background 150ms ease',
       }}
       className={path.disabled ? '' : 'path-card'}
     >
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: path.disabled ? 'var(--text-muted)' : path.accent, margin: 0 }}>
+          <p style={{
+            fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+            letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+            color: path.disabled ? 'var(--text-muted)' : path.accent, margin: 0,
+          }}>
             {path.eyebrow}
           </p>
           {path.tag && (
@@ -116,16 +128,26 @@ function PathCard({ path }: { path: typeof PATHS[0] }) {
             </span>
           )}
         </div>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '10px', lineHeight: 1.2 }}>
+        <h2 style={{
+          fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600,
+          color: 'var(--text-primary)', marginBottom: '10px', lineHeight: 1.2,
+        }}>
           {path.title}
         </h2>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0, maxWidth: '56ch' }}>
+        <p style={{
+          fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-muted)',
+          lineHeight: 1.6, margin: 0, maxWidth: '56ch',
+        }}>
           {path.description}
         </p>
       </div>
 
       <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '24px', color: path.disabled ? 'var(--text-muted)' : path.accent, marginBottom: '8px', lineHeight: 1 }}>
+        <p style={{
+          fontFamily: 'var(--font-sans)', fontSize: '24px',
+          color: path.disabled ? 'var(--text-muted)' : path.accent,
+          marginBottom: '8px', lineHeight: 1,
+        }}>
           {path.icon}
         </p>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>

@@ -2,8 +2,8 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Using Claude — AI Codex',
-  description: 'Everything you need to get real work done with Claude — how it thinks, how to direct it, and how to trust its output.',
+  title: 'Getting more out of Claude — AI Codex',
+  description: 'How Claude actually thinks, how to direct it precisely, and the features most people never discover.',
 }
 
 // Each step: concept name, slug, article slug (if exists), what you learn
@@ -95,13 +95,13 @@ export default function LearnClaudePage() {
       <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
         <Link href="/learn" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Learn</Link>
         <span>›</span>
-        <span style={{ color: 'var(--text-secondary)' }}>Using Claude</span>
+        <span style={{ color: 'var(--text-secondary)' }}>Getting more out of Claude</span>
       </nav>
 
       {/* Header */}
       <div style={{ marginBottom: '56px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-          <p className="eyebrow">Learning path</p>
+          <p className="eyebrow">For daily Claude users</p>
           <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: ACCENT_BG, color: ACCENT, fontFamily: 'var(--font-sans)' }}>
             {STEPS.length} concepts · ~{totalTime} min
           </span>
@@ -119,12 +119,12 @@ export default function LearnClaudePage() {
             maxWidth: '24ch',
           }}
         >
-          Using Claude
+          Getting more out of Claude
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-muted)', maxWidth: '56ch', lineHeight: 1.65 }}>
           Eight concepts, in the right order. Each one builds on the last.
-          By the end you'll have a clear mental model of how Claude works —
-          and you'll use it noticeably better.
+          By the end you'll understand how Claude actually works — and you'll
+          get noticeably better results from it.
         </p>
       </div>
 
