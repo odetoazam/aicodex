@@ -47,6 +47,14 @@ const COMPARISONS = [
     readTime: '5 min',
     accent: '#9B7BD4',
   },
+  {
+    href: '/compare/claude-vs-openai-for-enterprise',
+    title: 'Claude vs OpenAI for Enterprise',
+    description: 'The comparison decision-makers search for. Data privacy, admin controls, context window, compliance, and what actually determines the vendor decision at scale.',
+    tags: ['Claude', 'OpenAI', 'Enterprise'],
+    readTime: '7 min',
+    accent: '#4CAF7D',
+  },
 ]
 
 export default function ComparePage() {

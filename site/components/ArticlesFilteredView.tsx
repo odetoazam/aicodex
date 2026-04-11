@@ -23,6 +23,7 @@ const DEV_SLUGS = new Set([
   'nextauth-claude-integration',
   'supabase-conversation-history',
   'claude-vs-custom-model',
+  'claude-plus-linear',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -47,6 +48,10 @@ const PRODUCTIVITY_SLUGS = new Set([
   'claude-plus-notion',
   'claude-plus-google-sheets',
   'claude-plus-google-docs',
+  'claude-plus-airtable',
+  'claude-plus-asana',
+  'claude-plus-figma',
+  'claude-plus-webflow',
 ])
 
 const AGENCIES_SLUGS = new Set([
@@ -61,7 +66,7 @@ const PINNED_ALL       = ['how-to-write-a-good-prompt', 'claude-common-mistakes'
 const PINNED_OPERATOR  = ['claude-plus-slack-for-teams', 'claude-plus-zapier', 'claude-common-mistakes', 'how-to-write-a-good-prompt', 'running-your-first-ai-pilot']
 const PINNED_FOUNDER   = ['solo-founder-operating-system', 'validating-startup-idea-with-claude', 'ai-product-failure-modes-founders', 'first-ten-customers-ai-product']
 const PINNED_DEV       = ['your-first-claude-api-call', 'building-a-rag-pipeline-from-scratch', 'prompt-caching-implementation', 'claude-cost-optimization']
-const PINNED_PROD      = ['claude-plus-notion', 'claude-plus-google-docs', 'claude-for-writing-and-editing', 'using-claude-for-research']
+const PINNED_PROD      = ['claude-plus-notion', 'claude-plus-airtable', 'claude-plus-figma', 'claude-for-writing-and-editing']
 const PINNED_AGENCIES  = ['claude-for-agencies', 'what-to-tell-clients-about-ai', 'client-handoff-with-claude', 'building-claude-powered-deliverable']
 
 type Tab = 'all' | 'operator' | 'founder' | 'developer' | 'productivity' | 'agencies'
