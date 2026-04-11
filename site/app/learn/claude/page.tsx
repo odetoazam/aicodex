@@ -169,7 +169,7 @@ export default function LearnClaudePage() {
           </p>
         </div>
         <a
-          href="https://anthropic.skilljar.com/page/claude-101"
+          href="https://anthropic.skilljar.com/claude-101"
           target="_blank"
           rel="noopener noreferrer"
           style={{

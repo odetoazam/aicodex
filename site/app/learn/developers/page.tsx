@@ -383,7 +383,7 @@ export default function LearnDevelopersPage() {
           </p>
         </div>
         <a
-          href="https://anthropic.skilljar.com/page/building-with-the-claude-api"
+          href="https://anthropic.skilljar.com"
           target="_blank"
           rel="noopener noreferrer"
           style={{
