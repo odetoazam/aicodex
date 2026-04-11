@@ -6,16 +6,24 @@ const FOOTER_LINKS = {
   'Knowledge': [
     { label: 'Glossary', href: '/glossary' },
     { label: 'Articles', href: '/articles' },
-    { label: 'Clusters', href: '/glossary#clusters' },
+    { label: 'Timeline', href: '/timeline' },
+  ],
+  'Tools': [
+    { label: 'Cost Calculator', href: '/tools/cost-calculator' },
+    { label: 'Prompt Builder', href: '/tools/system-prompt-builder' },
+    { label: 'Maturity Scorecard', href: '/tools/scorecard' },
+  ],
+  'Compare': [
+    { label: 'Claude vs GPT-4: Support', href: '/compare/claude-vs-gpt4-customer-support' },
+    { label: 'Claude vs GPT-4: Coding', href: '/compare/claude-vs-gpt4-coding' },
+    { label: 'Claude vs GPT-4: Writing', href: '/compare/claude-vs-gpt4-writing' },
+    { label: 'Claude vs GPT-4: Documents', href: '/compare/claude-vs-gpt4-document-analysis' },
+    { label: 'Haiku vs Sonnet', href: '/compare/claude-haiku-vs-sonnet' },
   ],
   'Learn': [
-    { label: 'Newsletter', href: '/newsletter' },
+    { label: 'Learning paths', href: '/learn' },
     { label: 'Updates', href: '/updates' },
-    { label: 'From the Field', href: '/articles?angle=field-note' },
-  ],
-  'About': [
     { label: 'About', href: '/about' },
-    { label: 'Built with Claude', href: '/about#stack' },
   ],
 }
 
@@ -38,7 +46,7 @@ export default function Footer() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr repeat(3, auto)',
+            gridTemplateColumns: '1fr repeat(4, auto)',
             gap: 'clamp(32px, 6vw, 80px)',
             marginBottom: '48px',
           }}

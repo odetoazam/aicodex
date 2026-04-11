@@ -2,7 +2,10 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { marked } from 'marked'
 import { CLUSTER_MAP, ANGLE_LABELS } from '@/lib/clusters'
-import { getArticle, getArticlesForTerm } from '@/lib/db'
+import { ARTICLE_PATHS } from '@/lib/paths'
+import { getArticle, getArticlesForTerm, getArticlesByCluster } from '@/lib/db'
+import type { Article } from '@/lib/types'
+import ArticleActions from '@/components/ArticleActions'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,6 +18,156 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title: `${article.title} — AI Codex`,
     description: article.excerpt ?? undefined,
   }
+}
+
+function ArticleCard({ article, label }: { article: Article; label?: string }) {
+  const config = CLUSTER_MAP[article.cluster]
+  const angleLabel = ANGLE_LABELS[article.angle] ?? article.angle
+  return (
+    <Link href={`/articles/${article.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+      <div
+        style={{
+          padding: '20px 22px',
+          borderRadius: '8px',
+          border: '1px solid var(--border-base)',
+          background: 'var(--bg-surface)',
+          borderTop: `3px solid ${config?.color ?? 'var(--accent)'}`,
+          height: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '10px' }}>
+          {label && (
+            <span style={{
+              fontFamily: 'var(--font-sans)', fontSize: '10px', fontWeight: 600,
+              letterSpacing: '0.07em', textTransform: 'uppercase' as const,
+              color: config?.color ?? 'var(--accent)',
+            }}>
+              {label}
+            </span>
+          )}
+          {label && <span style={{ color: 'var(--border-base)', fontSize: '10px' }}>·</span>}
+          <span style={{
+            fontFamily: 'var(--font-sans)', fontSize: '10px', fontWeight: 500,
+            letterSpacing: '0.05em', textTransform: 'uppercase' as const, color: 'var(--text-muted)',
+          }}>
+            {angleLabel}
+          </span>
+          <span style={{ color: 'var(--border-base)', fontSize: '10px' }}>·</span>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)' }}>
+            {article.read_time} min
+          </span>
+        </div>
+        <p style={{
+          fontFamily: 'var(--font-serif)', fontSize: '16px', fontWeight: 600,
+          color: 'var(--text-primary)', lineHeight: 1.3, margin: '0 0 8px',
+        }}>
+          {article.title}
+        </p>
+        {article.excerpt && (
+          <p style={{
+            fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)',
+            lineHeight: 1.55, margin: 0,
+            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden',
+          }}>
+            {article.excerpt}
+          </p>
+        )}
+      </div>
+    </Link>
+  )
+}
+
+interface ToolCallout {
+  label: string
+  description: string
+  href: string
+  cta: string
+}
+
+const TOOL_CALLOUTS: Record<string, ToolCallout> = {
+  calculator: {
+    label: 'Claude API Cost Calculator',
+    description: 'Estimate your monthly spend by model, message volume, and caching strategy.',
+    href: '/tools/cost-calculator',
+    cta: 'Calculate your cost →',
+  },
+  promptBuilder: {
+    label: 'System Prompt Builder',
+    description: 'Generate a production-ready Claude system prompt for your use case in minutes.',
+    href: '/tools/system-prompt-builder',
+    cta: 'Build your prompt →',
+  },
+  scorecard: {
+    label: 'AI Maturity Scorecard',
+    description: '10 questions to assess where your Claude implementation stands and what to improve.',
+    href: '/tools/scorecard',
+    cta: 'Check your score →',
+  },
+  compareGPT4: {
+    label: 'Claude vs GPT-4',
+    description: 'Side-by-side comparison across code quality, context, debugging, and cost.',
+    href: '/compare/claude-vs-gpt4-coding',
+    cta: 'See comparison →',
+  },
+  compareModels: {
+    label: 'Haiku vs Sonnet',
+    description: 'When to use each model — quality, speed, cost, and context tradeoffs.',
+    href: '/compare/claude-haiku-vs-sonnet',
+    cta: 'See comparison →',
+  },
+}
+
+function getRelatedTools(article: Article): ToolCallout[] {
+  const slug = article.slug.toLowerCase()
+  const term = (article.term_slug ?? '').toLowerCase()
+  const cluster = article.cluster.toLowerCase()
+  const tools: ToolCallout[] = []
+
+  const matches = (keywords: string[]) =>
+    keywords.some(k => slug.includes(k) || term.includes(k) || cluster.includes(k))
+
+  if (matches(['cost', 'pric', 'token', 'cach', 'billing', 'budget', 'spend'])) {
+    tools.push(TOOL_CALLOUTS.calculator)
+    tools.push(TOOL_CALLOUTS.compareModels)
+  }
+  if (matches(['system-prompt', 'system_prompt', 'prompting', 'prompt-design', 'instruction'])) {
+    tools.push(TOOL_CALLOUTS.promptBuilder)
+  }
+  if (matches(['gpt', 'openai', 'vs-gpt', 'versus', 'compared', 'comparison'])) {
+    tools.push(TOOL_CALLOUTS.compareGPT4)
+  }
+  if (matches(['haiku', 'sonnet', 'opus', 'model-selection', 'which-model', 'choose-model'])) {
+    tools.push(TOOL_CALLOUTS.compareModels)
+  }
+  if (matches(['production', 'deploy', 'architect', 'scale', 'enterprise', 'maturity', 'readiness'])) {
+    tools.push(TOOL_CALLOUTS.scorecard)
+  }
+  if (matches(['coding', 'code', 'developer', 'api', 'integration', 'claude-code'])) {
+    tools.push(TOOL_CALLOUTS.compareGPT4)
+    if (!tools.some(t => t.href === TOOL_CALLOUTS.calculator.href)) {
+      tools.push(TOOL_CALLOUTS.calculator)
+    }
+  }
+
+  // Deduplicate by href, take first 2
+  const seen = new Set<string>()
+  const unique: ToolCallout[] = []
+  for (const t of tools) {
+    if (!seen.has(t.href)) { seen.add(t.href); unique.push(t) }
+    if (unique.length === 2) break
+  }
+  return unique
+}
+
+function stripLinksFromHeadings(html: string): string {
+  return html.replace(
+    /<(h[1-6])([^>]*)>([\s\S]*?)<\/\1>/g,
+    (_, tag, attrs, content) => {
+      const stripped = content.replace(/<a[^>]*>([\s\S]*?)<\/a>/g, '$1')
+      return `<${tag}${attrs}>${stripped}</${tag}>`
+    }
+  )
 }
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
@@ -33,25 +186,51 @@ export default async function ArticlePage({ params }: { params: { slug: string }
     )
   }
 
-  const [relatedArticles] = await Promise.all([
+  const [termArticles, clusterArticles] = await Promise.all([
     getArticlesForTerm(article.term_id),
+    getArticlesByCluster(article.cluster, article.slug, 4),
   ])
 
-  const otherArticles = relatedArticles.filter(a => a.slug !== article.slug)
+  const otherTermArticles = termArticles.filter(a => a.slug !== article.slug)
   const clusterConfig = CLUSTER_MAP[article.cluster]
   const angleLabel = ANGLE_LABELS[article.angle] ?? article.angle
+
   const rawHtml = marked(article.body ?? '') as string
-  // Open external links in new tab
-  const bodyHtml = rawHtml.replace(
-    /<a href="(https?:\/\/[^"]+)"/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer"'
-  )
+  const bodyHtml = stripLinksFromHeadings(rawHtml)
+    .replace(/<a href="(https?:\/\/[^"]+)"/g, '<a href="$1" target="_blank" rel="noopener noreferrer"')
+
+  // Build "continue reading" cards: other angles on this term first, then cluster articles
+  // Filter cluster articles to exclude ones already shown as same-term articles
+  const termArticleSlugs = new Set(termArticles.map(a => a.slug))
+  const freshClusterArticles = clusterArticles.filter(a => !termArticleSlugs.has(a.slug))
+
+  // Up to 2 from same term, fill remaining with cluster
+  const sameTermCards = otherTermArticles.slice(0, 2)
+  const remaining = 3 - sameTermCards.length
+  const clusterCards = freshClusterArticles.slice(0, remaining)
+  const continueCards = [...sameTermCards, ...clusterCards]
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.excerpt ?? undefined,
+    author: { '@type': 'Organization', name: 'AI Codex', url: 'https://www.aicodex.to' },
+    publisher: { '@type': 'Organization', name: 'AI Codex', url: 'https://www.aicodex.to' },
+    url: `https://www.aicodex.to/articles/${article.slug}`,
+    datePublished: article.created_at ?? undefined,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://www.aicodex.to/articles/${article.slug}` },
+  }
 
   return (
     <div style={{ width: 'var(--container-wide)', margin: '0 auto', padding: 'clamp(40px, 6vw, 72px) 0 var(--section-y)' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Breadcrumb */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
         <Link href="/articles" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Articles</Link>
         <span>›</span>
         <span style={{ color: clusterConfig?.color }}>{article.cluster}</span>
@@ -61,6 +240,68 @@ export default async function ArticlePage({ params }: { params: { slug: string }
         </span>
       </nav>
 
+      {/* Learning path context banner */}
+      {(() => {
+        const pathInfo = ARTICLE_PATHS[article.slug]
+        if (!pathInfo) return null
+        return (
+          <div style={{
+            marginBottom: '32px',
+            padding: '12px 18px',
+            borderRadius: '8px',
+            border: '1px solid var(--border-base)',
+            background: 'var(--bg-surface)',
+            borderLeft: `3px solid ${pathInfo.accent}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: 'wrap' as const,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' as const }}>
+              <Link href={pathInfo.pathHref} style={{ textDecoration: 'none' }}>
+                <span style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 600,
+                  color: pathInfo.accent, letterSpacing: '0.02em',
+                }}>
+                  {pathInfo.pathName}
+                </span>
+              </Link>
+              <span style={{
+                fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)',
+                padding: '1px 7px', borderRadius: '3px', background: 'var(--bg-subtle)',
+                border: '1px solid var(--border-muted)',
+              }}>
+                Step {pathInfo.stepNumber} of {pathInfo.totalSteps}
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              {pathInfo.prevSlug ? (
+                <Link href={`/articles/${pathInfo.prevSlug}`} style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '12px',
+                  color: 'var(--text-muted)', textDecoration: 'none',
+                }}>
+                  ← Prev
+                </Link>
+              ) : (
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--border-base)' }}>← Prev</span>
+              )}
+              <span style={{ color: 'var(--border-base)', fontSize: '12px' }}>·</span>
+              {pathInfo.nextSlug ? (
+                <Link href={`/articles/${pathInfo.nextSlug}`} style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500,
+                  color: pathInfo.accent, textDecoration: 'none',
+                }}>
+                  Next →
+                </Link>
+              ) : (
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--border-base)' }}>Next →</span>
+              )}
+            </div>
+          </div>
+        )
+      })()}
+
       {/* Two-column layout */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '64px', alignItems: 'start' }} className="article-layout">
 
@@ -69,7 +310,6 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           {/* Header */}
           <div style={{ marginBottom: '40px' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: '8px', marginBottom: '20px' }}>
-              {/* Cluster tag */}
               <span
                 style={{
                   display: 'inline-flex', alignItems: 'center', padding: '3px 10px', borderRadius: '4px',
@@ -79,7 +319,6 @@ export default async function ArticlePage({ params }: { params: { slug: string }
               >
                 {article.cluster}
               </span>
-              {/* Angle tag */}
               <span
                 style={{
                   display: 'inline-flex', alignItems: 'center', padding: '3px 10px', borderRadius: '4px',
@@ -124,7 +363,10 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           </div>
 
           {/* Divider */}
-          <div style={{ height: '1px', background: 'var(--border-base)', marginBottom: '48px' }} />
+          <div style={{ height: '1px', background: 'var(--border-base)', marginBottom: '32px' }} />
+
+          {/* Save / read actions */}
+          <ArticleActions slug={article.slug} />
 
           {/* Body */}
           <div
@@ -167,14 +409,14 @@ export default async function ArticlePage({ params }: { params: { slug: string }
             </Link>
           </div>
 
-          {/* More on this term */}
-          {otherArticles.length > 0 && (
+          {/* Other angles on this term */}
+          {otherTermArticles.length > 0 && (
             <div style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '16px' }}>
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '12px' }}>
                 More on {article.term_name}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
-                {otherArticles.map(a => (
+                {otherTermArticles.map(a => (
                   <Link
                     key={a.slug}
                     href={`/articles/${a.slug}`}
@@ -194,29 +436,100 @@ export default async function ArticlePage({ params }: { params: { slug: string }
             </div>
           )}
 
-          {/* Back links */}
+          {/* Explore cluster */}
           <div style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)' }}>
-            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '10px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '10px' }}>
+              Explore
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
               <Link
                 href={`/glossary/${article.term_slug}`}
                 style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', textDecoration: 'none' }}
               >
-                ← {article.term_name} definition
+                {article.term_name} definition →
+              </Link>
+              <Link
+                href={`/glossary?cluster=${encodeURIComponent(article.cluster)}`}
+                style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', textDecoration: 'none' }}
+              >
+                All {article.cluster.split(' ')[0]} terms →
               </Link>
               <Link
                 href="/articles"
                 style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', textDecoration: 'none' }}
               >
-                ← All articles
+                All articles →
               </Link>
             </div>
           </div>
         </aside>
       </div>
 
+      {/* Related tools callout */}
+      {(() => {
+        const tools = getRelatedTools(article)
+        if (tools.length === 0) return null
+        return (
+          <div style={{ marginTop: '64px', padding: '24px 28px', borderRadius: '12px', border: '1px solid var(--border-base)', background: 'var(--bg-subtle)' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '16px' }}>
+              Related tools
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: tools.length === 1 ? '1fr' : '1fr 1fr', gap: '12px' }} className="tools-callout-grid">
+              {tools.map(tool => (
+                <Link key={tool.href} href={tool.href} style={{ textDecoration: 'none' }}>
+                  <div style={{ padding: '16px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', display: 'flex', flexDirection: 'column', gap: '6px', height: '100%', boxSizing: 'border-box' as const }}>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>{tool.label}</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0, flex: 1 }}>{tool.description}</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent)', margin: 0 }}>{tool.cta}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* Continue reading */}
+      {continueCards.length > 0 && (
+        <div style={{ marginTop: '80px', paddingTop: '48px', borderTop: '1px solid var(--border-base)' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '28px' }}>
+            <h2 style={{
+              fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600,
+              color: 'var(--text-primary)', margin: 0,
+            }}>
+              Continue reading
+            </h2>
+            <Link href="/articles" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', textDecoration: 'none' }}>
+              All articles →
+            </Link>
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${continueCards.length}, 1fr)`,
+              gap: '16px',
+            }}
+            className="continue-grid"
+          >
+            {continueCards.map(a => {
+              const isSameTerm = a.term_id === article.term_id
+              return (
+                <ArticleCard
+                  key={a.slug}
+                  article={a}
+                  label={isSameTerm ? a.term_name : undefined}
+                />
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       <style>{`
         @media (max-width: 768px) {
           .article-layout { grid-template-columns: 1fr !important; }
+          .continue-grid { grid-template-columns: 1fr !important; }
+          .tools-callout-grid { grid-template-columns: 1fr !important; }
         }
 
         /* ── Prose styles for markdown body ─────────────── */

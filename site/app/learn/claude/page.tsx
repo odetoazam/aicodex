@@ -147,9 +147,51 @@ export default function LearnClaudePage() {
         </div>
       </div>
 
+      {/* Anthropic Academy callout */}
+      <div style={{
+        marginTop: '48px',
+        padding: '20px 24px',
+        borderRadius: '10px',
+        border: '1px solid var(--border-base)',
+        background: 'var(--bg-subtle)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '20px',
+        flexWrap: 'wrap' as const,
+      }}>
+        <div>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '4px' }}>
+            Official course from Anthropic
+          </p>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+            Prefer video with a certificate? Anthropic offers a free <strong>Claude 101</strong> course — covers the basics with video lessons and a completion certificate.
+          </p>
+        </div>
+        <a
+          href="https://anthropic.skilljar.com/page/claude-101"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            fontFamily: 'var(--font-sans)',
+            fontSize: '13px',
+            fontWeight: 500,
+            color: 'var(--text-secondary)',
+            textDecoration: 'none',
+            whiteSpace: 'nowrap' as const,
+            flexShrink: 0,
+          }}
+        >
+          Anthropic Academy ↗
+        </a>
+      </div>
+
       {/* Footer CTA */}
       <div style={{
-        marginTop: '64px',
+        marginTop: '24px',
         padding: '32px',
         borderRadius: '12px',
         border: '1px solid var(--border-base)',

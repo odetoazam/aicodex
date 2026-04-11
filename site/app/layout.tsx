@@ -6,11 +6,11 @@ import './globals.css'
 export const metadata: Metadata = {
   title: {
     default: 'AI Codex — Learn to operate with AI',
-    template: '%s | AI Codex',
+    template: '%s',
   },
   description:
-    'Clear explanations of every AI concept that matters, and what each one means for your work. Built for operators, founders, and teams putting AI to use.',
-  metadataBase: new URL('https://aicodex.to'),
+    'Structured learning paths, practical guides, and free tools for building and operating with Claude. For developers, founders, and teams putting AI to work.',
+  metadataBase: new URL('https://www.aicodex.to'),
   openGraph: {
     type: 'website',
     siteName: 'AI Codex',

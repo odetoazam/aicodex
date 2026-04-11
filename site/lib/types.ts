@@ -38,6 +38,7 @@ export type Term = {
   related_terms: string[]
   claude_specific: boolean
   definition: string
+  practical_example: string | null
   published: boolean
   created_at: string
   updated_at: string

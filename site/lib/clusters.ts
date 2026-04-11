@@ -69,6 +69,7 @@ export const ANGLE_LABELS: Record<string, string> = {
   role: 'Role-Specific',
   absence: 'What\'s Missing',
   history: 'History & Evolution',
+  'field-note': 'Field Note',
 }
 
 export const AUDIENCE_LABELS: Record<string, string> = {

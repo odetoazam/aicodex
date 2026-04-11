@@ -1,8 +1,11 @@
 import Link from 'next/link'
 import NewsletterCTA from '@/components/NewsletterCTA'
 import ArticleCard from '@/components/ArticleCard'
+import GuidedStartTrigger from '@/components/GuidedStartTrigger'
 import { CLUSTERS } from '@/lib/clusters'
 import { getFeaturedArticles } from '@/lib/db'
+import { createClient } from '@/lib/supabase/server'
+import { ARTICLE_PATHS } from '@/lib/paths'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -14,9 +17,9 @@ export const metadata: Metadata = {
 
 const ENTRY_POINTS = [
   {
-    eyebrow: 'Start here',
-    title: 'Just getting started?',
-    description: 'A guided path through everything you need to know to use Claude effectively — how it thinks, how to direct it, and when to trust it.',
+    eyebrow: 'Brand new to AI?',
+    title: 'Never used AI at work before?',
+    description: 'Start here. Plain-English explanations of how AI works, how to talk to it effectively, and what to actually trust it with. No technical background required.',
     cta: 'Begin the learning path',
     href: '/learn/claude',
     accent: '#D4845A',
@@ -36,15 +39,48 @@ const ENTRY_POINTS = [
     meta: '10 concepts · ~54 min',
   },
   {
-    eyebrow: 'Going deeper',
-    title: 'Already using AI at work?',
-    description: 'Decision guides and failure patterns for operators past the basics — when to build vs. buy, what actually goes wrong, and what good looks like.',
-    cta: 'Read the articles',
-    href: '/articles',
+    eyebrow: 'For developers',
+    title: 'Building with the API?',
+    description: 'Implementation guides that assume you can code. API basics, RAG, evals, streaming, tool use, auth, rate limiting, and deployment. No business-case framing.',
+    cta: 'Open the dev path',
+    href: '/learn/developers',
+    accent: '#7B8FD4',
+    accentBg: 'rgba(123,143,212,0.08)',
+    icon: '⌥',
+    meta: '17 guides · ~121 min',
+  },
+  {
+    eyebrow: 'For builders',
+    title: 'Building an AI product?',
+    description: 'Validate your idea, pick the right stack, avoid the failure modes that catch most AI founders off guard — and deploy it to real users. Written for solo builders.',
+    cta: 'Start the path',
+    href: '/learn/build-with-ai',
+    accent: '#4CAF7D',
+    accentBg: 'rgba(76,175,125,0.08)',
+    icon: '◬',
+    meta: '10 concepts · ~61 min',
+  },
+  {
+    eyebrow: 'For agencies',
+    title: 'Using Claude for client work?',
+    description: 'How to deliver AI-powered work to clients — what to build, how to hand it off, and exactly what to tell clients about how the AI works.',
+    cta: 'Read the guides',
+    href: '/articles?tab=agencies',
+    accent: '#D4A45A',
+    accentBg: 'rgba(212,164,90,0.08)',
+    icon: '◫',
+    meta: '4 guides',
+  },
+  {
+    eyebrow: 'Already using AI at work?',
+    title: 'Getting more out of it',
+    description: 'Not starting from zero — you\'re past the basics and want to go deeper. What most teams haven\'t unlocked yet, and the failure patterns worth knowing before they hit you.',
+    cta: 'See the path',
+    href: '/learn/ai-for-your-company',
     accent: '#5AAFD4',
     accentBg: 'rgba(90,175,212,0.08)',
     icon: '◐',
-    meta: '20+ articles',
+    meta: '7 steps · ~35 min',
   },
   {
     eyebrow: 'Reference',
@@ -57,10 +93,74 @@ const ENTRY_POINTS = [
     icon: '◇',
     meta: '150+ terms',
   },
+  {
+    eyebrow: 'Free tools',
+    title: 'Need to make a decision?',
+    description: 'Prompt library, cost calculator, system prompt builder, and AI maturity scorecard — interactive tools for the decisions operators and developers actually face.',
+    cta: 'Open the tools',
+    href: '/tools',
+    accent: '#D4845A',
+    accentBg: 'rgba(212,132,90,0.06)',
+    icon: '◈',
+    meta: '4 tools · free',
+  },
+  {
+    eyebrow: 'Integrations',
+    title: 'Which Claude integrations are worth setting up?',
+    description: 'Every connector, skill, and platform integration explained plainly — what it does, how you\'d actually use it in a real workday, and whether it\'s worth the setup time for your role.',
+    cta: 'Browse integrations',
+    href: '/integrations',
+    accent: '#4CAF7D',
+    accentBg: 'rgba(76,175,125,0.06)',
+    icon: '◎',
+    meta: '17 integrations',
+  },
 ]
 
 export default async function HomePage() {
-  const featuredArticles = await getFeaturedArticles(3)
+  const [featuredArticles, supabase] = await Promise.all([
+    getFeaturedArticles(3),
+    createClient(),
+  ])
+
+  // Check if the user is logged in and has path progress
+  const { data: { user } } = await supabase.auth.getUser()
+
+  type ResumeInfo = {
+    pathName: string
+    pathHref: string
+    stepNumber: number
+    totalSteps: number
+    accent: string
+    nextSlug: string | null
+  }
+  let resumeInfo: ResumeInfo | null = null
+
+  if (user) {
+    const { data: progress } = await supabase
+      .from('user_progress')
+      .select('article_slug, read_at')
+      .eq('user_id', user.id)
+      .order('read_at', { ascending: false })
+      .limit(60)
+
+    if (progress?.length) {
+      for (const row of progress) {
+        const membership = ARTICLE_PATHS[row.article_slug]
+        if (membership) {
+          resumeInfo = {
+            pathName: membership.pathName,
+            pathHref: membership.pathHref,
+            stepNumber: membership.stepNumber,
+            totalSteps: membership.totalSteps,
+            accent: membership.accent,
+            nextSlug: membership.nextSlug,
+          }
+          break
+        }
+      }
+    }
+  }
 
   return (
     <div>
@@ -101,27 +201,51 @@ export default async function HomePage() {
           }}
         >
           The plain-English layer on top of AI — so you can make confident decisions,
-          understand what you're working with, and actually implement it at your company.
+          understand what you're working with, and actually ship something.
         </p>
 
-        <Link
-          href="/learn"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'var(--accent)',
-            color: 'var(--text-inverse)',
-            textDecoration: 'none',
-            padding: '14px 28px',
-            borderRadius: '8px',
-            fontFamily: 'var(--font-sans)',
-            fontSize: '15px',
-            fontWeight: 500,
-          }}
-        >
-          Start learning →
-        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' as const }}>
+          {resumeInfo ? (
+            <Link
+              href={resumeInfo.nextSlug ? `/articles/${resumeInfo.nextSlug}` : resumeInfo.pathHref}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: resumeInfo.accent,
+                color: '#fff',
+                textDecoration: 'none',
+                padding: '14px 28px',
+                borderRadius: '8px',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '15px',
+                fontWeight: 500,
+              }}
+            >
+              Resume: {resumeInfo.pathName} · Step {resumeInfo.stepNumber} of {resumeInfo.totalSteps} →
+            </Link>
+          ) : (
+            <Link
+              href="/learn"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'var(--accent)',
+                color: 'var(--text-inverse)',
+                textDecoration: 'none',
+                padding: '14px 28px',
+                borderRadius: '8px',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '15px',
+                fontWeight: 500,
+              }}
+            >
+              Start learning →
+            </Link>
+          )}
+          <GuidedStartTrigger variant="hero" />
+        </div>
       </section>
 
       {/* ── Where do you want to start? ───────────────────── */}
@@ -191,6 +315,9 @@ export default async function HomePage() {
             </Link>
           ))}
         </div>
+
+        {/* Guided start trigger */}
+        <GuidedStartTrigger />
       </section>
 
       {/* ── Featured Articles ─────────────────────────────── */}
@@ -200,7 +327,7 @@ export default async function HomePage() {
             <div>
               <p className="eyebrow" style={{ marginBottom: '8px' }}>Worth reading</p>
               <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-2xl)', fontWeight: 600, color: 'var(--text-primary)' }}>
-                For operators doing the work
+                Worth reading this week
               </h2>
             </div>
             <Link href="/articles" style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none', whiteSpace: 'nowrap' as const }}>
@@ -265,8 +392,11 @@ export default async function HomePage() {
         @media (max-width: 640px) {
           .entry-grid { grid-template-columns: 1fr !important; }
         }
-        @media (min-width: 641px) and (max-width: 1100px) {
+        @media (min-width: 641px) and (max-width: 900px) {
           .entry-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (min-width: 901px) and (max-width: 1280px) {
+          .entry-grid { grid-template-columns: repeat(3, 1fr) !important; }
         }
         .entry-card:hover {
           background: var(--bg-surface) !important;

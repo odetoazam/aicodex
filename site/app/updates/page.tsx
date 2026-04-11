@@ -17,6 +17,90 @@ type Update = {
 const UPDATES: Update[] = [
   {
     date: 'April 2026',
+    tag: 'Content',
+    title: 'Production deployment guides (batch 22)',
+    description: 'Four articles completing the developer production path: deploying to production (secrets, rate limits, cost controls, observability checklist), production error handling (API error taxonomy, output format resilience, hallucination detection, user-facing errors), end-to-end Next.js + Claude chatbot (streaming SSE, Vercel deploy, conversation history), and what to actually build with Claude as a first product (the 2x2, structural advantages, the test before you build).',
+    links: [
+      { label: 'Deploying to production →', href: '/articles/deploying-claude-app-production' },
+      { label: 'Error handling →', href: '/articles/claude-production-error-handling' },
+      { label: 'Next.js chatbot tutorial →', href: '/articles/nextjs-chatbot-claude-full-tutorial' },
+    ],
+  },
+  {
+    date: 'April 2026',
+    tag: 'Content',
+    title: 'Cost & memory developer guides (batch 21)',
+    description: 'Four new articles: prompt caching implementation (cache_control, multi-block caching, verifying hits, 80% cost reduction patterns), cutting Claude API costs (model routing, batch API, output length control, context management), building a chatbot with persistent memory (user facts, session summaries, extraction patterns), and using Claude for note-taking and knowledge management (Projects, capture workflows, retrieval patterns).',
+    links: [
+      { label: 'Prompt caching →', href: '/articles/prompt-caching-implementation' },
+      { label: 'Cost optimization →', href: '/articles/claude-cost-optimization' },
+      { label: 'Persistent memory chatbot →', href: '/articles/chatbot-with-persistent-memory' },
+    ],
+  },
+  {
+    date: 'April 2026',
+    tag: 'Content',
+    title: 'Advanced developer guides (batch 20)',
+    description: 'Four articles completing the developer and founder content: tool use implementation deep dive (defining tools, parsing responses, parallel tool calls, production failure modes), multi-agent orchestration basics (orchestrator + subagents, parallelism, state management, checkpoints), customer discovery with Claude (interview simulation, assumption mapping, synthesis), and meeting prep patterns.',
+    links: [
+      { label: 'Tool use deep dive →', href: '/articles/tool-use-implementation-deep-dive' },
+      { label: 'Multi-agent orchestration →', href: '/articles/multi-agent-orchestration-basics' },
+      { label: 'Customer discovery →', href: '/articles/customer-discovery-with-claude' },
+    ],
+  },
+  {
+    date: 'April 2026',
+    tag: 'New',
+    title: 'Developer learning path — Building with the Claude API',
+    description: 'An 8-step implementation path for developers: API basics, streaming, RAG pipelines, tool use, evals in CI, prompt caching, and agentic loops. Assumes you can code — no business-case framing. Visually distinct from the operator paths.',
+    links: [
+      { label: 'Building with the Claude API →', href: '/learn/developers' },
+    ],
+  },
+  {
+    date: 'April 2026',
+    tag: 'Content',
+    title: 'Developer implementation guides (batch 19)',
+    description: 'Four technical articles: your first Claude API call (auth, streaming, structured output, errors), building a RAG pipeline from scratch (chunking strategy, hybrid retrieval, reranking, evals), writing evals that catch regressions (test case structure, LLM-as-judge, CI integration), and streaming implementation patterns (SSE to browser, error handling, UX).',
+    links: [
+      { label: 'First API call →', href: '/articles/your-first-claude-api-call' },
+      { label: 'RAG pipeline →', href: '/articles/building-a-rag-pipeline-from-scratch' },
+      { label: 'Evals in CI →', href: '/articles/writing-evals-that-catch-regressions' },
+    ],
+  },
+  {
+    date: 'April 2026',
+    tag: 'New',
+    title: 'Building with AI learning path',
+    description: 'A 7-step path for solo founders and early-stage builders: validate your idea, choose the right stack, avoid the failure modes, price your product, get your first ten customers, and pitch to investors. No ML background required.',
+    links: [
+      { label: 'Building your first AI product →', href: '/learn/build-with-ai' },
+    ],
+  },
+  {
+    date: 'April 2026',
+    tag: 'Content',
+    title: 'Solo founder content (batches 16–17)',
+    description: 'Seven new articles targeting the zero-person startup: the solo founder operating system, idea validation without fooling yourself, build/buy/prompt stack decisions, AI product failure modes, investor pitch narrative, pricing your AI product, and getting your first ten customers.',
+    links: [
+      { label: 'Solo founder OS →', href: '/articles/solo-founder-operating-system' },
+      { label: 'Validating your idea →', href: '/articles/validating-startup-idea-with-claude' },
+      { label: 'Pitching to investors →', href: '/articles/pitching-ai-product-to-investors' },
+    ],
+  },
+  {
+    date: 'April 2026',
+    tag: 'Content',
+    title: 'Connectors best practices + everyday AI productivity (batch 18)',
+    description: 'Four new articles: how to give Claude precise connector instructions (the difference between "find that doc" and an instruction that reliably works), managing email with Claude, the 20-minute weekly review, and using Claude to declutter your digital life.',
+    links: [
+      { label: 'Precise connector instructions →', href: '/articles/how-to-write-precise-connector-instructions' },
+      { label: 'Managing email →', href: '/articles/managing-email-with-claude' },
+      { label: 'Weekly review →', href: '/articles/weekly-review-with-claude' },
+    ],
+  },
+  {
+    date: 'April 2026',
     tag: 'New',
     title: 'Admin learning path',
     description: 'A 10-step path for IT leads and administrators: from evaluating Claude to running it across an organisation. Three stages — evaluation, deployment, ongoing management — each with dedicated articles.',

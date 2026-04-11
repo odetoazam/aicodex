@@ -69,8 +69,21 @@ export default async function TermPage({ params }: { params: { slug: string } })
   const officialResources = OFFICIAL_RESOURCES[term.slug] ?? []
   const clusterConfig = CLUSTER_MAP[term.cluster]
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTerm',
+    name: term.name,
+    description: term.definition,
+    inDefinedTermSet: { '@type': 'DefinedTermSet', name: 'AI Codex Glossary', url: 'https://www.aicodex.to/glossary' },
+    url: `https://www.aicodex.to/glossary/${term.slug}`,
+  }
+
   return (
     <div style={{ width: 'var(--container-wide)', margin: '0 auto', padding: 'clamp(40px, 6vw, 72px) 0 var(--section-y)' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Breadcrumb */}
       <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
@@ -121,7 +134,7 @@ export default async function TermPage({ params }: { params: { slug: string } })
             style={{
               padding: '24px 28px', borderRadius: '10px', background: 'var(--bg-surface)',
               border: '1px solid var(--border-base)', borderLeft: `3px solid ${clusterConfig?.color ?? 'var(--accent)'}`,
-              marginBottom: '48px',
+              marginBottom: '32px',
             }}
           >
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-lg)', color: 'var(--text-primary)', lineHeight: 1.7, margin: 0 }}>
@@ -129,51 +142,145 @@ export default async function TermPage({ params }: { params: { slug: string } })
             </p>
           </div>
 
-          {/* Articles */}
-          {termArticles.length > 0 && (
-            <section style={{ marginBottom: '48px' }}>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', color: 'var(--text-primary)',
-                  marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--border-muted)',
-                }}
-              >
-                Articles
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '12px' }}>
-                {termArticles.map(a => {
-                  const aCluster = CLUSTER_MAP[a.cluster]
-                  const aAngle = ANGLE_LABELS[a.angle] ?? a.angle
+          {/* Practical example */}
+          {term.practical_example && (
+            <div style={{
+              padding: '20px 24px', borderRadius: '10px',
+              background: 'var(--bg-subtle)',
+              border: '1px solid var(--border-muted)',
+              marginBottom: '32px',
+              display: 'flex', gap: '14px', alignItems: 'flex-start',
+            }}>
+              <span style={{ fontSize: '15px', color: 'var(--text-muted)', flexShrink: 0, marginTop: '2px' }}>◎</span>
+              <div>
+                <p style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600,
+                  letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                  color: 'var(--text-muted)', margin: '0 0 8px',
+                }}>
+                  In practice
+                </p>
+                <p style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '14px',
+                  color: 'var(--text-secondary)', lineHeight: 1.65, margin: 0,
+                }}>
+                  {term.practical_example}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Related concepts — inline chips */}
+          {relatedTerms.length > 0 && (
+            <div style={{ marginBottom: '48px' }}>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+                letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                color: 'var(--text-muted)', marginBottom: '12px',
+              }}>
+                Related concepts
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: '8px' }}>
+                {relatedTerms.map(t => {
+                  const tConfig = CLUSTER_MAP[t.cluster]
                   return (
                     <Link
-                      key={a.slug}
-                      href={`/articles/${a.slug}`}
-                      style={{ textDecoration: 'none', display: 'block' }}
+                      key={t.slug}
+                      href={`/glossary/${t.slug}`}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '6px',
+                        padding: '6px 14px', borderRadius: '20px', textDecoration: 'none',
+                        border: `1px solid ${(tConfig?.color ?? 'var(--accent)') + '35'}`,
+                        background: (tConfig?.color ?? 'var(--accent)') + '0a',
+                        fontFamily: 'var(--font-sans)', fontSize: '13px',
+                        color: tConfig?.color ?? 'var(--accent)',
+                        transition: 'background 120ms ease',
+                      }}
                     >
-                      <div style={{
-                        padding: '18px 20px', borderRadius: '8px', border: '1px solid var(--border-base)',
-                        background: 'var(--bg-surface)', borderLeft: `3px solid ${aCluster?.color ?? 'var(--accent)'}40`,
-                        transition: 'border-left-color 120ms ease, background 120ms ease',
-                      }}>
-                        <div style={{ display: 'flex', gap: '8px', marginBottom: '6px', alignItems: 'center' }}>
-                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
-                            {aAngle}
-                          </span>
-                          <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>·</span>
-                          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)' }}>{a.read_time} min</span>
-                        </div>
-                        <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.25, margin: '0 0 6px' }}>
-                          {a.title}
-                        </p>
-                        {a.excerpt && (
-                          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.55, margin: 0 }}>
-                            {a.excerpt}
-                          </p>
-                        )}
-                      </div>
+                      {t.name}
                     </Link>
                   )
                 })}
+              </div>
+            </div>
+          )}
+
+          {/* Articles */}
+          {termArticles.length > 0 && (
+            <section id="articles" style={{ marginBottom: '48px' }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--border-muted)' }}>
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', color: 'var(--text-primary)', margin: 0 }}>
+                  Where {term.name} shows up
+                </h2>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
+                  {termArticles.length} {termArticles.length === 1 ? 'article' : 'articles'}
+                </span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '10px' }}>
+                {termArticles
+                  .slice()
+                  .sort((a, b) => {
+                    const order: Record<string, number> = { process: 0, role: 1, def: 2, cross: 3, failure: 4, 'field-note': 5, history: 6 }
+                    return (order[a.angle] ?? 9) - (order[b.angle] ?? 9)
+                  })
+                  .map((a) => {
+                    const aCluster = CLUSTER_MAP[a.cluster]
+                    const aAngle = ANGLE_LABELS[a.angle] ?? a.angle
+                    const isGuide = a.angle === 'process'
+                    const isFailure = a.angle === 'failure'
+                    const accentColor = aCluster?.color ?? 'var(--accent)'
+                    return (
+                      <Link
+                        key={a.slug}
+                        href={`/articles/${a.slug}`}
+                        style={{ textDecoration: 'none', display: 'block' }}
+                      >
+                        <div style={{
+                          padding: '18px 20px', borderRadius: '8px',
+                          border: `1px solid ${isGuide ? accentColor + '30' : 'var(--border-base)'}`,
+                          background: isGuide ? accentColor + '06' : 'var(--bg-surface)',
+                          borderLeft: `3px solid ${isGuide ? accentColor : isFailure ? '#D4845A' : accentColor + '40'}`,
+                          transition: 'background 120ms ease',
+                        }}>
+                          {/* Scenario excerpt — lead with this */}
+                          {a.excerpt && (
+                            <p style={{
+                              fontFamily: 'var(--font-sans)', fontSize: '14px',
+                              color: 'var(--text-secondary)', lineHeight: 1.6,
+                              margin: '0 0 12px',
+                            }}>
+                              {a.excerpt}
+                            </p>
+                          )}
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' as const }}>
+                            {isGuide && (
+                              <span style={{
+                                fontFamily: 'var(--font-sans)', fontSize: '10px', fontWeight: 600,
+                                color: accentColor, background: accentColor + '15',
+                                padding: '2px 7px', borderRadius: '3px', letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                              }}>
+                                Implementation guide
+                              </span>
+                            )}
+                            {!isGuide && (
+                              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+                                {aAngle}
+                              </span>
+                            )}
+                            <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>·</span>
+                            <span style={{
+                              fontFamily: 'var(--font-serif)', fontSize: '13px',
+                              color: 'var(--accent)', lineHeight: 1.25,
+                            }}>
+                              {a.title} →
+                            </span>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>·</span>
+                            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)' }}>{a.read_time} min</span>
+                          </div>
+                        </div>
+                      </Link>
+                    )
+                  })}
               </div>
             </section>
           )}
@@ -235,6 +342,25 @@ export default async function TermPage({ params }: { params: { slug: string } })
                   </a>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Articles quick count */}
+          {termArticles.length > 0 && (
+            <div style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '8px' }}>
+                Articles
+              </p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 4px', lineHeight: 1 }}>
+                {termArticles.length}
+              </p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 12px' }}>
+                {termArticles.filter(a => a.angle === 'process').length > 0 && 'Includes implementation guide · '}
+                {termArticles.filter(a => a.angle === 'failure').length > 0 && 'Failure modes covered'}
+              </p>
+              <a href="#articles" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent)', textDecoration: 'none' }}>
+                Read articles ↓
+              </a>
             </div>
           )}
 

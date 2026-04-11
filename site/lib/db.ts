@@ -41,13 +41,15 @@ export async function getTermsByCluster(cluster: string): Promise<Term[]> {
   return data ?? []
 }
 
-export async function getRelatedTerms(slugs: string[]): Promise<Pick<Term, 'slug' | 'name' | 'cluster'>[]> {
-  if (!slugs.length) return []
+export async function getRelatedTerms(slugsOrNames: string[]): Promise<Pick<Term, 'slug' | 'name' | 'cluster'>[]> {
+  if (!slugsOrNames.length) return []
+  // related_terms may store names ("Knowledge Graph") or slugs ("knowledge-graph") — normalize both
+  const normalized = slugsOrNames.map(s => s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''))
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('terms')
     .select('slug, name, cluster')
-    .in('slug', slugs)
+    .in('slug', normalized)
     .eq('published', true)
 
   if (error) { console.error('getRelatedTerms:', error); return [] }
@@ -146,6 +148,21 @@ export async function getFeaturedArticles(limit = 3): Promise<Article[]> {
     .limit(limit)
 
   if (error) { console.error('getFeaturedArticles:', error); return [] }
+  return data ?? []
+}
+
+export async function getArticlesByCluster(cluster: string, excludeSlug: string, limit = 4): Promise<Article[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('published', true)
+    .eq('cluster', cluster)
+    .neq('slug', excludeSlug)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (error) { console.error('getArticlesByCluster:', error); return [] }
   return data ?? []
 }
 

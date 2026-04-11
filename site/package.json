@@ -10,6 +10,7 @@
     "seed": "npx tsx supabase/seed.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.88.0",
     "@supabase/ssr": "^0.3",
     "@supabase/supabase-js": "^2",
     "@types/marked": "^5.0.2",

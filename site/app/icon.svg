@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Rounded square background -->
+  <rect width="32" height="32" rx="7" fill="#D4845A"/>
+  <!-- ◈ mark: outer diamond -->
+  <polygon points="16,4 28,16 16,28 4,16" fill="none" stroke="white" stroke-width="2"/>
+  <!-- ◈ mark: inner square rotated 45deg -->
+  <rect x="11.5" y="11.5" width="9" height="9" rx="1" fill="white" transform="rotate(45 16 16)"/>
+</svg>
