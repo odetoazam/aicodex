@@ -167,6 +167,14 @@ export default function LearnClaudeForAdminsPage() {
           or it&apos;s your whole role — this path takes you from evaluation to running Claude
           confidently across your whole organization.
         </p>
+
+        {/* Cross-track note */}
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', marginTop: '16px', lineHeight: 1.5 }}>
+          Also figuring out which workflows to automate first?{' '}
+          <Link href="/learn/for-your-team" style={{ color: ACCENT, textDecoration: 'none' }}>
+            Rolling out Claude to your team →
+          </Link>
+        </p>
       </div>
 
       {/* Staged Steps */}

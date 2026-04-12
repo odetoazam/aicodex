@@ -14,26 +14,27 @@ export interface PathMembership {
   nextSlug: string | null
 }
 
-// Claude intro path — 8 steps (beginner)
-const CLAUDE_INTRO_STEPS = [
-  'large-language-model-def',
-  'context-window-def',
-  'token-def',
-  'system-prompt-def',
-  'constitutional-ai-def',
-  'hallucination-def',
-  'rag-def',
-  'ai-agent-def',
+// Track 1: For yourself — 8 practical steps
+const FOR_YOURSELF_STEPS = [
+  'how-to-write-a-good-prompt',
+  'what-ai-cant-do',
+  'claude-common-mistakes',
+  'claude-for-writing-and-editing',
+  'using-claude-for-research',
+  'claude-projects-role',
+  'hallucination-failure',
+  'claude-prompt-debugging',
 ]
 
-// AI for your company path — 7 steps (ops leaders / founders)
-const AI_FOR_COMPANY_STEPS = [
+// Track 2: For your team — 8 steps (merged from ai-for-your-company + getting-your-team-started)
+const FOR_YOUR_TEAM_STEPS = [
   'ai-roi-role',
   'what-to-automate-first',
   'running-your-first-ai-pilot',
-  'ai-pilot-failure',
-  'system-prompt-failure',
+  'system-prompt-role',
   'claude-projects-role',
+  'connectors-skills-role',
+  'hallucination-failure',
   'evals-role',
 ]
 
@@ -58,7 +59,7 @@ const DEV_STEPS = [
   'nextjs-chatbot-claude-full-tutorial',
 ]
 
-// Build-with-AI path — 10 steps (step 0 through 9)
+// Build-with-AI path — 10 steps (page still accessible, not in main index)
 const BWAI_STEPS = [
   'what-to-build-with-claude',
   'solo-founder-operating-system',
@@ -95,19 +96,20 @@ function buildMap(
   return map
 }
 
-const CLAUDE_INTRO_MAP    = buildMap(CLAUDE_INTRO_STEPS, 'How Claude Works', '/learn/claude', '#D4845A')
-const AI_FOR_COMPANY_MAP  = buildMap(AI_FOR_COMPANY_STEPS, 'AI for Your Company', '/learn/ai-for-your-company', '#5AAFD4')
-const DEV_MAP             = buildMap(DEV_STEPS, 'Developer Path', '/learn/developers', '#7B8FD4')
-const BWAI_MAP            = buildMap(BWAI_STEPS, 'Build with AI', '/learn/build-with-ai', '#4CAF7D', 0)
+const FOR_YOURSELF_MAP  = buildMap(FOR_YOURSELF_STEPS, 'Claude for Your Work', '/learn/claude', '#D4845A')
+const FOR_YOUR_TEAM_MAP = buildMap(FOR_YOUR_TEAM_STEPS, 'Rolling Out Claude to Your Team', '/learn/for-your-team', '#4CAF7D')
+const DEV_MAP           = buildMap(DEV_STEPS, 'Developer Path', '/learn/developers', '#7B8FD4')
+const BWAI_MAP          = buildMap(BWAI_STEPS, 'Build with AI', '/learn/build-with-ai', '#4CAF7D', 0)
 
 /**
  * Precedence (last wins on slug conflicts):
- * Claude Intro → AI for Company → Build-with-AI → Developer Path
+ * For Yourself → Build-with-AI → For Your Team → Developer Path
  * Developer path wins on shared articles (e.g. system-prompt-failure, deploying-claude-app-production).
+ * For Your Team wins over For Yourself on shared articles (e.g. claude-projects-role, hallucination-failure).
  */
 export const ARTICLE_PATHS: Record<string, PathMembership> = {
-  ...CLAUDE_INTRO_MAP,
-  ...AI_FOR_COMPANY_MAP,
+  ...FOR_YOURSELF_MAP,
   ...BWAI_MAP,
-  ...DEV_MAP, // Developer path wins on conflicts
+  ...FOR_YOUR_TEAM_MAP, // wins over for-yourself on conflicts
+  ...DEV_MAP,           // developer path wins on conflicts
 }

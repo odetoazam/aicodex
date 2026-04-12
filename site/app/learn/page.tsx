@@ -3,107 +3,72 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Learn — AI Codex',
-  description: 'Structured learning paths for operators, founders, and teams implementing AI at work.',
+  description: 'Structured learning paths for individuals, managers, and teams implementing Claude at work.',
 }
 
-const PATHS = [
+const TRACKS = [
   {
     href: '/learn/claude',
-    eyebrow: 'New to AI or Claude',
-    title: 'How Claude actually works',
-    description: 'Start here if you\'re new. How Claude thinks, why it responds the way it does, how to give it better instructions, and when to trust what it says. No technical background needed.',
+    eyebrow: 'For individuals',
+    title: 'Claude for your work',
+    description: 'For anyone using Claude personally who wants to get noticeably better at it. How to prompt well, what Claude is actually good at, the mistakes everyone makes first, and how to build a workflow that sticks.',
     accent: '#D4845A',
     accentBg: 'rgba(212,132,90,0.1)',
     icon: '◈',
     steps: 8,
     time: '~40 min',
-    tag: 'Start here',
-    disabled: false,
   },
   {
-    href: '/learn/ai-for-your-company',
-    eyebrow: 'For founders & ops leaders',
-    title: 'Figuring out AI for your company',
-    description: 'Is AI right for you right now? Where to start, how to run a pilot, what most teams get wrong, and how to build the internal case — without needing a technical co-founder to explain it.',
-    accent: '#5AAFD4',
-    accentBg: 'rgba(90,175,212,0.1)',
-    icon: '◐',
-    steps: 7,
-    time: '~35 min',
-    tag: 'Available now',
-    disabled: false,
-  },
-  {
-    href: '/learn/getting-your-team-started',
-    eyebrow: 'For department heads',
-    title: 'Getting your team actually using AI',
-    description: "Setting up Claude for your team, writing prompts that work consistently, the most valuable use cases for CS, ops, and marketing — and what to do when it doesn't go as planned.",
+    href: '/learn/for-your-team',
+    eyebrow: 'For managers & department heads',
+    title: 'Rolling out Claude to your team',
+    description: 'For the person responsible for getting their team actually using Claude. From deciding where to start, to setting up Projects and system prompts, to knowing whether it\'s making a real difference.',
     accent: '#4CAF7D',
     accentBg: 'rgba(76,175,125,0.1)',
     icon: '⬡',
-    steps: 6,
-    time: '~30 min',
-    tag: 'Available now',
-    disabled: false,
+    steps: 8,
+    time: '~41 min',
   },
   {
     href: '/learn/claude-for-admins',
-    eyebrow: 'For administrators & IT leads',
+    eyebrow: 'For IT & operations leads',
     title: 'Setting up Claude for your company',
-    description: "You've been asked to get Claude working for the whole organization. Three stages — evaluation, deployment, ongoing management — with the exact decisions you need to make at each step.",
+    description: 'For the person asked to deploy Claude org-wide. Three stages — evaluation, deployment, ongoing management — with the exact decisions you need to make at each step.',
     accent: '#5B8DD9',
     accentBg: 'rgba(91,141,217,0.1)',
     icon: '◫',
     steps: 10,
-    time: '~54 min',
-    tag: 'Available now',
-    disabled: false,
-  },
-  {
-    href: '/learn/build-with-ai',
-    eyebrow: 'For founders & builders',
-    title: 'Building your first AI product',
-    description: 'From deciding what to build to shipping it — validate your idea, choose the right stack, avoid the failure modes that catch founders off guard, deploy, and handle production errors.',
-    accent: '#4CAF7D',
-    accentBg: 'rgba(76,175,125,0.1)',
-    icon: '◬',
-    steps: 10,
-    time: '~61 min',
-    tag: 'Available now',
-    disabled: false,
-  },
-  {
-    href: '/learn/developers',
-    eyebrow: 'For developers',
-    title: 'Building with the Claude API',
-    description: 'Implementation guides that assume you can code. The messages array, streaming, RAG, evals, tool use, prompt caching, cost optimization, persistent memory, auth, and rate limiting. No business-case framing.',
-    accent: '#7B8FD4',
-    accentBg: 'rgba(123,143,212,0.1)',
-    icon: '⌥',
-    steps: 17,
-    time: '~121 min',
-    tag: 'Technical',
-    disabled: false,
-  },
-  {
-    href: '/learn/claude-for-cs',
-    eyebrow: 'For CS managers & leads',
-    title: 'Claude for Customer Success',
-    description: 'From daily ticket workflows to team-level infrastructure. How CS managers use Claude for escalations and renewals, and how CS leaders build the shared playbook that raises the whole team\'s floor.',
-    accent: '#C45E8A',
-    accentBg: 'rgba(196,94,138,0.1)',
-    icon: '◎',
-    steps: 8,
-    time: '~53 min',
-    tag: 'Available now',
-    disabled: false,
+    time: '~57 min',
   },
 ]
+
+const BWAI_PATH = {
+  href: '/learn/build-with-ai',
+  eyebrow: 'Going further',
+  title: 'Building AI tools for your team',
+  description: 'Once you know what your team needs — and what you\'d build if you could — this path covers the practical side: what to build, how to build it, the mistakes that kill early AI products, and how to deploy something that lasts.',
+  accent: '#4CAF7D',
+  accentBg: 'rgba(76,175,125,0.1)',
+  steps: 10,
+  time: '~64 min',
+}
+
+const DEV_PATH = {
+  href: '/learn/developers',
+  title: 'Building with the Claude API',
+  description: 'Implementation guides that assume you can code. The messages array, streaming, RAG, evals, tool use, prompt caching, cost optimization, persistent memory, auth, and rate limiting.',
+  accent: '#7B8FD4',
+  accentBg: 'rgba(123,143,212,0.1)',
+  steps: 17,
+  time: '~121 min',
+}
+
 
 export default function LearnPage() {
   return (
     <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(48px, 8vw, 96px) 0 var(--section-y)' }}>
 
+      {/* Header */}
       <div style={{ marginBottom: '64px' }}>
         <p className="eyebrow" style={{ marginBottom: '16px' }}>Learning Paths</p>
         <h1
@@ -118,109 +83,228 @@ export default function LearnPage() {
             maxWidth: '22ch',
           }}
         >
-          7 structured paths. Pick the one that fits.
+          Which of these is you?
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-muted)', maxWidth: '52ch', lineHeight: 1.65 }}>
-          Each path is a sequenced set of articles built around where you actually are — not a topic, not a product. Start at step 1 and follow it through, or jump to wherever you're stuck.
+          Pick the path that fits where you actually are — not a topic, not a product.
+          Each one is sequenced to build on itself. Start at step 1, or jump to wherever you're stuck.
         </p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {PATHS.map(path => (
-          <PathCard key={path.href} path={path} />
+      {/* 3 main tracks */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '56px' }}>
+        {TRACKS.map((track, i) => (
+          <Link key={track.href} href={track.href} style={{ textDecoration: 'none', display: 'block' }}>
+            <div
+              className="track-card"
+              style={{
+                padding: '28px 32px',
+                borderRadius: '12px',
+                border: `1px solid var(--border-base)`,
+                borderLeft: `3px solid ${track.accent}`,
+                background: 'var(--bg-surface)',
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+                gap: '24px',
+                transition: 'background 150ms ease',
+              }}
+            >
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    background: track.accentBg,
+                    fontFamily: 'var(--font-sans)',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: track.accent,
+                    flexShrink: 0,
+                  }}>
+                    {i + 1}
+                  </span>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+                    letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                    color: track.accent, margin: 0,
+                  }}>
+                    {track.eyebrow}
+                  </p>
+                </div>
+                <h2 style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'var(--text-xl)',
+                  fontWeight: 600,
+                  color: 'var(--text-primary)', marginBottom: '10px', lineHeight: 1.2,
+                }}>
+                  {track.title}
+                </h2>
+                <p style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-muted)',
+                  lineHeight: 1.6, margin: 0, maxWidth: '56ch',
+                }}>
+                  {track.description}
+                </p>
+              </div>
+
+              <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
+                <p style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '24px',
+                  color: track.accent, marginBottom: '8px', lineHeight: 1,
+                }}>
+                  {track.icon}
+                </p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
+                  {track.steps} steps
+                </p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+                  {track.time}
+                </p>
+              </div>
+            </div>
+          </Link>
         ))}
       </div>
 
+      {/* Build with AI — sub-path within the you/team/company framework */}
+      <div style={{ marginBottom: '56px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'var(--text-muted)', flexShrink: 0 }}>
+            WHEN YOU'RE READY TO BUILD
+          </p>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+        </div>
+        <Link href={BWAI_PATH.href} style={{ textDecoration: 'none', display: 'block' }}>
+          <div
+            className="track-card"
+            style={{
+              padding: '24px 28px',
+              borderRadius: '12px',
+              border: `1px solid var(--border-muted)`,
+              borderLeft: `3px solid ${BWAI_PATH.accent}`,
+              background: 'var(--bg-subtle)',
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              gap: '24px',
+              transition: 'background 150ms ease',
+            }}
+          >
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+                letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                color: BWAI_PATH.accent, margin: '0 0 8px',
+              }}>
+                {BWAI_PATH.eyebrow}
+              </p>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'var(--text-lg)',
+                fontWeight: 600,
+                color: 'var(--text-primary)', marginBottom: '8px', lineHeight: 1.2,
+              }}>
+                {BWAI_PATH.title}
+              </h2>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)',
+                lineHeight: 1.6, margin: 0, maxWidth: '58ch',
+              }}>
+                {BWAI_PATH.description}
+              </p>
+            </div>
+            <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
+                {BWAI_PATH.steps} steps
+              </p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+                {BWAI_PATH.time}
+              </p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Divider with label */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ flex: 1, height: '1px', background: 'var(--border-base)' }} />
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.06em', flexShrink: 0 }}>
+          FOR DEVELOPERS
+        </p>
+        <div style={{ flex: 1, height: '1px', background: 'var(--border-base)' }} />
+      </div>
+
+      {/* Developer path */}
+      <Link href={DEV_PATH.href} style={{ textDecoration: 'none', display: 'block', marginBottom: '0' }}>
+        <div
+          className="track-card"
+          style={{
+            padding: '24px 28px',
+            borderRadius: '12px',
+            border: `1px solid var(--border-base)`,
+            borderLeft: `3px solid ${DEV_PATH.accent}`,
+            background: 'var(--bg-surface)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '24px',
+            transition: 'background 150ms ease',
+          }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span style={{
+                padding: '2px 8px', borderRadius: '4px',
+                fontSize: '10px', fontWeight: 600, letterSpacing: '0.04em',
+                background: DEV_PATH.accentBg, color: DEV_PATH.accent,
+                fontFamily: 'var(--font-mono)',
+              }}>
+                {'{ }'}
+              </span>
+              <p style={{
+                fontFamily: 'var(--font-mono)', fontSize: '11px',
+                color: DEV_PATH.accent, margin: 0, letterSpacing: '0.03em',
+              }}>
+                // technical
+              </p>
+            </div>
+            <h2 style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: 'var(--text-lg)',
+              fontWeight: 600,
+              color: 'var(--text-primary)', marginBottom: '8px', lineHeight: 1.2,
+            }}>
+              {DEV_PATH.title}
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)',
+              lineHeight: 1.6, margin: 0, maxWidth: '60ch',
+            }}>
+              {DEV_PATH.description}
+            </p>
+          </div>
+          <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
+              {DEV_PATH.steps} steps
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+              {DEV_PATH.time}
+            </p>
+          </div>
+        </div>
+      </Link>
+
       <style>{`
-        .path-card:hover {
+        .track-card:hover {
           background: var(--bg-subtle) !important;
-          border-left-color: currentColor;
         }
       `}</style>
     </div>
-  )
-}
-
-function PathCard({ path }: { path: typeof PATHS[0] }) {
-  const inner = (
-    <div
-      style={{
-        padding: '28px 32px',
-        borderRadius: '12px',
-        border: `1px solid var(--border-base)`,
-        borderLeft: `3px solid ${path.disabled ? 'var(--border-muted)' : path.accent}`,
-        background: 'var(--bg-surface)',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-        gap: '24px',
-        opacity: path.disabled ? 0.55 : 1,
-        transition: 'background 150ms ease',
-      }}
-      className={path.disabled ? '' : 'path-card'}
-    >
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-          <p style={{
-            fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
-            letterSpacing: '0.06em', textTransform: 'uppercase' as const,
-            color: path.disabled ? 'var(--text-muted)' : path.accent, margin: 0,
-          }}>
-            {path.eyebrow}
-          </p>
-          {path.tag && (
-            <span style={{
-              padding: '2px 8px', borderRadius: '4px',
-              fontSize: path.tag === 'Technical' ? '10px' : '11px',
-              fontWeight: path.tag === 'Technical' ? 600 : 500,
-              letterSpacing: path.tag === 'Technical' ? '0.04em' : undefined,
-              background: path.disabled ? 'var(--bg-subtle)' : path.accentBg,
-              color: path.disabled ? 'var(--text-muted)' : path.accent,
-              fontFamily: path.tag === 'Technical' ? 'var(--font-mono)' : 'var(--font-sans)',
-            }}>
-              {path.tag === 'Technical' ? '{ }' : path.tag}
-            </span>
-          )}
-        </div>
-        <h2 style={{
-          fontFamily: path.tag === 'Technical' ? 'var(--font-mono)' : 'var(--font-serif)',
-          fontSize: path.tag === 'Technical' ? 'var(--text-lg)' : 'var(--text-xl)',
-          fontWeight: 600,
-          color: 'var(--text-primary)', marginBottom: '10px', lineHeight: 1.2,
-        }}>
-          {path.title}
-        </h2>
-        <p style={{
-          fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'var(--text-muted)',
-          lineHeight: 1.6, margin: 0, maxWidth: '56ch',
-        }}>
-          {path.description}
-        </p>
-      </div>
-
-      <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
-        <p style={{
-          fontFamily: 'var(--font-sans)', fontSize: '24px',
-          color: path.disabled ? 'var(--text-muted)' : path.accent,
-          marginBottom: '8px', lineHeight: 1,
-        }}>
-          {path.icon}
-        </p>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
-          {path.steps} concepts
-        </p>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
-          {path.time}
-        </p>
-      </div>
-    </div>
-  )
-
-  if (path.disabled) return <div key={path.href}>{inner}</div>
-
-  return (
-    <Link href={path.href} style={{ textDecoration: 'none', display: 'block' }}>
-      {inner}
-    </Link>
   )
 }

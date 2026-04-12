@@ -91,7 +91,7 @@ const RESULTS: Record<Q1, Record<string, Result>> = {
         { slug: 'writing-system-prompts-that-work', title: 'Writing system prompts that work', time: 5, excerpt: 'The prompts teams actually use vs. the ones they think they need.' },
         { slug: 'measuring-ai-roi', title: 'Measuring AI ROI', time: 6, excerpt: 'What to measure, when to measure it, and what the numbers mean.' },
       ],
-      path: { label: 'Team rollout path →', href: '/learn/getting-your-team-started' },
+      path: { label: 'Team rollout path →', href: '/learn/for-your-team' },
     },
     deep: {
       headline: 'Going deeper — the underused patterns.',

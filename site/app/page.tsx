@@ -76,11 +76,11 @@ const ENTRY_POINTS = [
     title: 'Getting more out of it',
     description: 'You\'re past the basics and want more out of it. What actually works at scale, and the failure patterns worth knowing before they hit you.',
     cta: 'See the path',
-    href: '/learn/ai-for-your-company',
+    href: '/learn/for-your-team',
     accent: '#5AAFD4',
     accentBg: 'rgba(90,175,212,0.08)',
     icon: '◐',
-    meta: '7 steps · ~35 min',
+    meta: '8 steps · ~41 min',
   },
   {
     eyebrow: 'Reference',

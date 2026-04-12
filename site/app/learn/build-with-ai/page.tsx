@@ -190,10 +190,10 @@ export default function LearnBuildWithAIPage() {
             All articles →
           </Link>
           <Link
-            href="/learn/ai-for-your-company"
+            href="/learn/for-your-team"
             style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', textDecoration: 'none' }}
           >
-            AI for your company →
+            Rolling out to your team →
           </Link>
           <Link
             href="/glossary"

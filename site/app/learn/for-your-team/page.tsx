@@ -2,89 +2,89 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Claude for your work — AI Codex',
-  description: 'Eight practical steps for anyone using Claude personally: how to prompt well, what Claude is actually good at, the mistakes everyone makes, and how to build a workflow that sticks.',
+  title: 'Rolling out Claude to your team — AI Codex',
+  description: 'A practical path for managers and department heads: from deciding where to start, to setting up Projects and system prompts, to knowing whether your rollout is actually working.',
 }
 
 const STEPS = [
   {
     number: 1,
-    concept: 'Prompting that works',
-    conceptSlug: 'prompt-engineering',
-    articleSlug: 'how-to-write-a-good-prompt',
-    label: 'The skill that changes everything',
-    takeaway: 'Most people get mediocre results because they write prompts the way they\'d text a friend. The specific techniques that consistently produce better output — with examples you can steal.',
-    time: '6 min',
+    concept: 'Is AI worth it for your team right now?',
+    conceptSlug: 'ai-roi',
+    articleSlug: 'ai-roi-role',
+    label: 'Start with an honest assessment',
+    takeaway: 'Most teams should start with AI. Most teams should start smaller than they think. How to honestly evaluate where the real value is — and avoid the distraction of the flashy use case.',
+    time: '5 min',
   },
   {
     number: 2,
-    concept: 'What Claude is actually good at',
-    conceptSlug: 'ai-augmentation',
-    articleSlug: 'what-ai-cant-do',
-    label: 'Know the real limits before they surprise you',
-    takeaway: 'Claude is excellent at some things and genuinely bad at others. Knowing the difference before you need it saves you from making decisions on bad output without realising it.',
-    time: '5 min',
+    concept: 'What to automate first',
+    conceptSlug: 'workflow-automation',
+    articleSlug: 'what-to-automate-first',
+    label: 'Pick the right starting point',
+    takeaway: 'Not the most impressive use case — the one that actually ships and delivers results in the first 30 days. The framework for finding it in your specific team.',
+    time: '6 min',
   },
   {
     number: 3,
-    concept: 'The mistakes everyone makes first',
-    conceptSlug: 'hallucination',
-    articleSlug: 'claude-common-mistakes',
-    label: 'Skip the predictable failures',
-    takeaway: 'The patterns that trip up almost every new Claude user — being too vague, accepting the first output, not giving context. Knowing them in advance puts you months ahead.',
-    time: '5 min',
+    concept: 'Running your first pilot',
+    conceptSlug: 'evals',
+    articleSlug: 'running-your-first-ai-pilot',
+    label: 'Scope it so it can succeed',
+    takeaway: 'What a real pilot looks like — how to scope it, who to include, what success means, and how to avoid the trap of pilots that never turn into real change.',
+    time: '6 min',
   },
   {
     number: 4,
-    concept: 'Writing and editing with Claude',
-    conceptSlug: 'ai-augmentation',
-    articleSlug: 'claude-for-writing-and-editing',
-    label: 'The use case most people start with',
-    takeaway: 'What actually works for drafts, rewrites, tone adjustments, and editing — and what doesn\'t. How to direct Claude without losing your own voice in the output.',
-    time: '5 min',
+    concept: 'The system prompt: your most important decision',
+    conceptSlug: 'system-prompt',
+    articleSlug: 'system-prompt-role',
+    label: 'Set it up properly from day one',
+    takeaway: 'The system prompt is what turns Claude from a generic assistant into something that produces consistent, on-brand outputs for your whole team. How to write one that actually holds up.',
+    time: '6 min',
   },
   {
     number: 5,
-    concept: 'Research with Claude',
-    conceptSlug: 'rag',
-    articleSlug: 'using-claude-for-research',
-    label: 'When to use it and when not to',
-    takeaway: 'Claude is fast and useful for research — and also capable of sounding completely authoritative while being wrong. How to get the value without getting burned.',
+    concept: 'Projects: giving your team a shared foundation',
+    conceptSlug: 'claude-projects',
+    articleSlug: 'claude-projects-role',
+    label: 'Stop letting outputs vary by who wrote the prompt',
+    takeaway: 'How Projects turn Claude from a personal tool into a team resource — so every rep starts from the same baseline instead of reinventing the wheel every time.',
     time: '5 min',
   },
   {
     number: 6,
-    concept: 'Projects: Claude that remembers your context',
-    conceptSlug: 'claude-projects',
-    articleSlug: 'claude-projects-role',
-    label: 'Stop re-explaining yourself every conversation',
-    takeaway: 'Projects let you give Claude standing instructions and shared context so you don\'t start from zero every time. How to set one up and what to put in it.',
-    time: '5 min',
+    concept: 'Skills and connectors: what to actually enable',
+    conceptSlug: 'connector',
+    articleSlug: 'connectors-skills-role',
+    label: 'Connect Claude to your actual work',
+    takeaway: 'Which Skills and Connectors are worth turning on — and which to leave off until your team is ready. How to give Claude access to your documents without creating new problems.',
+    time: '4 min',
   },
   {
     number: 7,
-    concept: 'When to trust the output — and when not to',
+    concept: 'What to tell your team about trust',
     conceptSlug: 'hallucination',
     articleSlug: 'hallucination-failure',
-    label: 'Build the right instincts',
-    takeaway: 'The specific failure patterns you need to know — not to be paranoid about every output, but to catch the ones that actually matter before they become a problem.',
+    label: 'Build the right habits before they matter',
+    takeaway: 'The failure patterns your team needs to know — not to be paranoid, but to catch the ones that actually matter. What to tell people in their first week.',
     time: '5 min',
   },
   {
     number: 8,
-    concept: 'When something goes wrong: fix the prompt',
-    conceptSlug: 'prompt-engineering',
-    articleSlug: 'claude-prompt-debugging',
-    label: 'Diagnose before you give up',
-    takeaway: 'When Claude misses, most people either accept the bad output or give up. The third option: a quick diagnostic process that tells you exactly what to change.',
+    concept: 'Knowing if it\'s actually working',
+    conceptSlug: 'evals',
+    articleSlug: 'evals-role',
+    label: 'Measure what matters',
+    takeaway: 'Beyond "the team seems to like it." How to measure whether the rollout is delivering real time savings, better outputs, and new capabilities — without needing a data team.',
     time: '5 min',
   },
 ]
 
-const ACCENT = '#D4845A'
-const ACCENT_BG = 'rgba(212,132,90,0.1)'
+const ACCENT = '#4CAF7D'
+const ACCENT_BG = 'rgba(76,175,125,0.1)'
 
-export default function LearnClaudePage() {
+export default function LearnForYourTeamPage() {
   const totalTime = STEPS.reduce((sum, s) => sum + parseInt(s.time), 0)
 
   return (
@@ -94,13 +94,13 @@ export default function LearnClaudePage() {
       <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
         <Link href="/learn" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Learn</Link>
         <span>›</span>
-        <span style={{ color: 'var(--text-secondary)' }}>Claude for your work</span>
+        <span style={{ color: 'var(--text-secondary)' }}>Rolling out Claude to your team</span>
       </nav>
 
       {/* Header */}
       <div style={{ marginBottom: '56px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-          <p className="eyebrow">For individuals</p>
+          <p className="eyebrow">For managers & department heads</p>
           <span style={{ padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: ACCENT_BG, color: ACCENT, fontFamily: 'var(--font-sans)' }}>
             {STEPS.length} steps · ~{totalTime} min
           </span>
@@ -115,15 +115,23 @@ export default function LearnClaudePage() {
             lineHeight: 1.15,
             letterSpacing: '-0.02em',
             marginBottom: '16px',
-            maxWidth: '24ch',
+            maxWidth: '28ch',
           }}
         >
-          Claude for your work
+          Rolling out Claude to your team
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-muted)', maxWidth: '56ch', lineHeight: 1.65 }}>
-          Eight practical steps, in the right order. No technical background needed —
-          just the skills that separate people who get real value from Claude
-          and people who give up after a week.
+          Eight steps from deciding where to start, to knowing if it's working.
+          Works for any function — CS, ops, marketing, HR. The fundamentals are the same.
+          No technical background required.
+        </p>
+
+        {/* Cross-track note */}
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', marginTop: '16px', lineHeight: 1.5 }}>
+          Also need to provision accounts or choose a plan?{' '}
+          <Link href="/learn/claude-for-admins" style={{ color: ACCENT, textDecoration: 'none' }}>
+            Setting up Claude for your company →
+          </Link>
         </p>
       </div>
 
@@ -145,51 +153,9 @@ export default function LearnClaudePage() {
         </div>
       </div>
 
-      {/* Anthropic Academy callout */}
-      <div style={{
-        marginTop: '48px',
-        padding: '20px 24px',
-        borderRadius: '10px',
-        border: '1px solid var(--border-base)',
-        background: 'var(--bg-subtle)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '20px',
-        flexWrap: 'wrap' as const,
-      }}>
-        <div>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '4px' }}>
-            Official course from Anthropic
-          </p>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
-            Prefer video with a certificate? Anthropic offers a free <strong>Claude 101</strong> course — basics with video lessons and a completion certificate.
-          </p>
-        </div>
-        <a
-          href="https://anthropic.skilljar.com/claude-101"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontFamily: 'var(--font-sans)',
-            fontSize: '13px',
-            fontWeight: 500,
-            color: 'var(--text-secondary)',
-            textDecoration: 'none',
-            whiteSpace: 'nowrap' as const,
-            flexShrink: 0,
-          }}
-        >
-          Anthropic Academy ↗
-        </a>
-      </div>
-
       {/* Footer CTA */}
       <div style={{
-        marginTop: '24px',
+        marginTop: '64px',
         padding: '32px',
         borderRadius: '12px',
         border: '1px solid var(--border-base)',
@@ -200,15 +166,15 @@ export default function LearnClaudePage() {
           Where to go next
         </p>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
-          Getting your team on board?
+          Deploying this org-wide?
         </h2>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '20px', maxWidth: '52ch' }}>
-          Once you're getting real value personally, the next move is usually figuring out
-          how to bring your team along. That's a different set of decisions.
+          If you're the person responsible for Claude across the whole company — plan selection,
+          provisioning, governance — that's a different set of decisions covered in the admin path.
         </p>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' as const }}>
-          <Link href="/learn/for-your-team" style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: ACCENT, textDecoration: 'none', fontWeight: 500 }}>
-            Rolling out Claude to your team →
+          <Link href="/learn/claude-for-admins" style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: ACCENT, textDecoration: 'none', fontWeight: 500 }}>
+            Setting up Claude for your company →
           </Link>
           <Link href="/articles" style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', textDecoration: 'none' }}>
             All articles →
