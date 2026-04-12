@@ -85,6 +85,19 @@ const PATHS = [
     tag: 'Technical',
     disabled: false,
   },
+  {
+    href: '/learn/claude-for-cs',
+    eyebrow: 'For CS managers & leads',
+    title: 'Claude for Customer Success',
+    description: 'From daily ticket workflows to team-level infrastructure. How CS managers use Claude for escalations and renewals, and how CS leaders build the shared playbook that raises the whole team\'s floor.',
+    accent: '#C45E8A',
+    accentBg: 'rgba(196,94,138,0.1)',
+    icon: '◎',
+    steps: 8,
+    time: '~53 min',
+    tag: 'Available now',
+    disabled: false,
+  },
 ]
 
 export default function LearnPage() {
@@ -105,7 +118,7 @@ export default function LearnPage() {
             maxWidth: '22ch',
           }}
         >
-          6 structured paths. Pick the one that fits.
+          7 structured paths. Pick the one that fits.
         </h1>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-muted)', maxWidth: '52ch', lineHeight: 1.65 }}>
           Each path is a sequenced set of articles built around where you actually are — not a topic, not a product. Start at step 1 and follow it through, or jump to wherever you're stuck.
