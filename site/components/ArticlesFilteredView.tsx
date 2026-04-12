@@ -24,6 +24,12 @@ const DEV_SLUGS = new Set([
   'supabase-conversation-history',
   'claude-vs-custom-model',
   'claude-plus-linear',
+  'claude-plus-jira',
+  'claude-code-project-setup',
+  'ai-agent-harness-explained',
+  'claude-advisor-tool',
+  'claude-managed-agents',
+  'claude-plus-confluence',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -52,6 +58,7 @@ const PRODUCTIVITY_SLUGS = new Set([
   'claude-plus-asana',
   'claude-plus-figma',
   'claude-plus-webflow',
+  'claude-plus-intercom',
 ])
 
 const AGENCIES_SLUGS = new Set([
@@ -63,7 +70,7 @@ const AGENCIES_SLUGS = new Set([
 
 // Pinned for each persona view
 const PINNED_ALL       = ['how-to-write-a-good-prompt', 'claude-common-mistakes', 'claude-operator-habits', 'running-your-first-ai-pilot', 'your-first-claude-api-call']
-const PINNED_OPERATOR  = ['claude-plus-slack-for-teams', 'claude-plus-zapier', 'claude-common-mistakes', 'how-to-write-a-good-prompt', 'running-your-first-ai-pilot']
+const PINNED_OPERATOR  = ['cs-manager-ai-workflow', 'ops-manager-ai-workflow', 'marketing-manager-claude-workflow', 'claude-plus-slack-for-teams', 'claude-common-mistakes']
 const PINNED_FOUNDER   = ['solo-founder-operating-system', 'validating-startup-idea-with-claude', 'ai-product-failure-modes-founders', 'first-ten-customers-ai-product']
 const PINNED_DEV       = ['your-first-claude-api-call', 'building-a-rag-pipeline-from-scratch', 'prompt-caching-implementation', 'claude-cost-optimization']
 const PINNED_PROD      = ['claude-plus-notion', 'claude-plus-airtable', 'claude-plus-figma', 'claude-for-writing-and-editing']

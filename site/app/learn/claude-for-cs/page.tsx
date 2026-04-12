@@ -63,12 +63,12 @@ const STEPS = [
   },
   {
     number: 7,
-    concept: 'Team Playbook',
-    conceptSlug: 'claude-projects',
-    articleSlug: 'claude-cs-team-playbook',
-    label: 'Build the infrastructure that scales your whole team',
-    takeaway: "The CS leader's job: shared Project setup, prompt library, new rep training with Claude, and how to measure whether the team's floor is actually rising.",
-    time: '8 min',
+    concept: 'Change Management',
+    conceptSlug: 'claude-plans',
+    articleSlug: 'ai-change-management',
+    label: 'Get the team to actually change how they work',
+    takeaway: "Setup without adoption is wasted. The first-use moment, early adopter strategy, and how to handle the reps who are skeptical — before you roll out to everyone.",
+    time: '6 min',
   },
   {
     number: 8,
@@ -165,16 +165,16 @@ export default function LearnClaudeForCSPage() {
         </p>
         <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' as const }}>
           <Link
-            href="/articles/claude-for-hr-teams"
+            href="/articles/claude-for-finance-teams"
             style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: ACCENT, textDecoration: 'none', fontWeight: 500 }}
           >
-            Claude for HR teams →
+            Claude for finance teams →
           </Link>
           <Link
-            href="/articles/claude-for-finance-teams"
+            href="/articles/claude-for-product-teams"
             style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-secondary)', textDecoration: 'none' }}
           >
-            Claude for finance teams →
+            Claude for product teams →
           </Link>
           <Link
             href="/articles"
