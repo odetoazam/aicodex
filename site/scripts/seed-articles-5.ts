@@ -130,7 +130,7 @@ The goal is appropriate depth. Not always deep, not always shallow.
     slug: 'mcp-role',
     angle: 'role',
     title: 'What MCP actually means for your business (it\'s not just for developers)',
-    excerpt: 'The Model Context Protocol sounds technical. The practical implication is simple: AI tools can now connect to your actual systems in a standardised, safe way. Here\'s what that unlocks.',
+    excerpt: 'The Model Context Protocol sounds technical. The practical implication is simple: AI tools can now connect to your actual systems in a standardised, safe way. Here\'s what that means for how you work.',
     readTime: 5,
     tier: 3,
     body: `When Anthropic open-sourced the [Model Context Protocol](/glossary/mcp), most coverage was aimed at developers. "Universal standard for AI tool integration." "Replaces custom API wrappers." Technical stuff.

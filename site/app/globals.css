@@ -173,3 +173,12 @@ pre {
   background: var(--border-base);
   border: none;
 }
+
+/* Compare page — mobile responsive table layout */
+@media (max-width: 768px) {
+  .compare-tldr-grid { grid-template-columns: 1fr !important; }
+  .compare-header { grid-template-columns: 1fr !important; }
+  .compare-row { grid-template-columns: 1fr !important; }
+  .compare-header > div:not(:first-child) { border-left: none !important; border-top: 1px solid var(--border-muted); }
+  .compare-row > div:not(:first-child) { border-left: none !important; border-top: 1px solid var(--border-muted); }
+}

@@ -128,9 +128,14 @@ export default function GlossaryBrowser({ terms }: { terms: Term[] }) {
     let result = terms
     if (search.trim()) {
       const q = search.toLowerCase()
-      result = result.filter(
-        t => t.name.toLowerCase().includes(q) || t.definition.toLowerCase().includes(q)
+      const nameMatches = result.filter(
+        t =>
+          t.name.toLowerCase().includes(q) ||
+          t.aliases.some(a => a.toLowerCase().includes(q))
       )
+      result = nameMatches.length > 0
+        ? nameMatches
+        : result.filter(t => t.definition.toLowerCase().includes(q))
     }
     if (activeCluster) result = result.filter(t => t.cluster === activeCluster)
     if (activeLetter) result = result.filter(t => t.name[0].toUpperCase() === activeLetter)

@@ -144,7 +144,7 @@ The data teams that get the most from Claude are not using it for analysis. They
     slug: 'context-window-practical',
     angle: 'process',
     title: 'The context window in practice: what it means for how you work',
-    excerpt: "The context window is not just a technical spec — it shapes what Claude can and can't do in any given conversation. Here is how to work with it.",
+    excerpt: "The context window shapes what Claude can and can't do in any given conversation. Here is how to work with it.",
     readTime: 5,
     cluster: 'Foundation Models & LLMs',
     body: `The [context window](/glossary/context-window) is the amount of text Claude can hold in its working memory at once — everything from the current conversation, uploaded documents, your Project instructions, and its own responses. Claude 3.5 Sonnet has a 200,000 token context window, which is roughly 150,000 words, or about 500 pages of text.
@@ -260,10 +260,10 @@ For teams, do not rely on Memory for consistency. That is Projects' job. Memory 
     slug: 'deep-research-practical',
     angle: 'process',
     title: 'How to get the most out of Claude Deep Research',
-    excerpt: 'Deep Research is not a faster Google. It is a different kind of tool. Here is what it actually does and how to use it well.',
+    excerpt: 'Deep Research works differently from a search engine. Here is what it actually does and how to use it well.',
     readTime: 5,
     cluster: 'Agents & Orchestration',
-    body: `[Deep Research](/glossary/deep-research) is one of Claude's most powerful features and one of the most commonly misused. The misuse comes from treating it like a faster web search — typing a question and expecting a Google-style answer. That is not what it does.
+    body: `[Deep Research](/glossary/deep-research) is one of the most commonly misused features in Claude. Most people treat it like a faster web search — typing a question and expecting a Google-style answer. It works differently.
 
 Deep Research is a multi-step research process. Claude reads multiple sources, synthesises across them, follows up on findings that need more context, and produces a structured report. It takes minutes, not seconds. It produces thousands of words, not a paragraph. It is the research process, not the search query.
 

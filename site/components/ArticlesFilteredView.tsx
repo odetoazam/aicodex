@@ -70,7 +70,7 @@ const AGENCIES_SLUGS = new Set([
 
 // Pinned for each persona view
 const PINNED_ALL       = ['how-to-write-a-good-prompt', 'claude-common-mistakes', 'claude-operator-habits', 'running-your-first-ai-pilot', 'your-first-claude-api-call']
-const PINNED_OPERATOR  = ['cs-manager-ai-workflow', 'ops-manager-ai-workflow', 'marketing-manager-claude-workflow', 'claude-plus-slack-for-teams', 'claude-common-mistakes']
+const PINNED_OPERATOR  = ['why-claude-feels-inconsistent', 'cs-manager-ai-workflow', 'marketing-manager-claude-workflow', 'claude-plus-slack-for-teams', 'claude-common-mistakes']
 const PINNED_FOUNDER   = ['solo-founder-operating-system', 'validating-startup-idea-with-claude', 'ai-product-failure-modes-founders', 'first-ten-customers-ai-product']
 const PINNED_DEV       = ['your-first-claude-api-call', 'building-a-rag-pipeline-from-scratch', 'prompt-caching-implementation', 'claude-cost-optimization']
 const PINNED_PROD      = ['claude-plus-notion', 'claude-plus-airtable', 'claude-plus-figma', 'claude-for-writing-and-editing']

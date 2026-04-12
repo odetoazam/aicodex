@@ -271,10 +271,10 @@ Writing that sounds like Claude — hedged, corporate, structured to a fault —
     slug: 'using-claude-for-research',
     angle: 'process',
     title: 'Using Claude for research',
-    excerpt: "Claude is not a search engine, but it is a powerful research partner. The distinction matters. Here is how to use it effectively for research without being misled by confident-sounding errors.",
+    excerpt: 'Claude works best for research as a thinking partner, not a search engine. Here is how to use it effectively without being misled by confident-sounding errors.',
     readTime: 6,
     cluster: 'Retrieval & Knowledge',
-    body: `Claude is not a search engine. It cannot browse the web, look things up in real time, or tell you what happened last week. Using it like a search engine will produce unreliable results, and the errors will be hard to catch because they sound authoritative.
+    body: `Claude cannot browse the web, look things up in real time, or tell you what happened last week. Using it like a search engine produces unreliable results, and the errors are hard to catch because they sound authoritative.
 
 Used correctly, Claude is a different kind of research tool — one that excels at synthesis, structure, and helping you think through what you already have.
 

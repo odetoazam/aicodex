@@ -74,7 +74,7 @@ const ENTRY_POINTS = [
   {
     eyebrow: 'Already using AI at work?',
     title: 'Getting more out of it',
-    description: 'Not starting from zero — you\'re past the basics and want to go deeper. What most teams haven\'t unlocked yet, and the failure patterns worth knowing before they hit you.',
+    description: 'You\'re past the basics and want more out of it. What actually works at scale, and the failure patterns worth knowing before they hit you.',
     cta: 'See the path',
     href: '/learn/ai-for-your-company',
     accent: '#5AAFD4',

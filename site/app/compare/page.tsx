@@ -55,6 +55,14 @@ const COMPARISONS = [
     readTime: '7 min',
     accent: '#4CAF7D',
   },
+  {
+    href: '/compare/claude-vs-gemini-for-business',
+    title: 'Claude vs Gemini for Business',
+    description: "Anthropic's Claude vs Google Gemini — instruction following, writing quality, Workspace integration, video understanding, and which one wins for your team's actual use case.",
+    tags: ['Claude', 'Gemini', 'Google'],
+    readTime: '7 min',
+    accent: '#4285F4',
+  },
 ]
 
 export default function ComparePage() {
@@ -83,7 +91,7 @@ export default function ComparePage() {
           maxWidth: '52ch',
           lineHeight: 1.65,
         }}>
-          Not benchmarks. Practical comparisons written for operators and developers choosing a model for a specific use case — with honest trade-offs, not vendor talking points.
+          Practical comparisons for people choosing a model for a real task — honest trade-offs based on implementation experience, not vendor marketing.
         </p>
       </div>
 
@@ -161,7 +169,7 @@ export default function ComparePage() {
           How we write these comparisons
         </p>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.65, margin: 0 }}>
-          These are written from real implementation experience, not synthetic benchmarks. Where Claude has a genuine weakness, we say so. Where GPT-4 is better for a specific task, we say that too. The goal is to help you pick the right tool — not to sell a preference.
+          These are written from real implementation experience. Where Claude has a genuine weakness, we say so. Where GPT-4 is better for a specific task, we say so too. The goal is to help you pick the right tool.
         </p>
       </div>
 

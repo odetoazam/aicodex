@@ -472,7 +472,7 @@ Memory is personal — each team member has their own. You cannot configure it c
     slug: 'deep-research-guide',
     angle: 'process',
     title: 'When to use Deep Research and how to get the most from it',
-    excerpt: 'Deep Research is not just "web search but longer." It is a different tool for a different kind of question. Here is when it is worth the time and tokens.',
+    excerpt: 'Deep Research is a different tool from web search — it runs longer, uses more tokens, and is worth it for specific questions. Here is when to use it.',
     readTime: 5,
     cluster: 'Tools & Ecosystem',
     body: `[Deep Research](/glossary/deep-research) is Claude spending extended time — sometimes 10-15 minutes — crawling multiple web sources, cross-referencing information, and producing a comprehensive, cited research report. It uses significantly more tokens than a regular web search. It is worth it for the right questions.

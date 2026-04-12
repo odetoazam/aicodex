@@ -136,7 +136,7 @@ export default function CompareEnterpriseCardPage() {
           maxWidth: '56ch',
           lineHeight: 1.65,
         }}>
-          The comparison decision-makers actually search for. Not a benchmark leaderboard — a practical breakdown of what separates these two platforms when you are deploying at scale, negotiating an enterprise contract, or presenting a vendor recommendation to your security team.
+          A practical breakdown of what separates these two platforms when you're deploying at scale, negotiating a contract, or presenting a vendor recommendation to your security team.
         </p>
       </div>
 
@@ -144,7 +144,7 @@ export default function CompareEnterpriseCardPage() {
       <div style={{
         display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px',
         marginBottom: '56px',
-      }} className="tldr-grid">
+      }} className="compare-tldr-grid">
         <div style={{
           padding: '24px',
           borderRadius: '10px',
@@ -300,15 +300,6 @@ export default function CompareEnterpriseCardPage() {
         </Link>
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .tldr-grid { grid-template-columns: 1fr !important; }
-          .compare-header { grid-template-columns: 1fr !important; }
-          .compare-row { grid-template-columns: 1fr !important; }
-          .compare-header > div:not(:first-child) { border-left: none !important; border-top: 1px solid var(--border-muted); }
-          .compare-row > div:not(:first-child) { border-left: none !important; border-top: 1px solid var(--border-muted); }
-        }
-      `}</style>
     </div>
   )
 }

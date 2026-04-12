@@ -132,7 +132,7 @@ Run through these three checks before concluding the connector does not work. In
     slug: 'managing-email-with-claude',
     angle: 'process',
     title: 'Managing your email with Claude: the system that actually works',
-    excerpt: 'Inbox zero is not a goal — it\'s a distraction. Here\'s how to use Claude to process email faster, write better replies, and stop letting your inbox run your day.',
+    excerpt: 'Inbox zero is a distraction. Here\'s how to use Claude to process email faster, write better replies, and stop letting your inbox run your day.',
     readTime: 6,
     cluster: 'Business Strategy & ROI',
     body: `Email is the one productivity problem that never gets solved. Tools come and go. Workflows get set up and abandoned. Folders get created, ignored, deleted. The inbox keeps growing.

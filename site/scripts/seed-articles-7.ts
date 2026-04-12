@@ -23,7 +23,7 @@ const ARTICLES = [
     slug: 'ai-for-customer-success',
     angle: 'field-note',
     title: 'What AI actually looks like in a customer success team',
-    excerpt: 'Not a demo, not a prediction. What CS teams are actually using AI for right now — what\'s working, what isn\'t, and what nobody tells you before you start.',
+    excerpt: 'What CS teams are actually using AI for right now — what\'s working, what isn\'t, and what nobody tells you before you start.',
     readTime: 6,
     cluster: 'Business Strategy & ROI',
     body: `Customer success is one of the best places to implement AI. The work is high-volume, often repetitive in structure, deeply dependent on knowing your product, and has clear quality signals — you can tell pretty quickly whether an output is good or not.
@@ -111,7 +111,7 @@ The most effective teams use Claude for the structure and the first draft, then 
     slug: 'tool-use-process',
     angle: 'process',
     title: 'How tool use works: what happens when Claude calls a function',
-    excerpt: 'Tool use is the mechanism that lets Claude do things, not just say things. Here\'s exactly what happens when Claude uses a tool.',
+    excerpt: 'Tool use is the mechanism that lets Claude take actions — call APIs, run code, search files — instead of just generating text. Here\'s exactly what happens when Claude uses a tool.',
     readTime: 4,
     cluster: 'Tools & Ecosystem',
     body: `[Tool use](/glossary/tool-use) is what turns Claude from a text generator into something that can take actions in the world — search the web, query a database, send an email, run a calculation. Here's exactly how the mechanism works.
