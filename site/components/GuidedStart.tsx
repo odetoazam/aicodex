@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type Q1 = 'operator' | 'founder' | 'developer' | 'curious'
+type Q1 = 'individual' | 'operator' | 'founder' | 'developer'
 type Persona = { id: Q1; headline: string; subtext: string; accent: string }
 type Q2Option = { id: string; label: string; sub: string }
 type ResultArticle = { slug: string; title: string; time: number; excerpt: string }
@@ -22,16 +22,22 @@ type Result = {
 
 const PERSONAS: Persona[] = [
   {
+    id: 'individual',
+    headline: "I use Claude at work and want better results.",
+    subtext: 'Using it personally — or just starting out. Want to get noticeably more out of it.',
+    accent: '#D4845A',
+  },
+  {
     id: 'operator',
-    headline: "I'm rolling out AI at my company.",
-    subtext: 'I want to know what works, what doesn\'t, and how to get my team actually using it.',
-    accent: '#5AAFD4',
+    headline: "I'm rolling out Claude to my team or company.",
+    subtext: 'Manager, department head, or IT lead. Making this work for other people, not just myself.',
+    accent: '#4CAF7D',
   },
   {
     id: 'founder',
     headline: "I'm building a product with Claude.",
     subtext: 'Early stage. Trying to figure out what to build, whether it\'ll work, and how to ship it.',
-    accent: '#4CAF7D',
+    accent: '#D4A45A',
   },
   {
     id: 'developer',
@@ -39,15 +45,14 @@ const PERSONAS: Persona[] = [
     subtext: 'I can code. I want production-quality patterns, not hello-world examples.',
     accent: '#7B8FD4',
   },
-  {
-    id: 'curious',
-    headline: "I'm just exploring.",
-    subtext: 'Curious about where AI is heading and what it actually means for how work gets done.',
-    accent: '#D4845A',
-  },
 ]
 
 const Q2_OPTIONS: Record<Q1, Q2Option[]> = {
+  individual: [
+    { id: 'new',          label: "I'm brand new to Claude.",             sub: 'Used it once or twice. Want to build the right habits from the start.' },
+    { id: 'inconsistent', label: "I'm getting inconsistent results.",    sub: 'Works great sometimes, mediocre other times. Not sure why.' },
+    { id: 'specific',     label: "I want to go deeper on specific tasks.", sub: 'Writing, research, analysis — the use cases that actually matter for my job.' },
+  ],
   operator: [
     { id: 'start',    label: "We haven't really started yet.",  sub: 'Still evaluating, or just ran a first pilot.' },
     { id: 'adoption', label: "People aren't using it the way I hoped.", sub: 'The tool is there. Adoption is slower than expected.' },
@@ -64,24 +69,51 @@ const Q2_OPTIONS: Record<Q1, Q2Option[]> = {
     { id: 'production', label: "Building for production.",           sub: 'Streaming, tool use, evals, error handling. The real stuff.' },
     { id: 'scale',      label: "Scaling an existing app.",           sub: 'Costs, caching, orchestration. Already working, want it better.' },
   ],
-  curious: [
-    { id: 'how',   label: "How does this actually work?",       sub: 'LLMs, context windows, prompting — the underlying mechanics.' },
-    { id: 'teams', label: "What are companies doing with AI?",  sub: 'Real implementations, real use cases, real results.' },
-    { id: 'where', label: "Where is AI heading?",               sub: 'The landscape, who\'s building what, what\'s changing fast.' },
-  ],
 }
 
 const RESULTS: Record<Q1, Record<string, Result>> = {
+  individual: {
+    new: {
+      headline: 'Start right, not from scratch.',
+      sub: 'Three reads that build the foundation — prompting, the failure modes everyone hits first, and when to actually trust what Claude produces.',
+      articles: [
+        { slug: 'how-to-write-a-good-prompt', title: 'How to write a good prompt', time: 6, excerpt: 'The techniques that consistently produce better output — with examples you can steal.' },
+        { slug: 'claude-common-mistakes', title: 'The mistakes everyone makes first', time: 5, excerpt: 'The patterns that trip up almost every new Claude user. Knowing them puts you months ahead.' },
+        { slug: 'hallucination-failure', title: 'When to trust the output — and when not to', time: 5, excerpt: 'The specific failure patterns that matter. Build the right instincts early.' },
+      ],
+      path: { label: 'Full individual learning path →', href: '/learn/claude' },
+    },
+    inconsistent: {
+      headline: 'The inconsistency is fixable.',
+      sub: "It's almost never the model. Here's what's actually varying — and the specific fix for each cause.",
+      articles: [
+        { slug: 'why-claude-feels-inconsistent', title: 'Why Claude keeps feeling inconsistent', time: 8, excerpt: "Claude worked well last week. Now it feels worse. The model hasn't changed. Here's what is." },
+        { slug: 'how-to-write-a-good-prompt', title: 'How to write a good prompt', time: 6, excerpt: 'Vague prompts get vague output. The techniques that consistently produce better results.' },
+        { slug: 'claude-projects-role', title: 'Projects: Claude that remembers your context', time: 5, excerpt: 'Stop re-explaining yourself every conversation. How to load your context once and keep it.' },
+      ],
+      path: { label: 'Full individual learning path →', href: '/learn/claude' },
+    },
+    specific: {
+      headline: 'The use cases worth going deep on.',
+      sub: 'Writing, research, and knowing when output is actually good enough to use.',
+      articles: [
+        { slug: 'claude-for-writing-and-editing', title: 'Writing and editing with Claude', time: 5, excerpt: 'What works for drafts, rewrites, and tone — and how to direct Claude without losing your voice.' },
+        { slug: 'using-claude-for-research', title: 'Research with Claude', time: 5, excerpt: 'Fast and useful — and capable of sounding authoritative while being wrong. How to get the value.' },
+        { slug: 'claude-prompt-debugging', title: 'When something goes wrong: fix the prompt', time: 5, excerpt: 'A quick diagnostic process that tells you exactly what to change instead of starting over.' },
+      ],
+      path: { label: 'Full individual learning path →', href: '/learn/claude' },
+    },
+  },
   operator: {
     start: {
       headline: 'Start here — your first 30 days.',
       sub: 'Three reads that will shape how you think about this before you commit to anything.',
       articles: [
+        { slug: 'ai-roi-role', title: 'Is AI worth it for your team right now?', time: 6, excerpt: 'An honest assessment of where the value actually is — and how to avoid the flashy-but-useless use case.' },
+        { slug: 'what-to-automate-first', title: 'What to automate first', time: 5, excerpt: 'Not everything is worth automating. How to pick the right first use case for your team.' },
         { slug: 'running-your-first-ai-pilot', title: 'Running your first AI pilot', time: 6, excerpt: 'The structure that separates pilots that lead to rollout from ones that fade out.' },
-        { slug: 'what-to-automate-first', title: 'What to automate first', time: 5, excerpt: 'Not everything is worth automating. How to pick the right first use case.' },
-        { slug: 'claude-operator-habits', title: 'The habits of effective Claude operators', time: 7, excerpt: 'What separates the people who get real value from Claude from the ones who don\'t.' },
       ],
-      path: { label: 'Full learning path — Getting started with Claude →', href: '/learn/claude' },
+      path: { label: 'Team rollout learning path →', href: '/learn/for-your-team' },
     },
     adoption: {
       headline: 'The adoption gap is a system problem.',
@@ -177,38 +209,6 @@ const RESULTS: Record<Q1, Record<string, Result>> = {
         { slug: 'multi-agent-orchestration-basics', title: 'Multi-agent orchestration', time: 8, excerpt: 'Orchestrator + subagents, state management, checkpoints. When one Claude isn\'t enough.' },
       ],
       path: { label: 'Full developer path — 13 steps →', href: '/learn/developers' },
-    },
-  },
-  curious: {
-    how: {
-      headline: 'The mechanics, not the marketing.',
-      sub: 'How it actually works — context windows, tokens, what the model can and can\'t do.',
-      articles: [
-        { slug: 'context-window-practical', title: 'Context windows in practice', time: 5, excerpt: 'What the context window is, how it runs out, and what to do when it does.' },
-        { slug: 'large-language-model-def', title: 'What is a large language model?', time: 4, excerpt: 'The clearest explanation of what LLMs actually are and how they work.' },
-        { slug: 'hallucination-role', title: 'Understanding hallucination', time: 5, excerpt: 'Why models confidently say wrong things and what to do about it.' },
-      ],
-      path: { label: 'Start with the fundamentals →', href: '/learn/claude' },
-    },
-    teams: {
-      headline: 'What real teams are actually doing.',
-      sub: 'Not the press releases — the patterns that actually made a difference.',
-      articles: [
-        { slug: 'claude-operator-habits', title: 'The habits of effective Claude operators', time: 7, excerpt: 'What the people getting real value from Claude are doing differently.' },
-        { slug: 'ai-for-customer-success', title: 'AI for customer success', time: 5, excerpt: 'How CS teams are using AI without losing the relationship quality that matters.' },
-        { slug: 'claude-for-product-teams', title: 'Claude for product teams', time: 5, excerpt: 'Spec writing, user research synthesis, roadmap analysis — the product team use cases that hold up.' },
-      ],
-      path: { label: 'Browse all articles →', href: '/articles' },
-    },
-    where: {
-      headline: 'The landscape, right now.',
-      sub: 'Where things stand, who\'s building what, and what\'s moving fast.',
-      articles: [
-        { slug: 'ai-agent-field-note', title: 'AI agents in the field', time: 6, excerpt: 'What it actually looks like when agents run in production. The real picture.' },
-        { slug: 'mcp-role', title: 'What is MCP and why does it matter?', time: 5, excerpt: 'Anthropic\'s open protocol for tool use — and what it changes about how AI connects to everything.' },
-        { slug: 'extended-thinking-role', title: 'Extended thinking', time: 5, excerpt: 'Claude reasoning step by step before answering — and when that actually matters.' },
-      ],
-      path: { label: 'See the AI timeline →', href: '/timeline' },
     },
   },
 }
@@ -422,10 +422,10 @@ export default function GuidedStart({ onClose }: { onClose: () => void }) {
                   lineHeight: 1.25, letterSpacing: '-0.015em',
                   marginBottom: '20px',
                 }}>
+                  {q1 === 'individual' && 'Where are you right now?'}
                   {q1 === 'operator'  && "What's your biggest challenge right now?"}
                   {q1 === 'founder'   && 'Where are you in the build?'}
                   {q1 === 'developer' && 'What are you working on?'}
-                  {q1 === 'curious'   && 'What do you want to understand?'}
                 </h2>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {q2Options.map(opt => (
