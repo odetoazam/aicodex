@@ -93,17 +93,6 @@ const ENTRY_POINTS = [
     icon: '◈',
     meta: '4 tools · free',
   },
-  {
-    eyebrow: 'Integrations',
-    title: 'Which Claude integrations are worth it?',
-    description: 'Every connector, skill, and platform integration explained plainly — what it does, how you\'d use it in a real workday, and whether it\'s worth the setup time.',
-    cta: 'Browse integrations',
-    href: '/integrations',
-    accent: '#4CAF7D',
-    accentBg: 'rgba(76,175,125,0.06)',
-    icon: '◎',
-    meta: '17 integrations',
-  },
 ]
 
 export default async function HomePage() {
