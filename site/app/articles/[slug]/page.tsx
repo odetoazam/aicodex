@@ -7,6 +7,7 @@ import { getArticle, getArticlesForTerm, getArticlesByCluster } from '@/lib/db'
 import type { Article } from '@/lib/types'
 import ArticleActions from '@/components/ArticleActions'
 import ReadSentinel from '@/components/ReadSentinel'
+import ScrollProgress from '@/components/ScrollProgress'
 
 export const dynamic = 'force-dynamic'
 
@@ -225,6 +226,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
 
   return (
     <div style={{ width: 'var(--container-wide)', margin: '0 auto', padding: 'clamp(40px, 6vw, 72px) 0 var(--section-y)' }}>
+      <ScrollProgress />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
