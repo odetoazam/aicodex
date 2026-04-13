@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
@@ -13,7 +13,6 @@ export default function ArticleActions({ slug }: Props) {
   const [isFavorited, setIsFavorited] = useState(false)
   const [isRead, setIsRead] = useState(false)
   const [favLoading, setFavLoading] = useState(false)
-  const sentinelRef = useRef<HTMLDivElement>(null)
   const supabase = createClient()
 
   // Load auth + state
@@ -34,31 +33,18 @@ export default function ArticleActions({ slug }: Props) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setLoggedIn(!!session)
     })
-    return () => subscription.unsubscribe()
+
+    // Listen for ReadSentinel firing at the bottom of the article
+    const onRead = (e: Event) => {
+      if ((e as CustomEvent).detail?.slug === slug) setIsRead(true)
+    }
+    window.addEventListener('article:read', onRead)
+
+    return () => {
+      subscription.unsubscribe()
+      window.removeEventListener('article:read', onRead)
+    }
   }, [slug])
-
-  // Auto-mark as read when end of article is visible
-  useEffect(() => {
-    if (!sentinelRef.current) return
-
-    const observer = new IntersectionObserver(
-      async (entries) => {
-        if (entries[0].isIntersecting && loggedIn && !isRead) {
-          const { data: { session } } = await supabase.auth.getSession()
-          if (!session) return
-          const res = await fetch('/api/progress', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug }),
-          })
-          if (res.ok) setIsRead(true)
-        }
-      },
-      { threshold: 1.0 }
-    )
-    observer.observe(sentinelRef.current)
-    return () => observer.disconnect()
-  }, [loggedIn, isRead, slug])
 
   async function toggleFavorite() {
     if (!loggedIn) return
@@ -129,8 +115,6 @@ export default function ArticleActions({ slug }: Props) {
         )}
       </div>
 
-      {/* Invisible sentinel at the end of the article — triggers "mark as read" */}
-      <div ref={sentinelRef} style={{ height: '1px', visibility: 'hidden' }} aria-hidden="true" />
     </>
   )
 }

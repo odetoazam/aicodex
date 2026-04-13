@@ -6,6 +6,7 @@ import { ARTICLE_PATHS } from '@/lib/paths'
 import { getArticle, getArticlesForTerm, getArticlesByCluster } from '@/lib/db'
 import type { Article } from '@/lib/types'
 import ArticleActions from '@/components/ArticleActions'
+import ReadSentinel from '@/components/ReadSentinel'
 
 export const dynamic = 'force-dynamic'
 
@@ -373,6 +374,9 @@ export default async function ArticlePage({ params }: { params: { slug: string }
             className="article-prose"
             dangerouslySetInnerHTML={{ __html: bodyHtml }}
           />
+
+          {/* Sentinel — fires when user reaches the end, marks article as read */}
+          <ReadSentinel slug={article.slug} />
         </article>
 
         {/* Sidebar */}
