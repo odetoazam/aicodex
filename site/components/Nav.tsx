@@ -244,7 +244,7 @@ export default function Nav() {
                 Sign in
               </Link>
               <Link
-                href="/newsletter"
+                href="/articles"
                 style={{
                   marginLeft: '6px',
                   fontFamily: 'var(--font-sans)',
@@ -260,7 +260,7 @@ export default function Nav() {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--accent-hover)' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--accent)' }}
               >
-                Subscribe
+                Start reading
               </Link>
             </>
           )}

@@ -59,6 +59,20 @@ const DEV_STEPS = [
   'nextjs-chatbot-claude-full-tutorial',
 ]
 
+// Admin path — 10 steps
+const ADMIN_STEPS = [
+  'claude-admin-zero-to-one',
+  'choosing-your-claude-plan',
+  'claude-admin-setup',
+  'claude-projects-org-structure',
+  'skills-setup-guide',
+  'connectors-best-practices',
+  'minimising-token-usage',
+  'evals-role',
+  'cowork-dispatch-guide',
+  'managed-agents-for-your-org',
+]
+
 // Build-with-AI path — 10 steps (page still accessible, not in main index)
 const BWAI_STEPS = [
   'what-to-build-with-claude',
@@ -100,16 +114,19 @@ const FOR_YOURSELF_MAP  = buildMap(FOR_YOURSELF_STEPS, 'Claude for Your Work', '
 const FOR_YOUR_TEAM_MAP = buildMap(FOR_YOUR_TEAM_STEPS, 'Rolling Out Claude to Your Team', '/learn/for-your-team', '#4CAF7D')
 const DEV_MAP           = buildMap(DEV_STEPS, 'Developer Path', '/learn/developers', '#7B8FD4')
 const BWAI_MAP          = buildMap(BWAI_STEPS, 'Build with AI', '/learn/build-with-ai', '#4CAF7D', 0)
+const ADMIN_MAP         = buildMap(ADMIN_STEPS, 'Setting up Claude for your company', '/learn/claude-for-admins', '#5B8DD9')
 
 /**
  * Precedence (last wins on slug conflicts):
- * For Yourself → Build-with-AI → For Your Team → Developer Path
+ * For Yourself → Build-with-AI → For Your Team → Admin → Developer Path
  * Developer path wins on shared articles (e.g. system-prompt-failure, deploying-claude-app-production).
  * For Your Team wins over For Yourself on shared articles (e.g. claude-projects-role, hallucination-failure).
+ * Admin path wins on evals-role over For Your Team.
  */
 export const ARTICLE_PATHS: Record<string, PathMembership> = {
   ...FOR_YOURSELF_MAP,
   ...BWAI_MAP,
   ...FOR_YOUR_TEAM_MAP, // wins over for-yourself on conflicts
+  ...ADMIN_MAP,         // admin path wins on its articles
   ...DEV_MAP,           // developer path wins on conflicts
 }

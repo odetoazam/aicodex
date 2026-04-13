@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Updates — AI Codex',
-  description: 'What has been added to AI Codex — new learning paths, articles, glossary terms, and features. Updated as things ship.',
+  description: 'Claude updates explained in plain English — what changed, who it affects, and what to do about it. We read the release notes so you don\'t have to.',
 }
 
 type Update = {
@@ -189,19 +189,18 @@ export default function UpdatesPage() {
           lineHeight: 1.15,
           letterSpacing: '-0.02em',
           marginBottom: '16px',
-          maxWidth: '24ch',
+          maxWidth: '28ch',
         }}>
-          What&apos;s been added
+          What changed and why it matters to you
         </h1>
         <p style={{
           fontFamily: 'var(--font-sans)',
           fontSize: 'var(--text-base)',
           color: 'var(--text-muted)',
-          maxWidth: '52ch',
+          maxWidth: '56ch',
           lineHeight: 1.65,
         }}>
-          New learning paths, articles, glossary terms, and features — logged as they ship.
-          Subscribe to the newsletter to get updates when significant new content lands.
+          Claude ships updates constantly. We read the release notes, changelogs, and announcements so you don&apos;t have to — then explain what actually changed and how it affects your work, in plain English.
         </p>
       </div>
 
@@ -328,20 +327,28 @@ export default function UpdatesPage() {
         borderLeft: '3px solid var(--accent)',
       }}>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--accent)', marginBottom: '10px' }}>
-          Stay current
+          Skip the changelog
         </p>
         <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px' }}>
-          Get notified when new content lands
+          We read the release notes so you don&apos;t have to
         </p>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', marginBottom: '20px', lineHeight: 1.6 }}>
-          New learning paths, articles, and guides — delivered when they ship, not on a schedule.
+          When Anthropic ships something new, we break down what it is, who it affects, and what you should actually do about it. No jargon, no hype.
         </p>
-        <Link
-          href="/newsletter"
-          style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}
-        >
-          Subscribe →
-        </Link>
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' as const }}>
+          <Link
+            href="/articles"
+            style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--accent)', textDecoration: 'none', fontWeight: 500 }}
+          >
+            Browse articles →
+          </Link>
+          <Link
+            href="/glossary"
+            style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', textDecoration: 'none' }}
+          >
+            Glossary →
+          </Link>
+        </div>
       </div>
     </div>
   )

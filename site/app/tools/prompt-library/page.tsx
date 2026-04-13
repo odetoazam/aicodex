@@ -3,7 +3,7 @@ import PromptLibrary from '@/components/PromptLibrary'
 
 export const metadata: Metadata = {
   title: 'Prompt Library — AI Codex',
-  description: 'Curated, copy-paste-ready Claude prompts for everyday work. Summarize, draft, research, analyze, extract, review — organized by task type.',
+  description: 'Copy-paste Claude prompts for everyday work, operators rolling out Claude, and developers building with the API. Organized by task type and role.',
 }
 
 export default function PromptLibraryPage() {

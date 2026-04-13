@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 
-type Category = 'summarize' | 'draft' | 'research' | 'analyze' | 'extract' | 'review' | 'plan' | 'compare'
+type Category = 'summarize' | 'draft' | 'research' | 'analyze' | 'extract' | 'review' | 'plan' | 'compare' | 'operators' | 'developers'
 
 type Prompt = {
   id: string
@@ -14,7 +14,7 @@ type Prompt = {
   tips: string
 }
 
-const CATEGORIES: { id: Category; label: string; icon: string; color: string }[] = [
+const TASK_CATEGORIES: { id: Category; label: string; icon: string; color: string }[] = [
   { id: 'summarize', label: 'Summarize',  icon: '◈', color: '#D4845A' },
   { id: 'draft',     label: 'Draft',      icon: '◧', color: '#5B8DD9' },
   { id: 'research',  label: 'Research',   icon: '◇', color: '#4CAF7D' },
@@ -24,6 +24,13 @@ const CATEGORIES: { id: Category; label: string; icon: string; color: string }[]
   { id: 'plan',      label: 'Plan',       icon: '◬', color: '#5AAFD4' },
   { id: 'compare',   label: 'Compare',    icon: '◫', color: '#9B7BD4' },
 ]
+
+const ROLE_CATEGORIES: { id: Category; label: string; icon: string; color: string }[] = [
+  { id: 'operators',  label: 'Operators',  icon: '⬡', color: '#5B8DD9' },
+  { id: 'developers', label: 'Developers', icon: '{ }', color: '#7B8FD4' },
+]
+
+const CATEGORIES = [...TASK_CATEGORIES, ...ROLE_CATEGORIES]
 
 const PROMPTS: Prompt[] = [
   // ── Summarize ─────────────────────────────────────────────────────────
@@ -381,6 +388,158 @@ Design it so the meeting could end 10 minutes early if everything goes well.`,
     tips: 'Including the meeting duration forces Claude to make hard tradeoffs about what actually fits.',
   },
 
+  // ── Operators ─────────────────────────────────────────────────────────
+  {
+    id: 'operators-system-prompt',
+    title: 'Write a Claude Project system prompt',
+    category: 'operators',
+    description: 'Creates a tight, effective system prompt for any team use case.',
+    prompt: `I need to write a Claude system prompt for the following team use case:
+
+**Team:** [Which team will use this — e.g. customer success, marketing, operations]
+**Primary task:** [What will they mainly ask Claude to do?]
+**Audience for outputs:** [Who reads/receives Claude's outputs — internal team, customers, executives?]
+**Tone:** [How should Claude write — formal, conversational, concise, detailed?]
+**What Claude should always do:** [2-3 specific behaviors]
+**What Claude should never do:** [1-2 hard constraints]
+**Key context about our company:** [Name, what we do, relevant details]
+
+Write a system prompt that:
+- Is under 400 words
+- Uses direct, specific language (not "be helpful" — say what helpful looks like)
+- States constraints explicitly
+- Gives Claude enough context to handle the most common 80% of requests without asking clarifying questions
+
+Then tell me what's missing from my inputs that would make it better.`,
+    whenToUse: 'When setting up a new Claude Project for a team and writing the instructions that define how Claude behaves for everyone in that Project.',
+    tips: 'Tight system prompts (200-400 words) consistently outperform long ones (1000+ words). Cut anything that describes a rare edge case — handle those in conversation.',
+  },
+  {
+    id: 'operators-eval',
+    title: 'Evaluate whether Claude is actually helping your team',
+    category: 'operators',
+    description: 'A quick diagnostic framework for assessing real Claude adoption and impact.',
+    prompt: `I want to evaluate whether our Claude rollout is working. Help me think through this.
+
+**How many people have access:** [Number]
+**How long we've had it:** [Weeks/months]
+**Main use cases we set it up for:** [List them]
+**What I'm observing:** [Describe what you're seeing — heavy use, low use, complaints, etc.]
+**What data I have access to:** [Usage stats, anecdotes, surveys, nothing yet]
+
+Give me:
+1. **The 3 questions I should be asking** — what would tell me whether this is actually working?
+2. **What "good" looks like at this stage** — realistic benchmarks for where we should be
+3. **What the warning signs are** — patterns that indicate adoption is failing and why
+4. **The fastest way to get signal** — one conversation I should have this week to learn the most
+5. **The one thing to change** — if I could only fix one thing based on what I've described, what is it?
+
+Be direct. I don't need encouragement — I need an honest read on what's working and what isn't.`,
+    whenToUse: 'At the 30-day and 90-day marks after a Claude rollout, or any time adoption feels lower than expected.',
+    tips: 'Include specific observations even if they\'re anecdotal ("three people told me the outputs don\'t sound like us"). Specific signals get more useful diagnosis than vague concerns.',
+  },
+  {
+    id: 'operators-skill',
+    title: 'Write a reusable Claude skill',
+    category: 'operators',
+    description: 'Structures a SKILL.md instruction set for a repeatable team task.',
+    prompt: `I want to create a reusable Claude skill — a structured instruction set that any team member can use to complete the same task the same way every time.
+
+**Task name:** [What is this skill called?]
+**What it does:** [Describe the task in one sentence]
+**Who uses it:** [Which team members, in what situation]
+**Input:** [What does the user provide at the start? Documents, data, a brief, etc.]
+**Output:** [What should Claude produce at the end? Format, length, structure]
+**Quality standard:** [What makes a good output vs. a mediocre one?]
+**Common variations:** [Are there 2-3 sub-types or scenarios this needs to handle?]
+
+Write a SKILL.md instruction set that:
+- Opens with one sentence explaining what this skill does
+- States the expected input clearly
+- Gives Claude a step-by-step process to follow
+- Defines the output format precisely
+- Includes one example of a good output (or describes what it looks like)
+- Is under 500 words
+
+The skill should be clear enough that a new team member could use it on day one without training.`,
+    whenToUse: 'When a team keeps doing the same task repeatedly and wants Claude to do it consistently without re-prompting from scratch each time.',
+    tips: 'The best skills are for tasks with a predictable structure and a clear "right" output. If every output looks completely different, a skill won\'t help much — fix the process first.',
+  },
+  {
+    id: 'operators-rollout',
+    title: 'Draft a Claude rollout announcement',
+    category: 'operators',
+    description: 'Writes the internal message that gets your team to actually try Claude.',
+    prompt: `I need to announce Claude to my team for the first time. Help me write the internal message.
+
+**Team size:** [How many people]
+**Channels I'm posting to:** [Slack, email, all-hands, etc.]
+**What we've set up:** [Projects, connectors, skills already configured]
+**The main use cases I want them to start with:** [2-3 specific things]
+**The biggest concern I'm anticipating:** [What will people worry about — job replacement, data privacy, quality, time to learn?]
+**What I want them to do first:** [Specific first action — log in, try a prompt, attend a demo?]
+
+Write an announcement that:
+- Opens with what's in it for them (not "the company is excited to roll out AI")
+- Is honest about what Claude is good and bad at
+- Gives them one specific thing to try today — not a list of possibilities
+- Addresses the concern I flagged without over-explaining
+- Is under 200 words
+
+Then write a follow-up message for one week later if people haven't engaged yet.`,
+    whenToUse: 'When you\'re ready to launch Claude to your team and want the announcement to drive actual usage, not just awareness.',
+    tips: 'The single most important thing: give one specific prompt to try, not a range of options. "Open Claude and paste your last meeting notes — try the meeting summary prompt" beats "Claude can help with many things."',
+  },
+  {
+    id: 'operators-debug-outputs',
+    title: 'Diagnose inconsistent Claude outputs',
+    category: 'operators',
+    description: 'Finds the root cause when Claude keeps giving different results for the same task.',
+    prompt: `Our team is getting inconsistent outputs from Claude for a task that should be predictable. Help me diagnose the problem.
+
+**The task:** [Describe what Claude is supposed to do]
+**What we're seeing:** [Describe the inconsistency — sometimes X, sometimes Y, no pattern]
+**How we're prompting:** [Paste your current prompt or system prompt]
+**What "good" looks like:** [Describe the ideal output]
+**What "bad" looks like:** [Describe the unacceptable outputs you're getting]
+**Context changes between uses:** [Does anything change between runs — different users, different inputs, different times?]
+
+Diagnose:
+1. **Most likely cause** — what is probably producing the inconsistency?
+2. **Second most likely cause** — what else could it be?
+3. **How to test my diagnosis** — what specific change would confirm which cause it is?
+4. **The fix** — what to change in the prompt, system prompt, or workflow
+5. **What to monitor** — how to know if the fix worked
+
+Be specific. "Make the prompt clearer" is not useful — tell me exactly what to change.`,
+    whenToUse: 'When a Claude-assisted workflow produces good outputs sometimes and bad outputs other times, with no obvious reason for the difference.',
+    tips: 'Include the actual prompt you\'re using. Paraphrasing it loses the detail that\'s usually causing the problem.',
+  },
+  {
+    id: 'operators-policy',
+    title: 'Draft a team AI usage policy section',
+    category: 'operators',
+    description: 'Writes the specific section of your AI policy covering what needs human review.',
+    prompt: `I need to write the section of our AI usage policy that covers when humans must review Claude's outputs before they go out.
+
+**Our team:** [Industry, company type, size]
+**Main ways Claude is being used:** [List the use cases]
+**Our biggest risk areas:** [Customer communications, legal documents, financial decisions, etc.]
+**Current review process (if any):** [How do people handle Claude outputs today?]
+**Level of formality needed:** [Internal guidelines vs. formal policy document]
+
+Write a policy section that covers:
+1. **What always requires human review** — the non-negotiable list
+2. **What can go out without review** — low-risk outputs where Claude can operate independently
+3. **The grey zone** — situations where judgment is required, and how to make that call
+4. **The review standard** — what "reviewed" actually means (spot check? full read? approval sign-off?)
+5. **What to do when Claude gets it wrong** — the reporting and correction process
+
+Keep it practical. People should be able to read this once and know what to do — not consult it every time.`,
+    whenToUse: 'When setting up Claude for the first time and establishing guardrails, or when updating existing AI policies after expanding how Claude is used.',
+    tips: 'The most important section is the grey zone — that\'s where most mistakes happen. Spend the most time defining the judgment calls, not the obvious yes/no cases.',
+  },
+
   // ── Compare ───────────────────────────────────────────────────────────
   {
     id: 'compare-options',
@@ -430,6 +589,184 @@ Don't sugarcoat. A balanced assessment is more useful than a positive one.`,
     whenToUse: 'When reviewing the impact of a change — new tool adoption, process update, team restructuring, AI implementation.',
     tips: 'Include specific metrics if you have them (response time, cost, satisfaction scores). Claude will work with hard data if you provide it.',
   },
+  // ── Developers ────────────────────────────────────────────────────────
+  {
+    id: 'dev-system-prompt',
+    title: 'Write a production system prompt',
+    category: 'developers',
+    description: 'Structures a system prompt for API use — precise, testable, token-efficient.',
+    prompt: `I need to write a production system prompt for a Claude API integration.
+
+**What the product does:** [Describe the application]
+**What Claude's role is:** [Specific function — not "be helpful," but what it actually does]
+**User type:** [Who interacts with it — customers, internal users, other systems?]
+**Tone and voice:** [2-3 specific descriptors with examples if possible]
+**What it must always do:** [Non-negotiable behaviors]
+**What it must never do:** [Hard constraints — topics, actions, formats to avoid]
+**Output format requirements:** [Does Claude always return JSON? Markdown? Plain text? Specific structure?]
+**Token budget for system prompt:** [Target length — e.g. under 500 tokens]
+
+Write a system prompt that:
+- States the role and context in the first 2 sentences
+- Uses specific, testable language (not "be professional" — say what professional means here)
+- Puts the most critical constraints early
+- Defines output format explicitly if the application depends on it
+- Stays within the token budget
+
+Then flag any ambiguities in my inputs that could cause inconsistent outputs in production.`,
+    whenToUse: 'When building a Claude-powered feature or product and writing the system prompt that will run in production.',
+    tips: 'Write the system prompt, then write 5 test cases that would break it. Fix the cases before shipping. This catches most edge cases before your users do.',
+  },
+  {
+    id: 'dev-tool-schema',
+    title: 'Design a Claude tool schema',
+    category: 'developers',
+    description: 'Structures a well-described tool definition for Claude tool use.',
+    prompt: `I need to design a tool schema for Claude to use in a tool-use implementation.
+
+**Tool name:** [What the tool is called — use snake_case]
+**What it does:** [Describe the tool's function in one sentence]
+**When Claude should call it:** [The conditions or user intent that should trigger this tool]
+**Parameters needed:**
+  - [Parameter 1]: [type, what it represents, required/optional]
+  - [Parameter 2]: [type, what it represents, required/optional]
+  - [etc.]
+**What it returns:** [Structure and content of the response]
+**What can go wrong:** [Possible errors or edge cases]
+
+Write a complete tool schema in JSON format with:
+- A clear, specific \`description\` that tells Claude exactly when to use this tool (not when not to)
+- Well-described parameter \`description\` fields — Claude reads these to decide what values to pass
+- Correct JSON Schema types and constraints
+- An \`enum\` for any parameter with a fixed set of valid values
+
+Then write the system prompt addition that tells Claude this tool exists and when to prefer it over generating a direct response.`,
+    whenToUse: 'When implementing Claude tool use and need to define the schema that tells Claude what a tool does and how to call it.',
+    tips: 'The \`description\` field on each parameter is what Claude reads to decide what value to pass. Vague descriptions produce wrong argument values. Be specific: "the ISO 8601 date string for when the event starts" beats "the date."',
+  },
+  {
+    id: 'dev-evals',
+    title: 'Write evals for a Claude feature',
+    category: 'developers',
+    description: 'Generates a set of test cases to evaluate output quality for a specific use case.',
+    prompt: `I need to write evaluations (evals) for a Claude-powered feature to catch quality regressions.
+
+**What the feature does:** [Describe the Claude-powered function]
+**Current system prompt:** [Paste it or describe it]
+**What "good" looks like:** [Describe a high-quality output — specific criteria]
+**What "bad" looks like:** [Describe a failure mode — what would be wrong/unacceptable]
+**Edge cases I'm worried about:** [List 2-3 scenarios that might cause problems]
+
+Generate:
+1. **10 test inputs** covering: typical cases (5), edge cases (3), adversarial inputs (2)
+2. **For each test input:** what the expected output should look like (not exact text, but criteria)
+3. **A grading rubric** — 3-5 specific criteria to score each output on (yes/no or 1-5 scale)
+4. **The 2-3 tests most likely to catch a regression** — if you only run a few, which matter most?
+
+Format the test cases as a table I can copy into a spreadsheet or test harness.`,
+    whenToUse: 'When shipping a Claude feature to production and need to verify it works, or when making changes to a system prompt and need to confirm nothing broke.',
+    tips: 'Run your evals before and after any system prompt change. The goal isn\'t 100% pass rate — it\'s knowing what changed so regressions don\'t surprise you in production.',
+  },
+  {
+    id: 'dev-debug-prompt',
+    title: 'Debug a prompt that is not working',
+    category: 'developers',
+    description: 'Diagnoses why a Claude prompt is producing wrong or inconsistent outputs.',
+    prompt: `My Claude prompt is not producing the results I expect. Help me diagnose and fix it.
+
+**My current prompt (system + user):**
+[Paste the full prompt]
+
+**What I expect Claude to output:**
+[Describe the ideal output — format, content, tone, length]
+
+**What Claude is actually outputting:**
+[Describe or paste the actual output that's wrong]
+
+**Is it always wrong, or sometimes wrong?**
+[Always / Sometimes — if sometimes, describe the pattern]
+
+**Model I'm using:**
+[claude-3-5-sonnet, claude-3-haiku, etc.]
+
+Diagnose:
+1. **Root cause** — why is Claude producing this output?
+2. **Specific fix** — exact change to make to the prompt (show me the rewrite)
+3. **Why the fix works** — what behavior it changes and why
+4. **What to watch for** — any tradeoffs or new failure modes the fix might introduce
+
+Don't give me general prompt engineering advice. Diagnose this specific prompt.`,
+    whenToUse: 'When a prompt that should work isn\'t producing the right output and you need to understand why before trying random changes.',
+    tips: 'Include the full prompt exactly as it runs in production — not a paraphrase. The problem is almost always in a specific word or sentence that you\'d think to simplify when describing it.',
+  },
+  {
+    id: 'dev-optimize-tokens',
+    title: 'Optimize a system prompt for tokens',
+    category: 'developers',
+    description: 'Reduces system prompt length without losing the behaviors that matter.',
+    prompt: `I need to reduce the token count of my system prompt without losing the behaviors that matter.
+
+**Current system prompt:**
+[Paste it]
+
+**Current token count (approximate):**
+[Number, or "not sure"]
+
+**Target token count:**
+[What you're aiming for, or "as low as possible"]
+
+**Behaviors I must preserve:**
+[List the specific behaviors that are non-negotiable]
+
+**Behaviors I'm less certain about:**
+[Anything in the prompt you're not sure is doing anything]
+
+Rewrite the system prompt to:
+1. Remove redundant instructions (things Claude does by default without being told)
+2. Collapse examples that illustrate the same point
+3. Convert negative instructions ("don't do X") to positive ones where possible
+4. Cut anything that addresses an edge case that can be handled in the user turn instead
+5. Tighten phrasing without changing meaning
+
+Show me: the rewritten prompt, the estimated token reduction, and a list of anything you removed that I should verify still works with the shorter version.`,
+    whenToUse: 'When system prompt token costs are significant at scale, or when you\'re approaching context window limits and need to make room.',
+    tips: 'After shortening, run your evals on the new prompt before deploying. The most common mistake is cutting an instruction that was doing invisible work — you only notice it\'s gone when outputs degrade.',
+  },
+  {
+    id: 'dev-review-integration',
+    title: 'Review a Claude API integration',
+    category: 'developers',
+    description: 'Spots common mistakes and missing best practices in a Claude implementation.',
+    prompt: `Review my Claude API integration for common mistakes and missing best practices.
+
+**What I've built:** [Describe the application]
+**My system prompt:**
+[Paste it]
+
+**My API call setup:**
+[Paste the relevant code or describe: model, max_tokens, temperature, streaming yes/no]
+
+**Conversation history handling:**
+[How do you manage the messages array — full history, summarized, windowed?]
+
+**Error handling:**
+[What happens when the API returns an error or times out?]
+
+**What I'm worried about:**
+[Performance? Cost? Quality? Security? Something specific?]
+
+Review for:
+1. **System prompt issues** — vague instructions, missing constraints, token waste
+2. **API parameter choices** — model selection, temperature, max_tokens for the use case
+3. **Context management** — is history handled in a way that will scale?
+4. **Error handling gaps** — what failure modes aren't covered?
+5. **Cost risks** — anything that could cause unexpected token usage at scale?
+6. **Security concerns** — prompt injection vectors, data exposure risks
+
+For each issue: what's wrong, why it matters, and the specific fix.`,
+    whenToUse: 'Before launching a Claude-powered feature to production, or when something is wrong and you want a systematic check rather than random debugging.',
+    tips: 'Include the actual code for your API call and history management if you can. Descriptions of implementation hide the details that usually cause problems.',
+  },
 ]
 
 export default function PromptLibrary() {
@@ -465,7 +802,8 @@ export default function PromptLibrary() {
     <>
       {/* Category filter */}
       <div style={{ marginBottom: '40px' }}>
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' as const }}>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' as const, alignItems: 'center' }}>
+          {/* All */}
           <button
             onClick={() => setActiveCategory('all')}
             style={{
@@ -489,7 +827,9 @@ export default function PromptLibrary() {
               {PROMPTS.length}
             </span>
           </button>
-          {CATEGORIES.map(cat => {
+
+          {/* Task categories */}
+          {TASK_CATEGORIES.map(cat => {
             const isActive = cat.id === activeCategory
             return (
               <button
@@ -508,6 +848,42 @@ export default function PromptLibrary() {
                 }}
               >
                 <span style={{ fontSize: '12px' }}>{cat.icon}</span>
+                {cat.label}
+                <span style={{
+                  fontSize: '11px', color: isActive ? cat.color : 'var(--text-muted)',
+                  background: isActive ? `${cat.color}15` : 'var(--bg-subtle)',
+                  border: '1px solid var(--border-muted)',
+                  borderRadius: '4px', padding: '0 5px', lineHeight: '18px',
+                }}>
+                  {countForCategory(cat.id)}
+                </span>
+              </button>
+            )
+          })}
+
+          {/* Divider */}
+          <span style={{ width: '1px', height: '22px', background: 'var(--border-base)', margin: '0 4px', flexShrink: 0 }} />
+
+          {/* Role categories */}
+          {ROLE_CATEGORIES.map(cat => {
+            const isActive = cat.id === activeCategory
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '13px',
+                  fontWeight: isActive ? 600 : 400,
+                  color: isActive ? cat.color : 'var(--text-muted)',
+                  background: isActive ? `${cat.color}10` : 'none',
+                  border: '1px solid',
+                  borderColor: isActive ? cat.color : 'var(--border-muted)',
+                  borderRadius: '6px', padding: '6px 14px', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)' }}>{cat.icon}</span>
                 {cat.label}
                 <span style={{
                   fontSize: '11px', color: isActive ? cat.color : 'var(--text-muted)',
@@ -653,9 +1029,8 @@ export default function PromptLibrary() {
         border: '1px solid var(--border-muted)', background: 'var(--bg-surface)',
       }}>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>
-          These prompts are generic by design — they work for anyone regardless of role or industry.
-          Paste them into Claude and fill in the [bracketed placeholders] with your actual content.
-          For role-specific prompts tailored to your job, check back — those are coming soon.
+          Paste any prompt into Claude and fill in the [bracketed placeholders] with your actual context.
+          The generic prompts work for anyone. The Operators and Developers sections are for prompts about working with Claude itself — configuring it, building with it, evaluating it.
         </p>
       </div>
 

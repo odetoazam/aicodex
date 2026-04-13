@@ -115,11 +115,7 @@ export default function AboutPage() {
         <hr className="divider" style={{ margin: '16px 0' }} />
 
         <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)' }}>
-          Questions, corrections, or want to share what you&rsquo;re building?{' '}
-          <Link href="/newsletter" className="link">
-            Subscribe to the newsletter
-          </Link>{' '}
-          — I read every reply.
+          Questions, corrections, or want to share what you&rsquo;re building? Reach out at hello@aicodex.to.
         </p>
       </div>
 

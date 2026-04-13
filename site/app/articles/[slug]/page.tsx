@@ -489,6 +489,92 @@ export default async function ArticlePage({ params }: { params: { slug: string }
         )
       })()}
 
+      {/* Next in path / path complete */}
+      {(() => {
+        const pathInfo = ARTICLE_PATHS[article.slug]
+        if (!pathInfo) return null
+
+        if (pathInfo.nextSlug) {
+          return (
+            <div style={{
+              marginTop: '64px',
+              padding: '24px 28px',
+              borderRadius: '12px',
+              border: '1px solid var(--border-base)',
+              background: 'var(--bg-surface)',
+              borderLeft: `3px solid ${pathInfo.accent}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '20px',
+              flexWrap: 'wrap' as const,
+            }}>
+              <div>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: pathInfo.accent, marginBottom: '4px' }}>
+                  Next in {pathInfo.pathName} · Step {pathInfo.stepNumber + 1} of {pathInfo.totalSteps}
+                </p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>
+                  Continue to the next article in the learning path
+                </p>
+              </div>
+              <Link
+                href={`/articles/${pathInfo.nextSlug}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  color: pathInfo.accent,
+                  textDecoration: 'none',
+                  whiteSpace: 'nowrap' as const,
+                  flexShrink: 0,
+                }}
+              >
+                Next article →
+              </Link>
+            </div>
+          )
+        }
+
+        // Last article in path — show completion CTA
+        return (
+          <div style={{
+            marginTop: '64px',
+            padding: '24px 28px',
+            borderRadius: '12px',
+            border: '1px solid var(--border-base)',
+            background: 'var(--bg-surface)',
+            borderLeft: `3px solid ${pathInfo.accent}`,
+          }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: pathInfo.accent, marginBottom: '8px' }}>
+              {pathInfo.pathName} · Complete
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+              You&apos;ve reached the end of this path.
+            </p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', marginBottom: '16px', lineHeight: 1.55 }}>
+              Go back to the path overview, or explore another learning path.
+            </p>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' as const }}>
+              <Link
+                href={pathInfo.pathHref}
+                style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500, color: pathInfo.accent, textDecoration: 'none' }}
+              >
+                ← Back to {pathInfo.pathName}
+              </Link>
+              <Link
+                href="/learn"
+                style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', textDecoration: 'none' }}
+              >
+                All learning paths →
+              </Link>
+            </div>
+          </div>
+        )
+      })()}
+
       {/* Continue reading */}
       {continueCards.length > 0 && (
         <div style={{ marginTop: '80px', paddingTop: '48px', borderTop: '1px solid var(--border-base)' }}>
