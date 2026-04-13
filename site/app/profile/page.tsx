@@ -101,7 +101,7 @@ export default function ProfilePage() {
       setFavorites(favs)
 
       // Fetch real titles for all slugs
-      const allSlugs = [...new Set([...prog.map(p => p.article_slug), ...favs.map(f => f.article_slug)])]
+      const allSlugs = Array.from(new Set([...prog.map(p => p.article_slug), ...favs.map(f => f.article_slug)]))
       if (allSlugs.length > 0) {
         const { data: articles } = await supabase
           .from('articles')
