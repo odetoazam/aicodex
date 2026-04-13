@@ -16,9 +16,7 @@ interface FavoriteRow {
   favorited_at: string
 }
 
-function SlugCard({ slug, badge }: { slug: string; badge?: string }) {
-  // Convert slug to readable title
-  const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+function ArticleCard({ slug, title, badge }: { slug: string; title: string; badge?: string }) {
   return (
     <Link href={`/articles/${slug}`} style={{ textDecoration: 'none', display: 'block' }}>
       <div style={{
@@ -38,11 +36,12 @@ function SlugCard({ slug, badge }: { slug: string; badge?: string }) {
   )
 }
 
-function Section({ title, items, emptyText, renderBadge }: {
+function Section({ title, items, emptyText, renderBadge, titleMap }: {
   title: string
   items: { slug: string; date: string }[]
   emptyText: string
   renderBadge: (date: string) => string
+  titleMap: Record<string, string>
 }) {
   return (
     <div style={{ marginBottom: '48px' }}>
@@ -63,7 +62,12 @@ function Section({ title, items, emptyText, renderBadge }: {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {items.map(item => (
-            <SlugCard key={item.slug} slug={item.slug} badge={renderBadge(item.date)} />
+            <ArticleCard
+              key={item.slug}
+              slug={item.slug}
+              title={titleMap[item.slug] ?? item.slug}
+              badge={renderBadge(item.date)}
+            />
           ))}
         </div>
       )}
@@ -76,6 +80,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null)
   const [progress, setProgress] = useState<ProgressRow[]>([])
   const [favorites, setFavorites] = useState<FavoriteRow[]>([])
+  const [titleMap, setTitleMap] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
@@ -89,8 +94,24 @@ export default function ProfilePage() {
         supabase.from('user_progress').select('article_slug, read_at').eq('user_id', session.user.id).order('read_at', { ascending: false }),
         supabase.from('user_favorites').select('article_slug, favorited_at').eq('user_id', session.user.id).order('favorited_at', { ascending: false }),
       ])
-      setProgress(progRes.data ?? [])
-      setFavorites(favRes.data ?? [])
+
+      const prog = progRes.data ?? []
+      const favs = favRes.data ?? []
+      setProgress(prog)
+      setFavorites(favs)
+
+      // Fetch real titles for all slugs
+      const allSlugs = [...new Set([...prog.map(p => p.article_slug), ...favs.map(f => f.article_slug)])]
+      if (allSlugs.length > 0) {
+        const { data: articles } = await supabase
+          .from('articles')
+          .select('slug, title')
+          .in('slug', allSlugs)
+        const map: Record<string, string> = {}
+        for (const a of articles ?? []) map[a.slug] = a.title
+        setTitleMap(map)
+      }
+
       setLoading(false)
     }
     load()
@@ -185,6 +206,7 @@ export default function ProfilePage() {
         items={favorites.map(f => ({ slug: f.article_slug, date: f.favorited_at }))}
         emptyText="No saved articles yet. Hit the ♡ on any article to save it here."
         renderBadge={date => `Saved ${formatDate(date)}`}
+        titleMap={titleMap}
       />
 
       {/* Reading history */}
@@ -193,6 +215,7 @@ export default function ProfilePage() {
         items={progress.map(p => ({ slug: p.article_slug, date: p.read_at }))}
         emptyText="No articles read yet. Articles you finish will appear here."
         renderBadge={date => `Read ${formatDate(date)}`}
+        titleMap={titleMap}
       />
     </div>
   )
