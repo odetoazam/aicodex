@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
-// POST /api/favorites — add a favorite
+// POST /api/favorites — save an article
 export async function POST(request: Request) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -18,13 +18,13 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error('favorites upsert error:', error)
-    return NextResponse.json({ error: 'Failed to save favorite' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to save' }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
 }
 
-// DELETE /api/favorites — remove a favorite
+// DELETE /api/favorites — unsave an article
 export async function DELETE(request: Request) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -43,7 +43,7 @@ export async function DELETE(request: Request) {
 
   if (error) {
     console.error('favorites delete error:', error)
-    return NextResponse.json({ error: 'Failed to remove favorite' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to unsave' }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
