@@ -37,10 +37,21 @@ const TRACKS = [
     accent: '#5B8DD9',
     accentBg: 'rgba(91,141,217,0.1)',
     icon: '◫',
-    steps: 10,
-    time: '~57 min',
+    steps: 12,
+    time: '~69 min',
   },
 ]
+
+const CLAUDE_CODE_PATH = {
+  href: '/learn/claude-code',
+  eyebrow: 'For teams using Claude Code',
+  title: 'Setting up Claude Code for your team',
+  description: 'Six guides on the .claude folder: what to configure, what to write in CLAUDE.md, which decisions to make as a team, how to keep it accurate, and what the agent layer looks like when you are ready for it.',
+  accent: '#5DA698',
+  accentBg: 'rgba(93,166,152,0.1)',
+  steps: 6,
+  time: '~44 min',
+}
 
 const BWAI_PATH = {
   href: '/learn/build-with-ai',
@@ -59,8 +70,8 @@ const DEV_PATH = {
   description: 'Implementation guides that assume you can code. The messages array, streaming, RAG, evals, tool use, prompt caching, cost optimization, persistent memory, auth, and rate limiting.',
   accent: '#7B8FD4',
   accentBg: 'rgba(123,143,212,0.1)',
-  steps: 17,
-  time: '~121 min',
+  steps: 20,
+  time: '~144 min',
 }
 
 
@@ -89,6 +100,37 @@ export default function LearnPage() {
           Pick the path that fits where you actually are — not a topic, not a product.
           Each one is sequenced to build on itself. Start at step 1, or jump to wherever you're stuck.
         </p>
+      </div>
+
+      {/* New-user nudge */}
+      <div style={{
+        padding: '14px 20px',
+        borderRadius: '8px',
+        background: 'rgba(212,132,90,0.06)',
+        border: '1px solid rgba(212,132,90,0.2)',
+        marginBottom: '28px',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        gap: '8px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' as const }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
+            <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>Used AI before but new to Claude?</span>
+            {' '}Path 1 is the right starting point.
+          </p>
+          <Link href="/learn/claude" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500, color: '#D4845A', textDecoration: 'none', whiteSpace: 'nowrap' as const }}>
+            Start path 1 →
+          </Link>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' as const }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
+            <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>Never used AI before?</span>
+            {' '}Read this first — it takes 8 minutes.
+          </p>
+          <Link href="/articles/new-to-ai-start-here" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500, color: '#D4845A', textDecoration: 'none', whiteSpace: 'nowrap' as const }}>
+            Start here →
+          </Link>
+        </div>
       </div>
 
       {/* 3 main tracks */}
@@ -225,6 +267,66 @@ export default function LearnPage() {
               </p>
               <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
                 {BWAI_PATH.time}
+              </p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Claude Code path */}
+      <div style={{ marginBottom: '56px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'var(--text-muted)', flexShrink: 0 }}>
+            FOR CLAUDE CODE USERS
+          </p>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+        </div>
+        <Link href={CLAUDE_CODE_PATH.href} style={{ textDecoration: 'none', display: 'block' }}>
+          <div
+            className="track-card"
+            style={{
+              padding: '24px 28px',
+              borderRadius: '12px',
+              border: `1px solid var(--border-muted)`,
+              borderLeft: `3px solid ${CLAUDE_CODE_PATH.accent}`,
+              background: 'var(--bg-subtle)',
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+              gap: '24px',
+              transition: 'background 150ms ease',
+            }}
+          >
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+                letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                color: CLAUDE_CODE_PATH.accent, margin: '0 0 8px',
+              }}>
+                {CLAUDE_CODE_PATH.eyebrow}
+              </p>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'var(--text-lg)',
+                fontWeight: 600,
+                color: 'var(--text-primary)', marginBottom: '8px', lineHeight: 1.2,
+              }}>
+                {CLAUDE_CODE_PATH.title}
+              </h2>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)',
+                lineHeight: 1.6, margin: 0, maxWidth: '58ch',
+              }}>
+                {CLAUDE_CODE_PATH.description}
+              </p>
+            </div>
+            <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
+                {CLAUDE_CODE_PATH.steps} steps
+              </p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+                {CLAUDE_CODE_PATH.time}
               </p>
             </div>
           </div>

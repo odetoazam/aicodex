@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import ArticleRow from '@/components/ArticleRow'
 import type { Article } from '@/lib/types'
 
@@ -15,8 +16,10 @@ const DEV_SLUGS = new Set([
   'claude-cost-optimization',
   'tool-use-implementation-deep-dive',
   'multi-agent-orchestration-basics',
+  'evaluating-multi-agent-systems',
   'chatbot-with-persistent-memory',
   'deploying-claude-app-production',
+  'monitoring-your-claude-app',
   'claude-production-error-handling',
   'nextjs-chatbot-claude-full-tutorial',
   'rate-limiting-claude-api',
@@ -26,10 +29,16 @@ const DEV_SLUGS = new Set([
   'claude-plus-linear',
   'claude-plus-jira',
   'claude-code-project-setup',
+  'claude-code-vs-web-app',
   'ai-agent-harness-explained',
   'claude-advisor-tool',
   'claude-managed-agents',
   'claude-plus-confluence',
+  'securing-your-claude-app',
+  'claude-streaming-decision',
+  'multi-agent-failure-handling',
+  'auditing-your-eval-suite',
+  'ant-cli',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -42,6 +51,8 @@ const FOUNDER_SLUGS = new Set([
   'first-ten-customers-ai-product',
   'customer-discovery-with-claude',
   'what-to-build-with-claude',
+  'founder-ai-workflow',
+  'solo-founder-project-setup',
 ])
 
 const PRODUCTIVITY_SLUGS = new Set([
@@ -59,6 +70,8 @@ const PRODUCTIVITY_SLUGS = new Set([
   'claude-plus-figma',
   'claude-plus-webflow',
   'claude-plus-intercom',
+  'claude-plus-confluence',
+  'claude-for-word',
 ])
 
 const AGENCIES_SLUGS = new Set([
@@ -66,15 +79,17 @@ const AGENCIES_SLUGS = new Set([
   'client-handoff-with-claude',
   'building-claude-powered-deliverable',
   'what-to-tell-clients-about-ai',
+  'claude-code-client-setup',
+  'pricing-claude-consulting-work',
 ])
 
 // Pinned for each persona view
-const PINNED_ALL       = ['how-to-write-a-good-prompt', 'claude-common-mistakes', 'claude-operator-habits', 'running-your-first-ai-pilot', 'your-first-claude-api-call']
-const PINNED_OPERATOR  = ['why-claude-feels-inconsistent', 'cs-manager-ai-workflow', 'marketing-manager-claude-workflow', 'claude-plus-slack-for-teams', 'claude-common-mistakes']
-const PINNED_FOUNDER   = ['solo-founder-operating-system', 'validating-startup-idea-with-claude', 'ai-product-failure-modes-founders', 'first-ten-customers-ai-product']
-const PINNED_DEV       = ['your-first-claude-api-call', 'building-a-rag-pipeline-from-scratch', 'prompt-caching-implementation', 'claude-cost-optimization']
+const PINNED_ALL       = ['new-to-ai-start-here', 'what-to-share-with-claude', 'how-to-write-a-good-prompt', 'claude-common-mistakes', 'claude-code-vs-web-app', 'claude-operator-habits', 'running-your-first-ai-pilot', 'your-first-claude-api-call', 'building-a-business-case-for-claude']
+const PINNED_OPERATOR  = ['what-to-share-with-claude', 'how-to-convince-skeptical-teammate', 'first-week-with-claude', 'after-your-manager-approves-claude', 'building-a-business-case-for-claude', 'getting-it-approval-for-claude', 'setting-up-claude-for-your-team', 'ai-usage-policy-template', 'why-claude-feels-inconsistent', 'measuring-ai-roi', 'claude-adoption-plateau', 'cs-manager-ai-workflow', 'ops-manager-ai-workflow']
+const PINNED_FOUNDER   = ['founder-ai-workflow', 'solo-founder-project-setup', 'solo-founder-operating-system', 'validating-startup-idea-with-claude']
+const PINNED_DEV       = ['your-first-claude-api-call', 'securing-your-claude-app', 'building-a-rag-pipeline-from-scratch', 'auditing-your-eval-suite', 'prompt-caching-implementation']
 const PINNED_PROD      = ['claude-plus-notion', 'claude-plus-airtable', 'claude-plus-figma', 'claude-for-writing-and-editing']
-const PINNED_AGENCIES  = ['claude-for-agencies', 'what-to-tell-clients-about-ai', 'client-handoff-with-claude', 'building-claude-powered-deliverable']
+const PINNED_AGENCIES  = ['claude-for-agencies', 'pricing-claude-consulting-work', 'what-to-tell-clients-about-ai', 'claude-code-client-setup', 'client-handoff-with-claude']
 
 type Tab = 'all' | 'operator' | 'founder' | 'developer' | 'productivity' | 'agencies'
 
@@ -95,8 +110,15 @@ function persona(a: Article): Tab {
   return 'operator'
 }
 
+const ANGLE_LABEL: Record<string, string> = {
+  def: 'Concept', process: 'How it works', failure: 'What goes wrong',
+  role: 'Decision guide', 'field-note': 'In practice',
+  cross: 'Cross-concept', absence: "What's missing", history: 'History',
+}
+
 export default function ArticlesFilteredView({ articles }: { articles: Article[] }) {
   const [active, setActive] = useState<Tab>('all')
+  const [query, setQuery] = useState('')
 
   const bySlug = Object.fromEntries(articles.map(a => [a.slug, a]))
   const tab = TABS.find(t => t.id === active)!
@@ -146,39 +168,129 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
   const problems    = active !== 'all' ? remaining.filter(a => a.angle === 'failure')                        : []
   const conceptsTab = active !== 'all' ? remaining.filter(a => ['def', 'cross', 'history', 'absence'].includes(a.angle)) : []
 
+  // ── Search ────────────────────────────────────────────────────────────────
+  const q = query.trim().toLowerCase()
+  const searchResults = q.length >= 2
+    ? articles.filter(a =>
+        a.title.toLowerCase().includes(q) ||
+        (a.excerpt ?? '').toLowerCase().includes(q) ||
+        a.slug.replace(/-/g, ' ').includes(q) ||
+        a.cluster.toLowerCase().includes(q)
+      )
+    : []
+
   return (
     <div>
+      {/* ── Search ──────────────────────────────────────────────────────── */}
+      <div style={{ marginBottom: '32px', position: 'relative', maxWidth: '480px' }}>
+        <input
+          type="search"
+          placeholder="Search 148 articles…"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          style={{
+            width: '100%',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-base)',
+            borderRadius: '8px',
+            padding: '11px 40px 11px 16px',
+            fontFamily: 'var(--font-sans)',
+            fontSize: '14px',
+            color: 'var(--text-primary)',
+            outline: 'none',
+            boxSizing: 'border-box' as const,
+          }}
+          onFocus={e => { e.target.style.borderColor = 'rgba(212,132,90,0.5)' }}
+          onBlur={e => { e.target.style.borderColor = 'var(--border-base)' }}
+        />
+        {query && (
+          <button
+            onClick={() => setQuery('')}
+            style={{
+              position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: 'var(--text-muted)', fontSize: '16px', lineHeight: 1, padding: '2px',
+            }}
+          >
+            ×
+          </button>
+        )}
+      </div>
+
+      {/* ── Search results ───────────────────────────────────────────────── */}
+      {q.length >= 2 ? (
+        <div>
+          <p style={{
+            fontFamily: 'var(--font-sans)', fontSize: '13px',
+            color: 'var(--text-muted)', marginBottom: '24px',
+          }}>
+            {searchResults.length === 0
+              ? `No articles found for "${query}"`
+              : `${searchResults.length} article${searchResults.length === 1 ? '' : 's'} matching "${query}"`
+            }
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            {searchResults.map(a => (
+              <div key={a.slug} style={{ position: 'relative' }}>
+                <ArticleRow article={a} />
+                <span style={{
+                  position: 'absolute', top: '18px', right: '48px',
+                  fontFamily: 'var(--font-sans)', fontSize: '11px',
+                  color: 'var(--text-muted)',
+                  background: 'var(--bg-subtle)',
+                  padding: '2px 7px', borderRadius: '4px',
+                }}>
+                  {ANGLE_LABEL[a.angle] ?? a.angle}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <>
       {/* ── Filter tabs ─────────────────────────────────────────────────── */}
       <div style={{ marginBottom: '48px' }}>
-        <div style={{
-          display: 'flex', gap: '6px', flexWrap: 'wrap' as const,
-          borderBottom: '1px solid var(--border-muted)', paddingBottom: '1px',
-        }}>
-          {TABS.map(t => {
-            const isActive = t.id === active
-            return (
-              <button
-                key={t.id}
-                onClick={() => setActive(t.id)}
-                style={{
-                  fontFamily: t.id === 'developer' ? 'var(--font-mono)' : 'var(--font-sans)',
-                  fontSize: '13px',
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
-                  marginBottom: '-1px',
-                  padding: '8px 14px',
-                  cursor: 'pointer',
-                  transition: 'color 0.15s, border-color 0.15s',
-                  letterSpacing: t.id === 'developer' ? '0.02em' : undefined,
-                }}
-              >
-                {t.id === 'developer' ? '{ dev }' : t.label}
-              </button>
-            )
-          })}
+        {/* Scroll wrapper — horizontal scroll on mobile, no scrollbar shown */}
+        <div
+          className="tabs-scroll"
+          style={{
+            overflowX: 'auto' as const,
+            WebkitOverflowScrolling: 'touch' as const,
+            borderBottom: '1px solid var(--border-muted)',
+            paddingBottom: '1px',
+          }}
+        >
+          <div style={{
+            display: 'flex', gap: '4px', flexWrap: 'nowrap' as const,
+            minWidth: 'max-content',
+          }}>
+            {TABS.map(t => {
+              const isActive = t.id === active
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setActive(t.id)}
+                  style={{
+                    fontFamily: t.id === 'developer' ? 'var(--font-mono)' : 'var(--font-sans)',
+                    fontSize: '13px',
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                    background: 'none',
+                    border: 'none',
+                    borderBottom: isActive ? '2px solid var(--accent)' : '2px solid transparent',
+                    marginBottom: '-1px',
+                    padding: '8px 14px',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap' as const,
+                    transition: 'color 0.15s, border-color 0.15s',
+                    letterSpacing: t.id === 'developer' ? '0.02em' : undefined,
+                  }}
+                >
+                  {t.id === 'developer' ? '{ dev }' : t.label}
+                </button>
+              )
+            })}
+          </div>
         </div>
         <p style={{
           fontFamily: 'var(--font-sans)', fontSize: '13px',
@@ -197,6 +309,7 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
               {pinned.map(a => <ArticleRow key={a.slug} article={a} featured />)}
             </Section>
           )}
+          <SeriesBanner />
           {devArticles.length > 0 && (
             <Section label="for developers" description="Implementation guides. Production-focused, code included." accent="#7B8FD4" accentBg="rgba(123,143,212,0.1)" mono>
               {devArticles.map(a => <ArticleRow key={a.slug} article={a} />)}
@@ -254,6 +367,7 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
               {pinned.map(a => <ArticleRow key={a.slug} article={a} featured />)}
             </Section>
           )}
+          {active === 'productivity' && <SeriesBanner />}
           {guides.length > 0 && (
             <Section
               label={active === 'developer' ? 'implementation guides' : 'Guides'}
@@ -277,6 +391,68 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
           )}
         </>
       )}
+        </>
+      )}
+      <style>{`
+        .tabs-scroll { scrollbar-width: none; }
+        .tabs-scroll::-webkit-scrollbar { display: none; }
+      `}</style>
+    </div>
+  )
+}
+
+function SeriesBanner() {
+  return (
+    <div style={{ marginBottom: '56px' }}>
+      <Link
+        href="/articles/claude-plus"
+        style={{ textDecoration: 'none', display: 'block' }}
+      >
+        <div style={{
+          padding: '20px 24px',
+          borderRadius: '10px',
+          border: '1px solid var(--border-base)',
+          borderLeft: '3px solid #D4845A',
+          background: 'rgba(212,132,90,0.05)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          flexWrap: 'wrap' as const,
+          transition: 'border-color 150ms ease',
+        }}
+          className="series-banner"
+        >
+          <div>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600,
+              letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+              color: '#D4845A', margin: '0 0 6px',
+            }}>
+              Series
+            </p>
+            <p style={{
+              fontFamily: 'var(--font-serif)', fontSize: '16px', fontWeight: 600,
+              color: 'var(--text-primary)', margin: '0 0 4px', lineHeight: 1.3,
+            }}>
+              Claude + Tool guides
+            </p>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '13px',
+              color: 'var(--text-muted)', margin: 0,
+            }}>
+              Using Claude alongside Notion, Slack, HubSpot, Jira, Confluence, Salesforce, and more.
+            </p>
+          </div>
+          <span style={{
+            fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500,
+            color: '#D4845A', whiteSpace: 'nowrap' as const,
+          }}>
+            See all 15 guides →
+          </span>
+        </div>
+      </Link>
+      <style>{`.series-banner:hover { border-color: rgba(212,132,90,0.4) !important; }`}</style>
     </div>
   )
 }
