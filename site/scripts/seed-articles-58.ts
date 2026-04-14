@@ -91,7 +91,7 @@ That one session will tell you more about whether this is useful for you than re
 
 ## Where to go from here
 
-**For the conceptual foundation** — what AI actually is, how it was built, and why it behaves the way it does — Anthropic has a free AI Fluency course that covers this well. It's a couple of hours and gives you a framework (the 4Ds: Delegation, Description, Discernment, Diligence) that makes the rest of your AI usage more intentional.
+**For the conceptual foundation** — what AI actually is, how it was built, and why it behaves the way it does — Anthropic's [AI Fluency course](https://www.anthropic.com/ai-fluency) covers this well. It's free, takes a couple of hours, and gives you a framework (the 4Ds: Delegation, Description, Discernment, Diligence) that makes the rest of your AI usage more intentional.
 
 **For practical application** — how to actually use Claude effectively in your specific work — that's what this site is for.
 
