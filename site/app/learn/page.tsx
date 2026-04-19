@@ -1,5 +1,9 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { createClient } from '@/lib/supabase/server'
+import { PATH_SLUGS } from '@/lib/paths'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Learn — AI Codex',
@@ -74,8 +78,93 @@ const DEV_PATH = {
   time: '~144 min',
 }
 
+type PathProgress = { done: number; total: number }
 
-export default function LearnPage() {
+function ProgressMeta({
+  href,
+  steps,
+  time,
+  accent,
+  progress,
+}: {
+  href: string
+  steps: number
+  time: string
+  accent: string
+  progress: PathProgress | null
+}) {
+  const done = progress?.done ?? 0
+  const pct = steps > 0 ? Math.round((done / steps) * 100) : 0
+  const complete = done >= steps && steps > 0
+
+  if (!progress || done === 0) {
+    return (
+      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
+          {steps} steps
+        </p>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+          {time}
+        </p>
+      </div>
+    )
+  }
+
+  if (complete) {
+    return (
+      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 600, color: '#4CAF7D', margin: '0 0 4px' }}>
+          ✓ Complete
+        </p>
+        <div style={{ width: '72px', height: '3px', borderRadius: '2px', background: 'rgba(76,175,125,0.2)', marginLeft: 'auto' }}>
+          <div style={{ width: '100%', height: '100%', borderRadius: '2px', background: '#4CAF7D' }} />
+        </div>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0' }}>
+          {time}
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: accent, fontWeight: 500, margin: '0 0 4px' }}>
+        {done} / {steps} steps
+      </p>
+      <div style={{ width: '72px', height: '3px', borderRadius: '2px', background: 'rgba(128,128,128,0.15)', marginLeft: 'auto' }}>
+        <div style={{ width: `${pct}%`, height: '100%', borderRadius: '2px', background: accent, transition: 'width 300ms ease' }} />
+      </div>
+      <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)', margin: '4px 0 0' }}>
+        {time}
+      </p>
+    </div>
+  )
+}
+
+export default async function LearnPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let progressByPath: Record<string, PathProgress> = {}
+
+  if (user) {
+    const { data: rows } = await supabase
+      .from('user_progress')
+      .select('article_slug')
+      .eq('user_id', user.id)
+
+    const doneSet = new Set((rows ?? []).map(r => r.article_slug))
+
+    for (const [pathHref, slugs] of Object.entries(PATH_SLUGS)) {
+      const done = slugs.filter(s => doneSet.has(s)).length
+      if (done > 0) {
+        progressByPath[pathHref] = { done, total: slugs.length }
+      }
+    }
+  }
+
+  const prog = (href: string) => progressByPath[href] ?? null
+
   return (
     <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(48px, 8vw, 96px) 0 var(--section-y)' }}>
 
@@ -194,26 +283,19 @@ export default function LearnPage() {
                 </p>
               </div>
 
-              <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
-                <p style={{
-                  fontFamily: 'var(--font-sans)', fontSize: '24px',
-                  color: track.accent, marginBottom: '8px', lineHeight: 1,
-                }}>
-                  {track.icon}
-                </p>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
-                  {track.steps} steps
-                </p>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
-                  {track.time}
-                </p>
-              </div>
+              <ProgressMeta
+                href={track.href}
+                steps={track.steps}
+                time={track.time}
+                accent={track.accent}
+                progress={prog(track.href)}
+              />
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Build with AI — sub-path within the you/team/company framework */}
+      {/* Build with AI */}
       <div style={{ marginBottom: '56px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
           <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
@@ -261,14 +343,13 @@ export default function LearnPage() {
                 {BWAI_PATH.description}
               </p>
             </div>
-            <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
-                {BWAI_PATH.steps} steps
-              </p>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
-                {BWAI_PATH.time}
-              </p>
-            </div>
+            <ProgressMeta
+              href={BWAI_PATH.href}
+              steps={BWAI_PATH.steps}
+              time={BWAI_PATH.time}
+              accent={BWAI_PATH.accent}
+              progress={prog(BWAI_PATH.href)}
+            />
           </div>
         </Link>
       </div>
@@ -321,19 +402,18 @@ export default function LearnPage() {
                 {CLAUDE_CODE_PATH.description}
               </p>
             </div>
-            <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
-                {CLAUDE_CODE_PATH.steps} steps
-              </p>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
-                {CLAUDE_CODE_PATH.time}
-              </p>
-            </div>
+            <ProgressMeta
+              href={CLAUDE_CODE_PATH.href}
+              steps={CLAUDE_CODE_PATH.steps}
+              time={CLAUDE_CODE_PATH.time}
+              accent={CLAUDE_CODE_PATH.accent}
+              progress={prog(CLAUDE_CODE_PATH.href)}
+            />
           </div>
         </Link>
       </div>
 
-      {/* Divider with label */}
+      {/* Divider */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
         <div style={{ flex: 1, height: '1px', background: 'var(--border-base)' }} />
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.06em', flexShrink: 0 }}>
@@ -391,14 +471,13 @@ export default function LearnPage() {
               {DEV_PATH.description}
             </p>
           </div>
-          <div style={{ textAlign: 'right' as const, flexShrink: 0 }}>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 2px' }}>
-              {DEV_PATH.steps} steps
-            </p>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
-              {DEV_PATH.time}
-            </p>
-          </div>
+          <ProgressMeta
+            href={DEV_PATH.href}
+            steps={DEV_PATH.steps}
+            time={DEV_PATH.time}
+            accent={DEV_PATH.accent}
+            progress={prog(DEV_PATH.href)}
+          />
         </div>
       </Link>
 

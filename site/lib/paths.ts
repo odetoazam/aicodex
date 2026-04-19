@@ -132,6 +132,16 @@ const BWAI_MAP          = buildMap(BWAI_STEPS, 'Build with AI', '/learn/build-wi
 const ADMIN_MAP         = buildMap(ADMIN_STEPS, 'Setting up Claude for your company', '/learn/claude-for-admins', '#5B8DD9')
 const CLAUDE_CODE_MAP   = buildMap(CLAUDE_CODE_STEPS, 'Setting up Claude Code for your team', '/learn/claude-code', '#5DA698')
 
+/** Path → slug list map — used by /learn page for progress computation */
+export const PATH_SLUGS: Record<string, string[]> = {
+  '/learn/claude':           FOR_YOURSELF_STEPS,
+  '/learn/for-your-team':    FOR_YOUR_TEAM_STEPS,
+  '/learn/claude-for-admins': ADMIN_STEPS,
+  '/learn/claude-code':      CLAUDE_CODE_STEPS,
+  '/learn/build-with-ai':    BWAI_STEPS,
+  '/learn/developers':       DEV_STEPS,
+}
+
 /**
  * Precedence (last wins on slug conflicts):
  * For Yourself → Build-with-AI → For Your Team → Admin → Claude Code → Developer Path
