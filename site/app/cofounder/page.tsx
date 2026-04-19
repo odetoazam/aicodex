@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import CofounderDashboard from './CofounderDashboard'
 
@@ -41,6 +42,14 @@ async function getLiveStats() {
 }
 
 export default async function CofounderPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const ownerEmail = process.env.COFOUNDER_EMAIL
+  if (!user || (ownerEmail && user.email !== ownerEmail)) {
+    redirect('/')
+  }
+
   const stats = await getLiveStats()
   return <CofounderDashboard stats={stats} />
 }
