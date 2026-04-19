@@ -179,9 +179,9 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   ],
 
   'claude-md-maintenance': [
+    { slug: 'claude-code-antipatterns', reason: 'CLAUDE.md bloat is one of several Code anti-patterns — the full list of what to stop doing.' },
     { slug: 'claude-code-for-your-team', reason: 'Maintenance is harder on shared repos — this covers the team-specific patterns.' },
     { slug: 'claude-md-templates', reason: 'When maintaining becomes a rewrite — these templates are a clean starting point.' },
-    { slug: 'ai-agent-harness-explained', reason: 'After CLAUDE.md is clean, the agent harness is the next architectural layer to understand.' },
   ],
 
   'ai-agent-harness-explained': [
@@ -191,8 +191,8 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   ],
 
   'claude-code-for-your-team': [
+    { slug: 'claude-code-antipatterns', reason: 'The failure-mode companion to this setup guide — what teams get wrong after the initial config.' },
     { slug: 'ai-usage-policy-for-teams', reason: 'Team Claude Code adoption needs a usage policy — especially around what Claude can access.' },
-    { slug: 'rolling-out-claude-across-teams', reason: 'The technical setup is one piece; adoption and change management is the harder piece.' },
     { slug: 'claude-md-maintenance', reason: 'Shared CLAUDE.md files drift fast without a maintenance process — this covers it.' },
   ],
 
@@ -211,7 +211,7 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   ],
 
   'how-to-convince-skeptical-teammate': [
-    { slug: 'ai-change-management', reason: 'Once you\'ve convinced the skeptic, this is the broader change management playbook.' },
+    { slug: 'influencing-ai-adoption-without-authority', reason: 'If you don\'t have authority to pitch formally, this covers the three levers you actually have — demonstration, advocacy, proximity.' },
     { slug: 'measuring-ai-roi', reason: 'Skeptics respond to numbers — here\'s how to build the case.' },
     { slug: 'claude-common-mistakes', reason: 'Skepticism is often based on bad early experiences — this is why those happen and how to prevent them.' },
   ],
@@ -281,9 +281,15 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   ],
 
   'client-handoff-with-claude': [
+    { slug: 'documenting-claude-setup-for-client-handoff', reason: 'Deliverable handoff is one piece — this covers how to document the Claude setup itself so the client can maintain it.' },
     { slug: 'what-to-tell-clients-about-ai', reason: 'The handoff starts with the client understanding what they\'re taking over.' },
     { slug: 'pricing-claude-consulting-work', reason: 'Handoff quality affects client perception of value — pricing should reflect it.' },
-    { slug: 'building-claude-powered-deliverable', reason: 'The deliverable you\'re handing off — what makes it maintainable by a non-technical client.' },
+  ],
+
+  'documenting-claude-setup-for-client-handoff': [
+    { slug: 'client-handoff-with-claude', reason: 'Deliverable handoff is the other half — this is the system documentation; that covers the client-facing output.' },
+    { slug: 'pricing-claude-consulting-work', reason: 'A real maintenance retainer needs a real scope — the handoff doc is what defines what maintenance even means.' },
+    { slug: 'claude-code-client-setup', reason: 'If Claude Code is part of the handoff, the .claude/ folder needs its own documentation layer on top of this.' },
   ],
 
   // ── Claude + Tool ─────────────────────────────────────────────────────────
@@ -332,10 +338,22 @@ export const NEXT_READS: Record<string, NextRead[]> = {
     { slug: 'claude-adoption-plateau', reason: 'The business case is step one. This is what happens if the rollout loses momentum at month 4.' },
   ],
 
+  'influencing-ai-adoption-without-authority': [
+    { slug: 'building-a-business-case-for-claude', reason: 'Once you\'ve built the demonstration story, this is what the formal pitch to your manager should look like.' },
+    { slug: 'claude-operator-habits', reason: 'The habits worth demonstrating — if people ask how you\'re faster, this is what you\'re showing them.' },
+    { slug: 'how-to-convince-skeptical-teammate', reason: 'Specific moves for the one-on-one conversation when a teammate is hesitant but not hostile.' },
+  ],
+
   'getting-it-approval-for-claude': [
+    { slug: 'claude-team-vs-enterprise-for-it', reason: 'Once IT is engaged, this is the side-by-side plan comparison they\'ll ask for — written to be forwarded to legal.' },
+    { slug: 'claude-admin-controls-2026', reason: 'New April 2026 admin controls — user groups, spend limits, Compliance API — are the specific features IT will want to understand.' },
     { slug: 'ai-usage-policy-template', reason: 'The usage policy James needs to see before he approves — have it ready before the conversation.' },
-    { slug: 'claude-admin-zero-to-one', reason: 'After IT says yes, this is the step-by-step admin setup that follows.' },
-    { slug: 'rolling-out-claude-across-teams', reason: 'Approval is step one — the team rollout playbook is what happens immediately after.' },
+  ],
+
+  'claude-team-vs-enterprise-for-it': [
+    { slug: 'getting-it-approval-for-claude', reason: 'The comparison answers "what are we actually buying?" — this covers how to frame the approval conversation.' },
+    { slug: 'claude-admin-controls-2026', reason: 'Drill down into the specific admin controls that differ between plans — user groups, spend caps, Compliance API.' },
+    { slug: 'building-a-business-case-for-claude', reason: 'The upstream proposal that brought IT into the conversation in the first place — know how Priya framed it.' },
   ],
 
   'claude-adoption-plateau': [
@@ -384,6 +402,50 @@ export const NEXT_READS: Record<string, NextRead[]> = {
     { slug: 'claude-plus-jira', reason: 'Confluence handles knowledge; Jira handles work. Using Claude across both creates a complete engineering loop.' },
     { slug: 'claude-for-engineering-teams', reason: 'Documentation is one piece — here\'s how engineering teams use Claude across planning, review, and standups.' },
     { slug: 'claude-md-maintenance', reason: 'If you use Claude Code, CLAUDE.md is your team\'s most important document — here\'s how to keep it accurate.' },
+  ],
+
+  // ── Feature updates (batch 60–62) ────────────────────────────────────────
+
+  'ask-your-org-guide': [
+    { slug: 'claude-admin-controls-2026', reason: 'Ask Your Org is one feature — this covers the full batch of admin controls that shipped alongside it.' },
+    { slug: 'getting-it-approval-for-claude', reason: 'An owner has to set up Ask Your Org. If IT hasn\'t approved Claude yet, this is the conversation to have first.' },
+    { slug: 'setting-up-claude-for-your-team', reason: 'Ask Your Org is the org-wide layer; this covers the project and team setup layer underneath it.' },
+  ],
+
+  'claude-admin-controls-2026': [
+    { slug: 'ask-your-org-guide', reason: 'The most visible new feature shipping alongside these controls — how to set up org-wide knowledge search.' },
+    { slug: 'getting-it-approval-for-claude', reason: 'These controls help IT say yes — the approval guide covers how to frame the conversation.' },
+    { slug: 'claude-admin-security-privacy', reason: 'New controls sit on top of existing security settings — worth reviewing both together.' },
+  ],
+
+  'claude-session-economics': [
+    { slug: 'claude-projects-role', reason: 'Projects are the escape hatch from conversation overhead — how to use them to hold context without accumulating cost.' },
+    { slug: 'minimising-token-usage', reason: 'Session economics is one lever; this covers the full token reduction picture.' },
+    { slug: 'claude-operator-habits', reason: 'Starting fresh chats is one habit in a system — what effective Claude users build over time.' },
+  ],
+
+  'claude-code-antipatterns': [
+    { slug: 'claude-md-maintenance', reason: 'The CLAUDE.md trimming anti-pattern is covered here — the full maintenance process.' },
+    { slug: 'claude-code-for-your-team', reason: 'Team setups amplify most of these anti-patterns — the team guide has the positive version.' },
+    { slug: 'mcp-for-operators', reason: 'The MCP cost trap is the trickiest to diagnose — this covers what to connect and why.' },
+  ],
+
+  'claude-opus-4-7': [
+    { slug: 'migrating-to-claude-4-7', reason: 'There are 5 API breaking changes in Opus 4.7 — this is the migration checklist.' },
+    { slug: 'choosing-the-right-claude-model', reason: 'Opus 4.7 is now the flagship — how it fits against Sonnet 4.6 and Haiku for your use case.' },
+    { slug: 'claude-cost-optimization', reason: 'The new tokenizer changes your cost math — worth re-running your estimates.' },
+  ],
+
+  'migrating-to-claude-4-7': [
+    { slug: 'claude-opus-4-7', reason: 'The full overview of what\'s new in Opus 4.7 beyond the breaking changes.' },
+    { slug: 'deploying-claude-app-production', reason: 'Migration checklist and production deployment are related concerns — good to review together.' },
+    { slug: 'claude-production-error-handling', reason: 'The new tokenizer and behavioral changes can surface as new error patterns in production.' },
+  ],
+
+  'claude-code-parallel-agents': [
+    { slug: 'claude-code-antipatterns', reason: 'The new parallel session workflow comes with its own anti-patterns — what to avoid as you scale up.' },
+    { slug: 'claude-code-project-setup', reason: 'Parallel sessions work better when each project is configured correctly from the start.' },
+    { slug: 'claude-code-for-your-team', reason: 'Parallel agents changes how teams coordinate on Claude Code — the team setup guide covers the shared patterns.' },
   ],
 
 }

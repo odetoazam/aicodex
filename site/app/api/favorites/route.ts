@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
   const { error } = await supabase
     .from('user_favorites')
-    .upsert({ user_id: session.user.id, article_slug: slug }, { onConflict: 'user_id,article_slug' })
+    .upsert({ user_id: session.user.id, article_slug: slug }, { onConflict: 'user_id,article_slug', ignoreDuplicates: true })
 
   if (error) {
     console.error('favorites upsert error:', error)

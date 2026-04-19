@@ -128,14 +128,11 @@ export default function GlossaryBrowser({ terms }: { terms: Term[] }) {
     let result = terms
     if (search.trim()) {
       const q = search.toLowerCase()
-      const nameMatches = result.filter(
+      result = result.filter(
         t =>
           t.name.toLowerCase().includes(q) ||
           t.aliases.some(a => a.toLowerCase().includes(q))
       )
-      result = nameMatches.length > 0
-        ? nameMatches
-        : result.filter(t => t.definition.toLowerCase().includes(q))
     }
     if (activeCluster) result = result.filter(t => t.cluster === activeCluster)
     if (activeLetter) result = result.filter(t => t.name[0].toUpperCase() === activeLetter)
@@ -220,7 +217,7 @@ export default function GlossaryBrowser({ terms }: { terms: Term[] }) {
           </span>
           <input
             type="text"
-            placeholder="Search terms, concepts, definitions..."
+            placeholder="Search terms..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             style={{

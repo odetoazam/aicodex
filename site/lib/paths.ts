@@ -50,9 +50,12 @@ const DEV_STEPS = [
   'claude-cost-optimization',
   'tool-use-implementation-deep-dive',
   'multi-agent-orchestration-basics',
+  'evaluating-multi-agent-systems',
   'chatbot-with-persistent-memory',
   'deploying-claude-app-production',
+  'monitoring-your-claude-app',
   'claude-production-error-handling',
+  'securing-your-claude-app',
   'nextauth-claude-integration',
   'supabase-conversation-history',
   'rate-limiting-claude-api',
@@ -64,6 +67,7 @@ const ADMIN_STEPS = [
   'claude-admin-zero-to-one',
   'choosing-your-claude-plan',
   'claude-admin-setup',
+  'ai-usage-policy-for-teams',
   'claude-projects-org-structure',
   'skills-setup-guide',
   'connectors-best-practices',
@@ -71,6 +75,17 @@ const ADMIN_STEPS = [
   'evals-role',
   'cowork-dispatch-guide',
   'managed-agents-for-your-org',
+  'claude-admin-ongoing-maintenance',
+]
+
+// Claude Code path — 6 steps
+const CLAUDE_CODE_STEPS = [
+  'claude-code-project-setup',
+  'claude-md-vs-hooks',
+  'claude-md-templates',
+  'claude-code-for-your-team',
+  'claude-md-maintenance',
+  'ai-agent-harness-explained',
 ]
 
 // Build-with-AI path — 10 steps (page still accessible, not in main index)
@@ -115,18 +130,21 @@ const FOR_YOUR_TEAM_MAP = buildMap(FOR_YOUR_TEAM_STEPS, 'Rolling Out Claude to Y
 const DEV_MAP           = buildMap(DEV_STEPS, 'Developer Path', '/learn/developers', '#7B8FD4')
 const BWAI_MAP          = buildMap(BWAI_STEPS, 'Build with AI', '/learn/build-with-ai', '#4CAF7D', 0)
 const ADMIN_MAP         = buildMap(ADMIN_STEPS, 'Setting up Claude for your company', '/learn/claude-for-admins', '#5B8DD9')
+const CLAUDE_CODE_MAP   = buildMap(CLAUDE_CODE_STEPS, 'Setting up Claude Code for your team', '/learn/claude-code', '#5DA698')
 
 /**
  * Precedence (last wins on slug conflicts):
- * For Yourself → Build-with-AI → For Your Team → Admin → Developer Path
+ * For Yourself → Build-with-AI → For Your Team → Admin → Claude Code → Developer Path
  * Developer path wins on shared articles (e.g. system-prompt-failure, deploying-claude-app-production).
  * For Your Team wins over For Yourself on shared articles (e.g. claude-projects-role, hallucination-failure).
  * Admin path wins on evals-role over For Your Team.
+ * Claude Code path wins on claude-code-project-setup and ai-agent-harness-explained.
  */
 export const ARTICLE_PATHS: Record<string, PathMembership> = {
   ...FOR_YOURSELF_MAP,
   ...BWAI_MAP,
   ...FOR_YOUR_TEAM_MAP, // wins over for-yourself on conflicts
   ...ADMIN_MAP,         // admin path wins on its articles
+  ...CLAUDE_CODE_MAP,   // claude code path wins on its articles
   ...DEV_MAP,           // developer path wins on conflicts
 }

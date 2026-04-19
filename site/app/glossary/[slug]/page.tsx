@@ -7,12 +7,17 @@ import { OFFICIAL_RESOURCES, getSourceLabel } from '@/lib/resources'
 
 export const dynamic = 'force-dynamic'
 
+function metaDescription(text: string, max = 155): string {
+  if (!text || text.length <= max) return text
+  return text.substring(0, max).replace(/\s+\S*$/, '') + '...'
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const term = await getTerm(params.slug)
   if (!term) return { title: 'Term not found' }
   return {
-    title: `${term.name} — AI Codex`,
-    description: term.definition,
+    title: `${term.name} — AI Glossary — AI Codex`,
+    description: metaDescription(term.definition),
   }
 }
 
@@ -69,20 +74,62 @@ export default async function TermPage({ params }: { params: { slug: string } })
   const officialResources = OFFICIAL_RESOURCES[term.slug] ?? []
   const clusterConfig = CLUSTER_MAP[term.cluster]
 
-  const jsonLd = {
+  const definedTermSchema = {
     '@context': 'https://schema.org',
     '@type': 'DefinedTerm',
     name: term.name,
     description: term.definition,
     inDefinedTermSet: { '@type': 'DefinedTermSet', name: 'AI Codex Glossary', url: 'https://www.aicodex.to/glossary' },
     url: `https://www.aicodex.to/glossary/${term.slug}`,
+    speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', '.term-definition'] },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Glossary', item: 'https://www.aicodex.to/glossary' },
+      ...(term.cluster ? [{ '@type': 'ListItem', position: 2, name: term.cluster, item: `https://www.aicodex.to/glossary?cluster=${encodeURIComponent(term.cluster)}` }] : []),
+      { '@type': 'ListItem', position: term.cluster ? 3 : 2, name: term.name, item: `https://www.aicodex.to/glossary/${term.slug}` },
+    ],
+  }
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `What is ${term.name}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: term.definition,
+        },
+      },
+      ...(term.aliases && term.aliases.length > 0 ? [{
+        '@type': 'Question',
+        name: `What is another name for ${term.name}?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `${term.name} is also known as: ${term.aliases.join(', ')}.`,
+        },
+      }] : []),
+    ],
   }
 
   return (
     <div style={{ width: 'var(--container-wide)', margin: '0 auto', padding: 'clamp(40px, 6vw, 72px) 0 var(--section-y)' }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       {/* Breadcrumb */}

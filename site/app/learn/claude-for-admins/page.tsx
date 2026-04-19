@@ -51,6 +51,15 @@ const STAGES = [
       },
       {
         number: 4,
+        concept: 'AI Usage Policy',
+        conceptSlug: 'claude-plans',
+        articleSlug: 'ai-usage-policy-for-teams',
+        label: 'Setting the rules your team will actually follow',
+        takeaway: 'Most AI usage policies are either too vague to be useful or so restrictive they get ignored. The three-zone model that works in practice — what is open, what requires review, and what is off-limits.',
+        time: '6 min',
+      },
+      {
+        number: 5,
         concept: 'Claude Projects',
         conceptSlug: 'claude-projects',
         articleSlug: 'claude-projects-org-structure',
@@ -59,7 +68,7 @@ const STAGES = [
         time: '7 min',
       },
       {
-        number: 5,
+        number: 6,
         concept: 'Skills',
         conceptSlug: 'skill',
         articleSlug: 'skills-setup-guide',
@@ -68,7 +77,7 @@ const STAGES = [
         time: '5 min',
       },
       {
-        number: 6,
+        number: 7,
         concept: 'Connectors',
         conceptSlug: 'connector',
         articleSlug: 'connectors-best-practices',
@@ -77,7 +86,7 @@ const STAGES = [
         time: '5 min',
       },
       {
-        number: 7,
+        number: 8,
         concept: 'Tokens',
         conceptSlug: 'token',
         articleSlug: 'minimising-token-usage',
@@ -93,7 +102,7 @@ const STAGES = [
     subtitle: 'Ongoing management',
     steps: [
       {
-        number: 8,
+        number: 9,
         concept: 'Evals',
         conceptSlug: 'evals',
         articleSlug: 'evals-role',
@@ -102,7 +111,7 @@ const STAGES = [
         time: '5 min',
       },
       {
-        number: 9,
+        number: 10,
         concept: 'Cowork & Dispatch',
         conceptSlug: 'claude-cowork',
         articleSlug: 'cowork-dispatch-guide',
@@ -111,13 +120,22 @@ const STAGES = [
         time: '6 min',
       },
       {
-        number: 10,
+        number: 11,
         concept: 'Managed Agents',
         conceptSlug: 'managed-agents',
         articleSlug: 'managed-agents-for-your-org',
         label: 'Staying current as Claude evolves',
         takeaway: 'Claude ships major capability updates every few months. How to keep your organization\'s setup current without constant fire drills — and how to evaluate new features before rolling them out.',
         time: '5 min',
+      },
+      {
+        number: 12,
+        concept: 'Ongoing Maintenance',
+        conceptSlug: 'claude-plans',
+        articleSlug: 'claude-admin-ongoing-maintenance',
+        label: 'Month 3 and beyond',
+        takeaway: 'The recurring admin work after the rollout is complete: user management, policy updates, connector reviews, spend monitoring, and the common incidents and how long they take. A realistic estimate of steady-state overhead.',
+        time: '6 min',
       },
     ],
   },

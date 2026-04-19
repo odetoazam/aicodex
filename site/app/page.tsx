@@ -15,91 +15,68 @@ export const metadata: Metadata = {
   description: 'The organizing layer for AI at work. Plain-English explanations, structured learning paths, and practical guides for operators.',
 }
 
-const ENTRY_POINTS = [
+// Three primary intent buckets — each may have 1 or 2 specific paths
+const PRIMARY_PATHS = [
   {
-    eyebrow: 'For individuals',
-    title: 'Using Claude for your own work?',
-    description: 'How to prompt well, what Claude is actually good at, the mistakes everyone makes first, and how to build a workflow that sticks. No technical background required.',
-    cta: 'Start the path',
-    href: '/learn/claude',
+    id: 'individual',
+    title: 'Using Claude at work?',
+    description: 'Better prompting, workflows that stick, and the habits that separate people who get consistent value from Claude from those who don\'t.',
     accent: '#D4845A',
-    accentBg: 'rgba(212,132,90,0.08)',
-    icon: '◈',
-    meta: '8 steps · ~40 min',
+    accentBg: 'rgba(212,132,90,0.07)',
+    paths: [
+      { cta: 'Start the path', href: '/learn/claude', meta: '8 steps · ~40 min' },
+    ],
   },
   {
-    eyebrow: 'For managers & department heads',
-    title: 'Rolling out Claude to your team?',
-    description: 'From deciding where to start, to setting up Projects and system prompts, to knowing whether the rollout is actually working. Works for any function.',
-    cta: 'See the path',
-    href: '/learn/for-your-team',
-    accent: '#4CAF7D',
-    accentBg: 'rgba(76,175,125,0.08)',
-    icon: '⬡',
-    meta: '8 steps · ~41 min',
-  },
-  {
-    eyebrow: 'For IT & operations leads',
-    title: 'Deploying Claude org-wide?',
-    description: "Evaluation, plan selection, provisioning, governance, and ongoing management — three stages in the right order, for whoever's been handed this job.",
-    cta: 'See the path',
-    href: '/learn/claude-for-admins',
-    accent: '#5B8DD9',
-    accentBg: 'rgba(91,141,217,0.08)',
-    icon: '◫',
-    meta: '10 steps · ~57 min',
-  },
-  {
-    eyebrow: 'For developers',
-    title: 'Building with the API?',
-    description: 'Implementation guides that assume you can code. API basics, RAG, evals, streaming, tool use, auth, rate limiting, and deployment. No business-case framing.',
-    cta: 'Open the dev path',
-    href: '/learn/developers',
+    id: 'builder',
+    title: 'Building with Claude?',
+    description: 'From your first API call to production deployment. Or from a product idea to real users — two paths depending on whether you\'re a developer or a founder.',
     accent: '#7B8FD4',
-    accentBg: 'rgba(123,143,212,0.08)',
-    icon: '⌥',
-    meta: '17 guides · ~121 min',
+    accentBg: 'rgba(123,143,212,0.07)',
+    paths: [
+      { cta: 'Developer path', href: '/learn/developers', meta: '17 guides · ~121 min' },
+      { cta: 'Founder / builder path', href: '/learn/build-with-ai', meta: '10 steps · ~64 min' },
+    ],
   },
   {
-    eyebrow: 'For builders',
-    title: 'Building an AI product?',
-    description: 'Validate your idea, pick the right stack, avoid the failure modes that catch most AI founders off guard — and deploy it to real users. Written for solo builders.',
-    cta: 'Start the path',
-    href: '/learn/build-with-ai',
+    id: 'team',
+    title: 'Deploying for your team?',
+    description: 'Whether you\'re a team lead doing a department rollout or IT handling org-wide deployment — two paths, starting in the right order.',
     accent: '#4CAF7D',
-    accentBg: 'rgba(76,175,125,0.08)',
-    icon: '◬',
-    meta: '10 steps · ~64 min',
+    accentBg: 'rgba(76,175,125,0.07)',
+    paths: [
+      { cta: 'Team lead path', href: '/learn/for-your-team', meta: '8 steps · ~41 min' },
+      { cta: 'IT / admin path', href: '/learn/claude-for-admins', meta: '12 steps · ~69 min' },
+    ],
   },
+]
+
+// Lightweight secondary destinations below the fold
+const SECONDARY_LINKS = [
   {
-    eyebrow: 'Reference',
-    title: 'Looking something up?',
-    description: 'Every AI term defined in plain English — what it means, why it matters, and how it connects to everything else.',
-    cta: 'Browse the glossary',
+    label: 'Glossary',
+    sub: '150+ AI terms in plain English',
     href: '/glossary',
     accent: '#7B8FD4',
-    accentBg: 'rgba(123,143,212,0.08)',
-    icon: '◇',
-    meta: '150+ terms',
+    cta: 'Browse →',
   },
   {
-    eyebrow: 'Free tools',
-    title: 'Need to make a decision?',
-    description: 'Cost calculator, system prompt builder, and AI maturity scorecard — interactive tools for the decisions operators and developers actually face.',
-    cta: 'Open the tools',
+    label: 'Free tools',
+    sub: 'Cost calculator, system prompt builder, AI maturity scorecard',
     href: '/tools',
     accent: '#D4845A',
-    accentBg: 'rgba(212,132,90,0.06)',
-    icon: '◈',
-    meta: '4 tools · free',
+    cta: 'Open →',
   },
 ]
 
 export default async function HomePage() {
-  const [featuredArticles, supabase] = await Promise.all([
-    getFeaturedArticles(3),
+  const [featuredArticlesRaw, supabase] = await Promise.all([
+    getFeaturedArticles(4),
     createClient(),
   ])
+  const featuredArticles = featuredArticlesRaw.filter(
+    a => a.slug !== 'ai-impact-on-knowledge-work'
+  ).slice(0, 3)
 
   // Check if the user is logged in and has path progress
   const { data: { user } } = await supabase.auth.getUser()
@@ -226,7 +203,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Where do you want to start? ───────────────────── */}
+      {/* ── What are you here to do? ──────────────────────── */}
       <section style={{ width: 'var(--container)', margin: '0 auto', paddingBottom: 'var(--section-y)' }}>
         <p style={{
           fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500,
@@ -236,66 +213,183 @@ export default async function HomePage() {
           Where do you want to start?
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }} className="entry-grid">
-          {ENTRY_POINTS.map(ep => (
-            <Link
-              key={ep.href}
-              href={ep.href}
-              style={{ textDecoration: 'none', display: 'block' }}
+        {/* 3 primary intent cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }} className="entry-grid">
+          {PRIMARY_PATHS.map(pp => (
+            <div
+              key={pp.id}
+              style={{
+                padding: '28px 26px',
+                borderRadius: '10px',
+                border: '1px solid var(--border-base)',
+                borderTop: `3px solid ${pp.accent}`,
+                background: pp.accentBg,
+                boxSizing: 'border-box' as const,
+                display: 'flex',
+                flexDirection: 'column' as const,
+              }}
             >
-              <div
-                style={{
-                  padding: '24px',
-                  borderRadius: '10px',
-                  border: '1px solid var(--border-base)',
-                  borderTop: `3px solid ${ep.accent}`,
-                  background: ep.accentBg,
-                  height: '100%',
-                  boxSizing: 'border-box' as const,
-                  transition: 'border-color 150ms ease, background 150ms ease',
-                }}
-                className="entry-card"
-              >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <p style={{
-                    fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
-                    letterSpacing: '0.06em', textTransform: 'uppercase' as const,
-                    color: ep.accent, margin: 0,
-                  }}>
-                    {ep.eyebrow}
-                  </p>
-                  <span style={{ fontSize: '18px', color: ep.accent, opacity: 0.7 }}>{ep.icon}</span>
-                </div>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600,
+                color: 'var(--text-primary)', lineHeight: 1.2, marginBottom: '12px',
+              }}>
+                {pp.title}
+              </h2>
 
-                <h2 style={{
-                  fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600,
-                  color: 'var(--text-primary)', lineHeight: 1.2, marginBottom: '10px',
-                }}>
-                  {ep.title}
-                </h2>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)',
+                lineHeight: 1.65, margin: '0 0 24px', flex: 1,
+              }}>
+                {pp.description}
+              </p>
 
-                <p style={{
-                  fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)',
-                  lineHeight: 1.6, margin: '0 0 16px',
-                }}>
-                  {ep.description}
-                </p>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: ep.accent, fontWeight: 500 }}>
-                    {ep.cta} →
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)' }}>
-                    {ep.meta}
-                  </span>
-                </div>
+              {/* One or two path CTAs */}
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
+                {pp.paths.map(path => (
+                  <Link
+                    key={path.href}
+                    href={path.href}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 16px',
+                      borderRadius: '7px',
+                      border: `1.5px solid ${pp.accent}`,
+                      background: 'var(--bg-surface)',
+                      textDecoration: 'none',
+                      transition: 'background 150ms ease',
+                    }}
+                    className="path-link"
+                  >
+                    <span style={{
+                      fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500,
+                      color: pp.accent,
+                    }}>
+                      {path.cta} →
+                    </span>
+                    <span style={{
+                      fontFamily: 'var(--font-sans)', fontSize: '11px',
+                      color: 'var(--text-muted)',
+                    }}>
+                      {path.meta}
+                    </span>
+                  </Link>
+                ))}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 
-        {/* Guided start trigger */}
-        <GuidedStartTrigger />
+        {/* Prominent guided start strip */}
+        <GuidedStartTrigger variant="strip" />
+
+        {/* Secondary: glossary + tools */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginTop: '12px' }} className="secondary-grid">
+          {SECONDARY_LINKS.map(sl => (
+            <Link
+              key={sl.href}
+              href={sl.href}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '16px 20px',
+                borderRadius: '8px',
+                border: '1px solid var(--border-base)',
+                background: 'var(--bg-surface)',
+                textDecoration: 'none',
+                transition: 'border-color 150ms ease',
+              }}
+              className="secondary-link"
+            >
+              <div>
+                <span style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500,
+                  color: 'var(--text-primary)', display: 'block', marginBottom: '2px',
+                }}>
+                  {sl.label}
+                </span>
+                <span style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '13px',
+                  color: 'var(--text-muted)',
+                }}>
+                  {sl.sub}
+                </span>
+              </div>
+              <span style={{
+                fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500,
+                color: sl.accent, whiteSpace: 'nowrap' as const,
+              }}>
+                {sl.cta}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Career context callout ───────────────────────── */}
+      <section style={{ width: 'var(--container)', margin: '0 auto', paddingBottom: 'var(--section-y)' }}>
+        <Link
+          href="/articles/ai-impact-on-knowledge-work"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '32px',
+            padding: '32px 36px',
+            borderRadius: '10px',
+            border: '1px solid var(--border-base)',
+            borderLeft: '4px solid var(--accent)',
+            background: 'var(--bg-subtle)',
+            textDecoration: 'none',
+          }}
+          className="career-callout"
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.07em',
+              textTransform: 'uppercase' as const,
+              color: 'var(--accent)',
+              marginBottom: '10px',
+            }}>
+              Start here
+            </p>
+            <h2 style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 'var(--text-xl)',
+              fontWeight: 600,
+              color: 'var(--text-primary)',
+              lineHeight: 1.2,
+              marginBottom: '10px',
+            }}>
+              What AI Is Actually Doing to Your Job
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-sans)',
+              fontSize: '14px',
+              color: 'var(--text-muted)',
+              lineHeight: 1.65,
+              margin: 0,
+              maxWidth: '60ch',
+            }}>
+              Block is eliminating middle management. Altman and Amodei predict the first billion-dollar one-person company. 36% of B2B companies already cut their SDR teams. The future of work is playing out role by role, with specific data, right now.
+            </p>
+          </div>
+          <span style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '14px',
+            fontWeight: 500,
+            color: 'var(--accent)',
+            whiteSpace: 'nowrap' as const,
+            flexShrink: 0,
+          }}>
+            Read →
+          </span>
+        </Link>
       </section>
 
       {/* ── Featured Articles ─────────────────────────────── */}
@@ -369,19 +463,24 @@ export default async function HomePage() {
       <style>{`
         @media (max-width: 640px) {
           .entry-grid { grid-template-columns: 1fr !important; }
+          .secondary-grid { grid-template-columns: 1fr !important; }
         }
         @media (min-width: 641px) and (max-width: 900px) {
           .entry-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
-        @media (min-width: 901px) and (max-width: 1280px) {
-          .entry-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        .path-link:hover {
+          background: var(--bg-subtle) !important;
         }
-        .entry-card:hover {
-          background: var(--bg-surface) !important;
+        .secondary-link:hover {
+          border-color: var(--accent) !important;
         }
         .cluster-pill:hover {
           border-color: var(--border-base) !important;
           color: var(--text-primary) !important;
+        }
+        .career-callout:hover {
+          background: var(--bg-surface) !important;
+          border-left-color: var(--accent) !important;
         }
       `}</style>
     </div>

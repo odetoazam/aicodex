@@ -1,6 +1,6 @@
 /**
- * Batch 34 — Is AI worth it for your team right now?
- * ai-roi-role
+ * Batch 34 — Claude Code team configuration (operator angle)
+ * claude-code-for-your-team
  *
  * Run: ./node_modules/.bin/tsx --env-file=.env.local scripts/seed-articles-34.ts
  */
@@ -18,115 +18,125 @@ async function getTermId(slug: string): Promise<{ id: string; name: string } | n
 }
 
 const ARTICLES = [
+
   {
-    termSlug: 'workflow-automation',
-    slug: 'ai-roi-role',
-    angle: 'role',
-    title: 'Is AI worth it for your team right now? An honest assessment',
-    excerpt: 'Most teams should start. Almost none should start as big as they plan to. Here is how to honestly evaluate where AI will actually deliver for your function — and how to avoid the trap of the impressive-but-useless use case.',
-    readTime: 6,
-    cluster: 'Team Rollout',
-    audience: ['operator'],
-    body: `The honest answer to whether AI is worth it for your team is almost certainly yes. But the version of "worth it" that most managers are picturing — the transformation, the dramatic productivity jump, the 10x output — usually is not what happens first. And chasing that version often leads to a failed pilot, a skeptical team, and a conclusion that AI was overhyped.
+    termSlug: 'claude-md',
+    slug: 'claude-code-for-your-team',
+    angle: 'process',
+    title: 'Claude Code for your team: the five decisions that actually matter',
+    excerpt: 'Most teams let one developer set up the .claude folder and never discuss it again. These are the decisions you should make together — and what breaks when you skip them.',
+    readTime: 7,
+    cluster: 'Claude Code',
+    body: `The .claude folder is not a developer tool. It is a team agreement written in markdown and JSON.
 
-The version that actually delivers is smaller, faster, and far less glamorous. And starting there is what makes the bigger changes possible later.
+When a team skips it — or lets one person set it up without discussion — everyone ends up correcting Claude individually, in their own sessions, with no shared baseline. The developer who knows what \`npm run test:reset\` does. The team lead who knows not to touch the .env file. The manager who knows Claude keeps getting the codebase structure wrong. All of them giving Claude the same corrections, repeatedly, in every session.
 
-Here is how to think through the assessment properly.
+The configuration that fixes this takes under an hour to set up. These are the five decisions your team actually needs to make.
 
-## Start with the work your team already does repeatedly
+## Decision 1: What goes in CLAUDE.md — and how long it stays
 
-The highest-ROI AI use cases are almost never the ones that look impressive in a demo. They are the boring, recurring tasks that eat hours every week — and that nobody has ever bothered to systematize because they seemed unavoidable.
+CLAUDE.md is the one file Claude reads at the start of every session, in every conversation, automatically. Whatever you write there, Claude holds in memory for the entire conversation.
 
-Before evaluating any specific tools or workflows, spend twenty minutes listing the work your team does that is:
+Every line in CLAUDE.md takes up space in Claude's working memory — the space it holds instructions in while it works. Files that grow past 200 lines start hurting more than they help. Not because Claude ignores long files, but because Claude gets worse at following all the instructions at once when there are too many of them.
 
-**High frequency.** Something that happens daily or weekly, not once a quarter. AI compounds — a small improvement on a task done 200 times a year is worth far more than a large improvement on a task done twice.
+What actually belongs there: your run commands (five lines that prevent Claude from ever asking how to start the app), the stack in two sentences (what it is, which directories hold what), and three to four non-obvious gotchas — things Claude would get wrong by default that nobody would think to explain. For example: a stricter code-quality setting that Claude won't know to use unless you tell it. A real local database in tests, not a stand-in that simulates one (Claude defaults to the stand-in; that causes tests to pass when the real app would fail). A custom error-logging module instead of the generic one Claude would use by default.
 
-**Text-heavy or structured.** First drafts, summaries, briefs, email responses, status updates, documentation, research synthesis. Claude is genuinely good at these. It is less useful for anything requiring real-time data, original research, or judgment calls with no clear right answer.
+The test for every line: would Claude get this wrong on the first try without it? If yes, it belongs. If Claude would figure it out from reading the code, leave it out.
 
-**Variable quality.** Tasks where the output quality varies a lot depending on who does it and when. AI can raise the floor significantly — it produces consistent, competent first drafts even on a bad day.
+**The coordination question:** CLAUDE.md is a shared file in the repo. Who updates it when something important changes — a new run command, a gotcha someone discovers? Pick one person to own it, or agree that anyone can add to it but no one edits existing lines without a quick discussion. CLAUDE.md merge conflicts are real. The rules/ folder (covered below) is the fix when the file starts growing.
 
-Write down three to five of these. That is where you look for the starting use case, not at the list of things that would be cool if AI could do them.
+## Decision 2: What Claude is and is not allowed to do
 
-## The trap of the impressive use case
+\`.claude/settings.json\` is your team's permission policy. Two lists: allow and deny.
 
-There is a pattern in almost every team rollout that does not go well. Someone sees something remarkable — AI summarizing a call in seconds, generating a full marketing brief from a product spec, answering a complex customer question from scratch — and that becomes the North Star for the rollout.
+**Allow list** — commands that run without Claude asking for confirmation. For most teams: your build and run scripts (\`Bash(npm run *)\`), standard file operations (Read, Write, Edit, Glob, Grep), read-only git commands.
 
-The problem is that impressive use cases tend to be complex use cases. They require setup, context-loading, specific prompting knowledge, and often produce outputs that need significant editing. They are also the cases where errors matter most. Teams who start here often conclude that Claude is "not reliable enough" — because they started with the hardest test.
+**Deny list** — commands blocked entirely, regardless of context. A sensible minimum: \`Bash(rm -rf *)\` for destructive shell commands, \`Bash(curl *)\` for direct network calls, \`Read(./.env)\` and \`Read(./.env.*)\` for credential files.
 
-The best starting use case has three properties:
+The important thing about the deny list: if you do not add something to it, Claude can access it. That is the default. If you have API keys, database credentials, or sensitive configuration files in your project, they need to be explicitly denied — or Claude will read them when a task asks it to understand your environment.
 
-**Low stakes.** Mistakes are easy to catch and cheap to fix. Internal drafts, not customer-facing messages. Summaries for review, not documents that go out.
+This is the conversation your team needs to have once. What does Claude need access to? What should it never touch? The allow list is convenience. The deny list is security.
 
-**Clear baseline.** You know what good looks like, so you can tell immediately if Claude is helping. "First draft of a weekly update" is clear. "Make our customer communications better" is not.
+For personal permission preferences — someone wants to allow a command on their machine that the team has not agreed to — \`.claude/settings.local.json\` works the same way and is auto-gitignored.
 
-**Short feedback loop.** Your team sees the benefit within the first week. If they have to wait a month to evaluate whether something worked, they will not stay motivated long enough to find out.
+## Decision 3: Do you want hooks, and if so, are they portable?
 
-If you find a use case that is impressive AND has these three properties, great. If not, choose the less impressive one.
+Hooks are shell scripts that fire automatically at specific points — before Claude runs a command (PreToolUse), after Claude edits a file (PostToolUse), when Claude declares it is finished (Stop). The most common use: a formatter that runs after every file edit, so Claude never produces unformatted code.
 
-## What ROI actually looks like at first
+The trap that breaks most hook setups: scripts that only work on one machine.
 
-The realistic ROI from an early AI rollout is not dramatic on paper. It looks like:
+If a hook references a script at \`/Users/yourname/.claude/hooks/format.sh\`, it works for you and nobody else. If it uses a relative path, it depends on where Claude Code is invoked from. Both break for teammates.
 
-- A first draft that takes five minutes instead of forty-five
-- A summary that replaces thirty minutes of re-reading notes before a meeting
-- A response to a common customer question that goes out in two minutes instead of ten
+The fix: put hook scripts inside \`.claude/hooks/\` in your project root, commit them to git, and reference them using \`$CLAUDE_PROJECT_DIR\` — the environment variable Claude Code sets to the project root. Every teammate who clones the repo gets the same hooks, pointing to the same scripts.
 
-Individually, none of these are transformative. Across a team of eight people doing three or four of these things daily, you are looking at several hours per person per week — freed up for actual judgment work, relationship work, problem-solving. Over a quarter, that is real.
+One thing worth knowing: hooks use exit codes to communicate. Exit code 2 is the only code that actually blocks Claude. Exit code 1 logs a warning and does nothing — if you write a security hook that exits with code 1, Claude proceeds anyway. For any hook meant to prevent an action, the exit code must be 2.
 
-More importantly, it is the kind of change that compounds. Teams that start with boring wins develop the prompting instincts that make the more complex use cases work. Teams that skip straight to complex use cases usually do not get there.
+If your team is not ready to maintain hook scripts, skip hooks for now. Hooks that only work on one machine are worse than no hooks. Come back when someone has a free afternoon.
 
-## The question you actually need to answer
+## Decision 4: Personal vs. shared configuration
 
-Rather than asking "is AI worth it for our team," ask something more specific:
+Two .claude folders exist. One lives inside your project and gets committed to git — that is team configuration. The other lives at \`~/.claude/\` in each person's home directory — that is personal.
 
-**Is there one task my team does at least twice a week, that takes more than thirty minutes per person, where the output quality is inconsistent, and where mistakes are catchable before they matter?**
+Missing the personal folder means everyone's individual preferences either go undocumented or end up in the shared CLAUDE.md where they do not belong.
 
-If the answer is yes, you have a starting use case. Start there. Build the habit. Measure the time saved informally — you do not need a dashboard for this, just pay attention for thirty days. Then decide whether to expand.
+The split is straightforward: what Claude needs to know to work in this codebase goes in the project CLAUDE.md. What Claude needs to know about how you personally like to work goes in \`~/.claude/CLAUDE.md\`. Both files load into every session; the project file takes precedence on any conflict.
 
-If the answer is no — if every task your team does is genuinely high-stakes, low-frequency, or resistant to text-based assistance — then AI might not be the right investment right now, and that is a legitimate answer too.
+\`CLAUDE.local.md\` in the project root also works for this — it is auto-gitignored and loads alongside the main CLAUDE.md. If someone has a strong personal preference that is codebase-specific (a preferred test runner, a workflow quirk), it goes here instead of polluting the shared file.
 
-## What you need to decide before you start
+## Decision 5: When to split into rules/ (not yet — but know the signal)
 
-A few decisions that will shape the rollout, regardless of which use case you pick:
+At some point your CLAUDE.md grows. Different people own different sections. The API conventions section gets long. You want rules about database queries to only load when Claude is working in the database layer.
 
-**Who goes first.** Pick a small group of volunteers who are open to experimentation, not the whole team at once. Three people trying something seriously for two weeks tells you far more than fifteen people trying it casually.
+\`.claude/rules/\` is the fix. Every markdown file in that folder loads alongside CLAUDE.md automatically. Instead of one file everyone edits, you have separate files organized by concern — \`api-conventions.md\`, \`testing.md\`, \`code-style.md\`. Each file can also be path-scoped with YAML frontmatter: add a \`paths\` field and it only loads when Claude is working in matching directories. API rules stay out of Claude's context when it is editing a React component.
 
-**What plan you need.** Individual Claude accounts work for personal experimentation, but if you want shared context across a team, you need Claude for Teams or above. This unlocks Projects — the feature that lets you set team-level instructions so every conversation starts from the same baseline. More on this in the next step.
+Most teams do not need this early. The signal: CLAUDE.md approaches 200 lines, or two people edit it in the same week and create a merge conflict. That is the moment — not day one.
 
-**What success looks like at 30 days.** Decide this now, before you start. Not "the team loves it" — something you can actually observe. Time saved on a specific task. Number of drafts that went out without significant edits. Tickets closed per hour. Pick one metric, measure it roughly, and revisit at 30 days.
+## The minimum viable setup
 
-## The honest summary
+Day one, you need two things:
 
-Most teams benefit from starting with Claude. Almost none benefit from starting big. The teams that get real value are the ones who pick a small, boring, high-frequency use case, run it for a month, build the habit, and then expand from there.
+**CLAUDE.md** (~20 lines): run commands, stack in two sentences, which directories hold what, and three to four non-obvious gotchas.
 
-The ones who do not get value are the ones who tried to do everything at once, picked the impressive use case, ran a loose pilot with no baseline, and concluded six months later that AI did not deliver.
+**settings.json** (deny list at minimum): \`Bash(rm -rf *)\`, \`Bash(curl *)\`, \`Read(./.env)\`, \`Read(./.env.*)\`. Add an allow list for your build scripts so Claude does not ask for confirmation on every run.
 
-Start small. Measure informally. Expand what works. That is it.
-
-**Where to go next:** Once you have a use case in mind, the next question is how to scope the rollout so it actually succeeds — not just "turn on Claude and see what happens." That is what the [pilot guide](/articles/running-your-first-ai-pilot) covers.`,
+Everything else — hooks, rules/, personal settings — you add when you feel the friction that makes them worth the time. The teams that try to configure everything on day one end up with a complicated setup nobody maintains. The ones who start with 20 lines and a deny list end up with a CLAUDE.md that is actually accurate six months later.`,
   },
+
 ]
 
-async function run() {
-  for (const a of ARTICLES) {
-    const term = await getTermId(a.termSlug)
-    if (!term) { console.error(`Term not found: ${a.termSlug}`); continue }
+async function seed() {
+  console.log('Seeding batch 34...\n')
+
+  for (const article of ARTICLES) {
+    const term = await getTermId(article.termSlug)
+    if (!term) {
+      console.error(`  ✗ Term not found: ${article.termSlug} (for ${article.slug})`)
+      continue
+    }
 
     const { error } = await sb.from('articles').upsert({
+      slug: article.slug,
       term_id: term.id,
-      slug: a.slug,
-      angle: a.angle,
-      title: a.title,
-      excerpt: a.excerpt,
-      read_time: a.readTime,
-      cluster: (a as any).cluster ?? null,
-      body: a.body,
+      term_name: term.name,
+      term_slug: article.termSlug,
+      cluster: article.cluster,
+      title: article.title,
+      angle: article.angle,
+      body: article.body.trim(),
+      excerpt: article.excerpt,
+      read_time: article.readTime,
+      tier: 2,
+      published: true,
     }, { onConflict: 'slug' })
 
-    if (error) console.error(`Error upserting ${a.slug}:`, error)
-    else console.log(`✓ ${a.slug}`)
+    if (error) {
+      console.error(`  ✗ ${article.slug}:`, error.message)
+    } else {
+      console.log(`  ✓ ${article.slug}`)
+    }
   }
-  console.log('Done.')
+
+  console.log('\nDone.')
 }
 
-run()
+seed().then(() => process.exit(0))

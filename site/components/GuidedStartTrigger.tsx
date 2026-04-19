@@ -4,8 +4,8 @@ import { useState } from 'react'
 import GuidedStart from './GuidedStart'
 
 interface Props {
-  /** 'hero' renders as a proper bordered button; 'subtle' is the original muted text link */
-  variant?: 'hero' | 'subtle'
+  /** 'hero' renders as a proper bordered button; 'subtle' is the original muted text link; 'strip' is a full-width band */
+  variant?: 'hero' | 'subtle' | 'strip'
 }
 
 export default function GuidedStartTrigger({ variant = 'subtle' }: Props) {
@@ -13,7 +13,64 @@ export default function GuidedStartTrigger({ variant = 'subtle' }: Props) {
 
   return (
     <>
-      {variant === 'hero' ? (
+      {variant === 'strip' ? (
+        <div style={{
+          marginTop: '20px',
+          padding: '18px 24px',
+          borderRadius: '10px',
+          border: '1px solid var(--border-base)',
+          background: 'var(--bg-subtle)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          flexWrap: 'wrap' as const,
+        }}>
+          <div>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500,
+              color: 'var(--text-primary)', margin: '0 0 2px',
+            }}>
+              Not sure which one fits you?
+            </p>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '13px',
+              color: 'var(--text-muted)', margin: 0,
+            }}>
+              Answer 2 questions and we'll point you to the right path.
+            </p>
+          </div>
+          <button
+            onClick={() => setOpen(true)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'none',
+              border: '1.5px solid var(--border-base)',
+              borderRadius: '8px',
+              padding: '10px 20px',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-sans)',
+              fontSize: '14px',
+              fontWeight: 500,
+              color: 'var(--text-secondary)',
+              whiteSpace: 'nowrap' as const,
+              transition: 'border-color 0.15s ease, color 0.15s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = 'var(--accent)'
+              e.currentTarget.style.color = 'var(--accent)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = 'var(--border-base)'
+              e.currentTarget.style.color = 'var(--text-secondary)'
+            }}
+          >
+            Find my path →
+          </button>
+        </div>
+      ) : variant === 'hero' ? (
         <button
           onClick={() => setOpen(true)}
           style={{

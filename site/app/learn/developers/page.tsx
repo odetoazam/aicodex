@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -109,6 +110,16 @@ const STEPS = [
   },
   {
     number: 11,
+    concept: 'Multi-agent Evaluation',
+    conceptSlug: 'multi-agent-system',
+    articleSlug: 'evaluating-multi-agent-systems',
+    label: 'assert multi > single_agent',
+    takeaway: 'Golden datasets, LLM-as-judge pairwise scoring, ablation testing to find the agent adding only latency, and the cost/quality equation that determines if orchestration is worth it.',
+    time: '8 min',
+    tag: 'Advanced',
+  },
+  {
+    number: 12,
     concept: 'Persistent Memory',
     conceptSlug: 'context-window',
     articleSlug: 'chatbot-with-persistent-memory',
@@ -118,7 +129,7 @@ const STEPS = [
     tag: 'Advanced',
   },
   {
-    number: 12,
+    number: 13,
     concept: 'Production Deployment',
     conceptSlug: 'api',
     articleSlug: 'deploying-claude-app-production',
@@ -128,7 +139,17 @@ const STEPS = [
     tag: 'Implementation',
   },
   {
-    number: 13,
+    number: 14,
+    concept: 'Production Monitoring',
+    conceptSlug: 'evals',
+    articleSlug: 'monitoring-your-claude-app',
+    label: 'log_claude_call(ClaudeCallLog(...))',
+    takeaway: 'The logging wrapper, the five metrics that matter, what Anthropic rate limiting looks like in practice, cost alerts, and the four dashboard questions you should be able to answer by month one.',
+    time: '7 min',
+    tag: 'Implementation',
+  },
+  {
+    number: 15,
     concept: 'Error Handling',
     conceptSlug: 'hallucination',
     articleSlug: 'claude-production-error-handling',
@@ -138,7 +159,17 @@ const STEPS = [
     tag: 'Implementation',
   },
   {
-    number: 14,
+    number: 16,
+    concept: 'Security',
+    conceptSlug: 'system-prompt',
+    articleSlug: 'securing-your-claude-app',
+    label: 'never trust user input',
+    takeaway: 'The four security issues that show up most often in Claude apps: API key exposure, prompt injection, over-permissioned tools, and untrusted system prompt content. With a pre-deploy checklist.',
+    time: '8 min',
+    tag: 'Implementation',
+  },
+  {
+    number: 17,
     concept: 'Authentication',
     conceptSlug: 'api',
     articleSlug: 'nextauth-claude-integration',
@@ -148,7 +179,7 @@ const STEPS = [
     tag: 'Implementation',
   },
   {
-    number: 15,
+    number: 18,
     concept: 'Conversation Persistence',
     conceptSlug: 'context-window',
     articleSlug: 'supabase-conversation-history',
@@ -158,7 +189,7 @@ const STEPS = [
     tag: 'Implementation',
   },
   {
-    number: 16,
+    number: 19,
     concept: 'Rate Limiting',
     conceptSlug: 'api',
     articleSlug: 'rate-limiting-claude-api',
@@ -168,7 +199,7 @@ const STEPS = [
     tag: 'Implementation',
   },
   {
-    number: 17,
+    number: 20,
     concept: 'Full-Stack Chatbot',
     conceptSlug: 'api',
     articleSlug: 'nextjs-chatbot-claude-full-tutorial',
@@ -276,8 +307,12 @@ export default function LearnDevelopersPage() {
               ? `/articles/${step.articleSlug}`
               : `/glossary/${step.conceptSlug}`
 
+            const showCheckpoint5 = step.number === 5
+            const showCheckpoint10 = step.number === 10
+
             return (
-              <div key={step.number} style={{ paddingLeft: '52px', paddingBottom: i === STEPS.length - 1 ? '0' : '4px' }}>
+              <React.Fragment key={step.number}>
+              <div style={{ paddingLeft: '52px', paddingBottom: i === STEPS.length - 1 ? '0' : '4px' }}>
                 <Link href={href} style={{ textDecoration: 'none', display: 'block' }}>
                   <div
                     style={{
@@ -356,6 +391,91 @@ export default function LearnDevelopersPage() {
                   </div>
                 </Link>
               </div>
+            {showCheckpoint5 && (
+              <div style={{
+                paddingLeft: '52px',
+                paddingTop: '8px',
+                paddingBottom: '8px',
+              }}>
+                <div style={{
+                  padding: '20px 24px',
+                  borderRadius: '8px',
+                  border: '1.5px dashed rgba(212,132,90,0.35)',
+                  background: 'rgba(212,132,90,0.04)',
+                }}>
+                  <p style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600,
+                    letterSpacing: '0.06em', color: '#D4845A', margin: '0 0 10px',
+                  }}>
+                    // CHECKPOINT — STEPS 1–5
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '13px',
+                    color: 'var(--text-secondary)', margin: '0 0 12px', lineHeight: 1.5,
+                  }}>
+                    You can build these right now, without reading further:
+                  </p>
+                  <ul style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '13px',
+                    color: 'var(--text-muted)', lineHeight: 1.6,
+                    margin: 0, paddingLeft: '18px',
+                  }}>
+                    <li>A streaming chat interface with a custom system prompt and error handling</li>
+                    <li>A document Q&A tool that retrieves from a knowledge base using RAG</li>
+                    <li>An assistant that calls external APIs or runs code on your behalf</li>
+                  </ul>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '12px',
+                    color: 'var(--text-muted)', margin: '12px 0 0', fontStyle: 'italic' as const,
+                  }}>
+                    Consider building one before continuing. Steps 6–10 add quality, cost control, and production scale.
+                  </p>
+                </div>
+              </div>
+            )}
+            {showCheckpoint10 && (
+              <div style={{
+                paddingLeft: '52px',
+                paddingTop: '8px',
+                paddingBottom: '8px',
+              }}>
+                <div style={{
+                  padding: '20px 24px',
+                  borderRadius: '8px',
+                  border: '1.5px dashed rgba(212,90,123,0.35)',
+                  background: 'rgba(212,90,123,0.04)',
+                }}>
+                  <p style={{
+                    fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600,
+                    letterSpacing: '0.06em', color: '#D45A7B', margin: '0 0 10px',
+                  }}>
+                    // CHECKPOINT — STEPS 1–10
+                  </p>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '13px',
+                    color: 'var(--text-secondary)', margin: '0 0 12px', lineHeight: 1.5,
+                  }}>
+                    You can build these right now:
+                  </p>
+                  <ul style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '13px',
+                    color: 'var(--text-muted)', lineHeight: 1.6,
+                    margin: 0, paddingLeft: '18px',
+                  }}>
+                    <li>A cost-optimized, eval-tested Claude API service with prompt caching</li>
+                    <li>A multi-agent research pipeline with parallelism and state management</li>
+                    <li>A chatbot with persistent memory that learns from previous conversations</li>
+                  </ul>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '12px',
+                    color: 'var(--text-muted)', margin: '12px 0 0', fontStyle: 'italic' as const,
+                  }}>
+                    Steps 11–20 cover production deployment, security, auth, and the full-stack capstone.
+                  </p>
+                </div>
+              </div>
+            )}
+              </React.Fragment>
             )
           })}
         </div>

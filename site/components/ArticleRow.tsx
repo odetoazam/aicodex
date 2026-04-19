@@ -4,20 +4,21 @@ import Link from 'next/link'
 import { CLUSTER_MAP } from '@/lib/clusters'
 import type { Article } from '@/lib/types'
 
-const ANGLE_LABEL: Record<string, string> = {
-  def:         'Concept',
-  process:     'How it works',
-  failure:     'What goes wrong',
-  role:        'Decision guide',
-  'field-note':'In practice',
-  cross:       'Cross-concept',
-  absence:     'What\'s missing',
-  history:     'History',
+const ANGLE_META: Record<string, { label: string; color?: string }> = {
+  def:         { label: 'Concept' },
+  process:     { label: 'How it works', color: '#5AAFD4' },
+  failure:     { label: 'What goes wrong', color: '#D45A7B' },
+  role:        { label: 'Decision guide', color: '#D4845A' },
+  'field-note':{ label: 'In practice', color: '#4CAF7D' },
+  cross:       { label: 'Cross-concept' },
+  absence:     { label: "What's missing" },
+  history:     { label: 'History' },
+  update:      { label: 'Feature update', color: '#7A5AD4' },
 }
 
 export default function ArticleRow({ article, featured = false }: { article: Article; featured?: boolean }) {
   const clusterConfig = CLUSTER_MAP[article.cluster]
-  const angleLabel = ANGLE_LABEL[article.angle] ?? article.angle
+  const angleMeta = ANGLE_META[article.angle] ?? { label: article.angle }
 
   return (
     <Link
@@ -58,8 +59,11 @@ export default function ArticleRow({ article, featured = false }: { article: Art
               {article.cluster.split(' ')[0]}
             </span>
           )}
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text-muted)' }}>
-            {angleLabel} · {article.read_time} min
+          <span style={{
+            fontFamily: 'var(--font-sans)', fontSize: '12px',
+            color: angleMeta.color ?? 'var(--text-muted)',
+          }}>
+            {angleMeta.label} · {article.read_time} min
           </span>
         </div>
         <h3 style={{

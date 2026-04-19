@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 type Org = 'Anthropic' | 'OpenAI' | 'Google' | 'Meta' | 'Microsoft' | 'Industry'
+type Audience = 'for-you' | 'for-admins' | 'for-builders'
 
 type Event = {
   date: string
@@ -12,6 +13,14 @@ type Event = {
   significance: 'major' | 'notable' | 'context'
   glossarySlug?: string
   href?: string
+  articleSlug?: string
+  audience?: Audience[]
+}
+
+const AUDIENCE_META: Record<Audience, { label: string; color: string }> = {
+  'for-you':      { label: 'For you',      color: '#5DA698' },
+  'for-admins':   { label: 'For admins',   color: '#D4845A' },
+  'for-builders': { label: 'For builders', color: '#7A5AD4' },
 }
 
 const EVENTS: Event[] = [
@@ -23,6 +32,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic launches Claude Design, an experimental product for creating visual work: prototypes, presentation decks, one-pagers, and UI mockups. Built on Opus 4.7. Users describe what they need, Claude builds a first version, then they refine through conversation or inline edits. Reads a team\'s design system and codebase for brand consistency. Exports to PDF, URL, PPTX, or Canva. Available to Pro, Max, Team, and Enterprise subscribers.',
     significance: 'major',
     href: 'https://techcrunch.com/2026/04/17/anthropic-launches-claude-design-a-new-product-for-creating-quick-visuals/',
+    audience: ['for-you'],
   },
   {
     date: 'Apr 16, 2026',
@@ -31,6 +41,8 @@ const EVENTS: Event[] = [
     description: 'Opus 4.7 upgrades the flagship model with improved agentic coding, multidisciplinary reasoning, scaled tool use, and computer use. New xhigh effort level gives finer latency vs. reasoning control. Maximum image resolution jumps from 1.15MP to 3.75MP (3.3× increase). Pricing unchanged at $5/$25 per million tokens. Available across Claude products, API, Bedrock, Vertex AI, and Microsoft Foundry.',
     significance: 'major',
     href: 'https://www.anthropic.com/news/claude-opus-4-7',
+    articleSlug: 'claude-opus-4-7',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'Apr 16, 2026',
@@ -55,6 +67,7 @@ const EVENTS: Event[] = [
     description: 'Claude launches as a native sidebar add-in for Microsoft Word on Mac and Windows. Highlights passages, rewrites sections, and inserts edits as tracked changes using Word\'s existing review workflow. Completes Claude\'s integration across the full Office suite (Excel, PowerPoint, Word). Available to Team and Enterprise plans.',
     significance: 'notable',
     href: 'https://www.thurrott.com/a-i/334834/anthropic-launches-claude-for-word-in-beta',
+    audience: ['for-you', 'for-admins'],
   },
   {
     date: 'Apr 10, 2026',
@@ -63,6 +76,7 @@ const EVENTS: Event[] = [
     description: 'Claude Code gains Ultraplan: a cloud-powered planning mode that uses Claude on the web to generate comprehensive implementation plans before coding begins. Designed for complex, multi-file tasks where getting the architecture right up front saves hours of rework.',
     significance: 'notable',
     href: 'https://code.claude.com/docs/en/ultraplan',
+    audience: ['for-builders'],
   },
   {
     date: 'Apr 9, 2026',
@@ -71,6 +85,25 @@ const EVENTS: Event[] = [
     description: 'Anthropic introduces the advisor tool: pair a fast executor model (Sonnet or Haiku) with Opus as a strategic advisor that only gets called on hard decisions. Sonnet + Opus advisor improved SWE-bench Multilingual by 2.7 percentage points while cutting per-task cost by 11.9%. A new paradigm for cost-effective agent intelligence.',
     significance: 'notable',
     href: 'https://claude.com/blog/the-advisor-strategy',
+    audience: ['for-builders'],
+  },
+  {
+    date: 'Apr 9, 2026',
+    org: 'Anthropic',
+    title: 'Ask Your Org — org-wide knowledge search across Slack, email, Drive',
+    description: 'Anthropic launches Ask Your Org: a pre-configured Project that searches across connected company tools (Slack, Microsoft 365, Google Workspace, custom MCP connectors) and returns a single synthesized answer with citations. Permission-aware — users only see data they can already access. Available to Team and Enterprise plans after owner setup.',
+    significance: 'major',
+    articleSlug: 'ask-your-org-guide',
+    audience: ['for-you', 'for-admins'],
+  },
+  {
+    date: 'Apr 9, 2026',
+    org: 'Anthropic',
+    title: 'New admin controls — user groups, spend limits, Compliance API',
+    description: 'Anthropic ships a batch of admin controls for Team and Enterprise: user groups with SCIM sync, role-based access defining which Claude features each group can use, per-user spend caps, managed Claude Code policies (tool/file/MCP permissions), and a new Compliance API for Enterprise giving programmatic access to usage data and selective deletion.',
+    significance: 'notable',
+    articleSlug: 'claude-admin-controls-2026',
+    audience: ['for-admins'],
   },
   {
     date: 'Apr 9, 2026',
@@ -79,6 +112,7 @@ const EVENTS: Event[] = [
     description: 'Cowork goes GA on macOS and Windows with Analytics API access, OpenTelemetry monitoring, and role-based access controls for enterprise departments. The shift from collaborative experiment to production-grade team workspace.',
     significance: 'notable',
     href: 'https://claude.com/blog/cowork-for-enterprise',
+    audience: ['for-you', 'for-admins'],
   },
   {
     date: 'Apr 9, 2026',
@@ -87,6 +121,7 @@ const EVENTS: Event[] = [
     description: 'Claude Code gains the Monitor tool: spawn a background process and stream its stdout into the conversation without blocking the thread. Enables patterns like "watch kubectl logs for errors and fix any crashes" — a step toward always-on agent awareness.',
     significance: 'notable',
     href: 'https://code.claude.com/docs/en/changelog',
+    audience: ['for-builders'],
   },
   {
     date: 'Apr 8, 2026',
@@ -103,6 +138,7 @@ const EVENTS: Event[] = [
     significance: 'major',
     glossarySlug: 'managed-agents',
     href: 'https://platform.claude.com/docs/en/managed-agents/overview',
+    audience: ['for-builders'],
   },
   {
     date: 'Apr 7, 2026',
@@ -111,6 +147,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic announces Project Glasswing alongside AWS, Apple, Google, Microsoft, NVIDIA, and others to secure critical software infrastructure. Claude Mythos Preview — a specialized cybersecurity model — available as a gated research preview for defensive work.',
     significance: 'notable',
     href: 'https://anthropic.com/glasswing',
+    audience: ['for-admins'],
   },
   {
     date: 'Apr 7, 2026',
@@ -142,6 +179,7 @@ const EVENTS: Event[] = [
     description: 'The 1M token context window is now GA for Claude Opus 4.6 and Sonnet 4.6 at standard pricing — no beta header required. Requests over 200k tokens work automatically. Also raised the media limit from 100 to 600 images or PDF pages per request.',
     significance: 'notable',
     href: 'https://platform.claude.com/docs/en/build-with-claude/context-windows',
+    audience: ['for-builders'],
   },
   {
     date: 'Mar 12, 2026',
@@ -150,6 +188,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic launches the Claude Partner Network with $100M invested to accelerate enterprise adoption. Targets system integrators, consultants, and implementation partners helping organizations deploy Claude at scale.',
     significance: 'notable',
     href: 'https://www.anthropic.com/news/claude-partner-network',
+    audience: ['for-admins'],
   },
   {
     date: 'Feb 17, 2026',
@@ -158,6 +197,7 @@ const EVENTS: Event[] = [
     description: 'Sonnet 4.6 launches as the balanced model for professional work at scale — improved agentic search, fewer tokens consumed, extended thinking support, and 1M token context window. Web search and code execution tools hit general availability on the same day.',
     significance: 'major',
     href: 'https://www.anthropic.com/news/claude-sonnet-4-6',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'Feb 12, 2026',
@@ -174,6 +214,7 @@ const EVENTS: Event[] = [
     description: "Opus 4.6 launches for complex, long-horizon agentic tasks. Introduces adaptive thinking (replacing manual budget_tokens), the compaction API for effectively infinite conversations, and data residency controls. Fast mode — up to 2.5x faster — available in preview.",
     significance: 'major',
     href: 'https://www.anthropic.com/news/claude-opus-4-6',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'Jan 13, 2026',
@@ -182,6 +223,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic launches Labs, a platform for experimental Claude features before they reach the main product. First move toward a formal beta program for early access to capabilities in development.',
     significance: 'notable',
     href: 'https://www.anthropic.com/news',
+    audience: ['for-you'],
   },
   {
     date: 'Jan 11, 2026',
@@ -190,6 +232,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic launches HIPAA-ready infrastructure with clinical trial connectors for healthcare and life sciences. Opens Claude to regulated industries that previously had compliance blockers.',
     significance: 'notable',
     href: 'https://www.anthropic.com/news',
+    audience: ['for-admins'],
   },
   {
     date: 'Jan 5, 2026',
@@ -207,6 +250,7 @@ const EVENTS: Event[] = [
     significance: 'notable',
     glossarySlug: 'mcp',
     href: 'https://www.anthropic.com/news',
+    audience: ['for-builders', 'for-admins'],
   },
   {
     date: 'Dec 1, 2025',
@@ -215,6 +259,7 @@ const EVENTS: Event[] = [
     description: 'Real-time collaborative sessions in Claude — multiple users working in the same conversation. Foundation for team-based AI workflows.',
     significance: 'notable',
     glossarySlug: 'cowork',
+    audience: ['for-you', 'for-admins'],
   },
   {
     date: 'Nov 24, 2025',
@@ -223,6 +268,7 @@ const EVENTS: Event[] = [
     description: 'Opus 4.5 launches as the most capable Claude model yet — step-change improvements in vision, coding, and computer use at a more accessible price than previous Opus models. Best model for complex specialized tasks and professional software engineering.',
     significance: 'major',
     href: 'https://www.anthropic.com/news/claude-opus-4-5',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'Nov 18, 2025',
@@ -231,6 +277,7 @@ const EVENTS: Event[] = [
     description: 'Claude models come to Azure customers through Microsoft Foundry with Azure billing and OAuth authentication. Full Messages API access including extended thinking, prompt caching, PDF support, and Agent Skills.',
     significance: 'notable',
     href: 'https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry',
+    audience: ['for-builders', 'for-admins'],
   },
   {
     date: 'Nov 7, 2024',
@@ -240,6 +287,7 @@ const EVENTS: Event[] = [
     significance: 'major',
     glossarySlug: 'mcp',
     href: 'https://www.anthropic.com/news/model-context-protocol',
+    audience: ['for-builders', 'for-admins'],
   },
   {
     date: 'Oct 28, 2025',
@@ -255,6 +303,7 @@ const EVENTS: Event[] = [
     description: 'Agent Skills launch in beta: pre-built Skills for PowerPoint, Excel, Word, and PDF files. Also supports custom Skills where you package your own domain expertise. Claude can now read and write Office documents without manual parsing — a major unlock for enterprise workflows.',
     significance: 'major',
     href: 'https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'Oct 15, 2025',
@@ -263,6 +312,7 @@ const EVENTS: Event[] = [
     description: 'Haiku 4.5 launches as the fastest and most capable Haiku yet — near-frontier performance for real-time applications, high-volume processing, and cost-sensitive deployments where speed matters more than maximum intelligence.',
     significance: 'notable',
     href: 'https://www.anthropic.com/news/claude-haiku-4-5',
+    audience: ['for-builders'],
   },
   {
     date: 'Sep 29, 2025',
@@ -271,6 +321,7 @@ const EVENTS: Event[] = [
     description: 'Sonnet 4.5 launches with the highest intelligence of any Sonnet, built for complex agent workflows and coding tasks. Also ships: the memory tool (persistent context across conversations) and context editing for automatic conversation management.',
     significance: 'major',
     href: 'https://www.anthropic.com/news/claude-sonnet-4-5',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'Sep 10, 2025',
@@ -279,6 +330,7 @@ const EVENTS: Event[] = [
     description: 'Web fetch tool launches in beta, letting Claude retrieve full content from any web page or PDF by URL. Pairs with web search for end-to-end research tasks.',
     significance: 'notable',
     href: 'https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool',
+    audience: ['for-builders'],
   },
   {
     date: 'Jun 12, 2025',
@@ -288,6 +340,7 @@ const EVENTS: Event[] = [
     significance: 'major',
     glossarySlug: 'claude-code',
     href: 'https://claude.ai/code',
+    audience: ['for-builders'],
   },
   {
     date: 'May 22, 2025',
@@ -296,6 +349,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic ships the first Claude 4 models: Opus 4 for frontier tasks and Sonnet 4 for everyday use, both with extended thinking. Also ships: Files API, Code Execution tool, and MCP connector in the API. A step-change in what Claude can do in production.',
     significance: 'major',
     href: 'http://www.anthropic.com/news/claude-4',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'May 7, 2025',
@@ -304,6 +358,7 @@ const EVENTS: Event[] = [
     description: 'Web search launches in the API, giving Claude access to up-to-date information. Closes the biggest gap between Claude and web-native AI products.',
     significance: 'notable',
     href: 'https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'May 5, 2025',
@@ -328,6 +383,7 @@ const EVENTS: Event[] = [
     significance: 'major',
     glossarySlug: 'extended-thinking',
     href: 'http://www.anthropic.com/news/claude-3-7-sonnet',
+    audience: ['for-you', 'for-builders'],
   },
   {
     date: 'Feb 6, 2025',
@@ -344,6 +400,7 @@ const EVENTS: Event[] = [
     description: 'Claude gains the ability to cite its sources when answering from documents — pointing to the exact passage it drew from. Major unlock for trust in enterprise document workflows and RAG applications.',
     significance: 'notable',
     href: 'https://platform.claude.com/docs/en/build-with-claude/citations',
+    audience: ['for-builders'],
   },
   {
     date: 'Jan 12, 2025',
@@ -360,6 +417,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic moves several API features to general availability: Message Batches API (50% cost reduction on batch jobs), Token Counting API, Prompt Caching (90% cost reduction), and PDF support. Also ships Go and Java SDKs.',
     significance: 'notable',
     href: 'https://platform.claude.com/docs/en/build-with-claude/batch-processing',
+    audience: ['for-builders'],
   },
   {
     date: 'Nov 4, 2024',
@@ -368,6 +426,7 @@ const EVENTS: Event[] = [
     description: 'Claude Haiku 3.5 launches as a fast, cost-efficient model for real-time applications and high-volume tasks. Better than Haiku 3 at a similar price point.',
     significance: 'notable',
     href: 'https://www.anthropic.com/claude/haiku',
+    audience: ['for-builders'],
   },
   {
     date: 'Oct 22, 2024',
@@ -376,6 +435,7 @@ const EVENTS: Event[] = [
     description: 'Anthropic ships Computer Use in public beta: Claude can move a mouse, click, type, and navigate GUI applications. First mainstream API for AI-controlled computer interaction. Sets the foundation for desktop-level automation.',
     significance: 'major',
     href: 'https://www.anthropic.com/news/developing-computer-use',
+    audience: ['for-builders'],
   },
   {
     date: 'Sep 12, 2024',
@@ -392,6 +452,7 @@ const EVENTS: Event[] = [
     description: 'Workspaces launch in the Developer Console: custom spend limits, grouped API keys, usage tracking by project, and user roles. First real admin layer for teams using the Claude API.',
     significance: 'notable',
     href: 'https://www.anthropic.com/news/workspaces',
+    audience: ['for-admins', 'for-builders'],
   },
   {
     date: 'Aug 14, 2024',
@@ -401,6 +462,7 @@ const EVENTS: Event[] = [
     significance: 'notable',
     glossarySlug: 'prompt-caching',
     href: 'https://www.anthropic.com/news/prompt-caching',
+    audience: ['for-builders'],
   },
   {
     date: 'Jun 20, 2024',
@@ -410,6 +472,7 @@ const EVENTS: Event[] = [
     significance: 'major',
     glossarySlug: 'claude-artifacts',
     href: 'http://anthropic.com/news/claude-3-5-sonnet',
+    audience: ['for-you'],
   },
   {
     date: 'Mar 4, 2024',
@@ -587,6 +650,18 @@ export default function TimelineView() {
                               {SIGNIFICANCE_LABEL[event.significance]}
                             </span>
                           )}
+                          {event.audience?.map(aud => (
+                            <span key={aud} style={{
+                              padding: '2px 8px', borderRadius: '4px',
+                              fontSize: '10px', fontWeight: 500,
+                              fontFamily: 'var(--font-sans)',
+                              color: AUDIENCE_META[aud].color,
+                              background: `${AUDIENCE_META[aud].color}15`,
+                              whiteSpace: 'nowrap' as const,
+                            }}>
+                              {AUDIENCE_META[aud].label}
+                            </span>
+                          ))}
                           <p style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-base)', fontWeight: 600, color: 'var(--text-primary)', margin: 0, lineHeight: 1.3 }}>
                             {event.title}
                           </p>
@@ -600,10 +675,15 @@ export default function TimelineView() {
                         {event.description}
                       </p>
 
-                      {(event.href || event.glossarySlug) && (
+                      {(event.href || event.glossarySlug || event.articleSlug) && (
                         <div style={{ marginTop: '10px', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                          {event.articleSlug && (
+                            <a href={`/articles/${event.articleSlug}`} style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--accent)', fontWeight: 500, textDecoration: 'none' }}>
+                              Read the guide →
+                            </a>
+                          )}
                           {event.href && (
-                            <a href={event.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--accent)', textDecoration: 'none' }}>
+                            <a href={event.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: event.articleSlug ? 'var(--text-muted)' : 'var(--accent)', textDecoration: 'none' }}>
                               Read announcement →
                             </a>
                           )}

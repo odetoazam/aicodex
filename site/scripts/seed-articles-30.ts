@@ -28,7 +28,9 @@ const ARTICLES = [
     readTime: 9,
     cluster: 'Developer Patterns',
     audience: ['developer'],
-    body: `The .claude folder is not a feature to explore. It is a priority stack. Set up the bottom layers well and Claude behaves the way your team needs it to behave across every session. Skip them and you spend your time giving the same corrections over and over.
+    body: `*This article is about Claude Code — the terminal-based coding assistant. If you are building an application that calls the Claude API, [the developer path starts here](/articles/your-first-claude-api-call).*
+
+The .claude folder is not a feature to explore. It is a priority stack. Set up the bottom layers well and Claude behaves the way your team needs it to behave across every session. Skip them and you spend your time giving the same corrections over and over.
 
 Most teams set up one layer — usually CLAUDE.md — and stop. That is a fine start. But if you are using Claude Code seriously, you have five tools available: CLAUDE.md, settings.json, hooks, rules, and skills/agents. Each one serves a different purpose. Each one is more optional than the last.
 

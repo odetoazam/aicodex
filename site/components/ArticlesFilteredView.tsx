@@ -39,6 +39,10 @@ const DEV_SLUGS = new Set([
   'multi-agent-failure-handling',
   'auditing-your-eval-suite',
   'ant-cli',
+  'claude-opus-4-7',
+  'migrating-to-claude-4-7',
+  'claude-code-parallel-agents',
+  'claude-code-antipatterns',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -77,6 +81,7 @@ const PRODUCTIVITY_SLUGS = new Set([
 const AGENCIES_SLUGS = new Set([
   'claude-for-agencies',
   'client-handoff-with-claude',
+  'documenting-claude-setup-for-client-handoff',
   'building-claude-powered-deliverable',
   'what-to-tell-clients-about-ai',
   'claude-code-client-setup',
@@ -84,8 +89,10 @@ const AGENCIES_SLUGS = new Set([
 ])
 
 // Pinned for each persona view
-const PINNED_ALL       = ['new-to-ai-start-here', 'what-to-share-with-claude', 'how-to-write-a-good-prompt', 'claude-common-mistakes', 'claude-code-vs-web-app', 'claude-operator-habits', 'running-your-first-ai-pilot', 'your-first-claude-api-call', 'building-a-business-case-for-claude']
-const PINNED_OPERATOR  = ['what-to-share-with-claude', 'how-to-convince-skeptical-teammate', 'first-week-with-claude', 'after-your-manager-approves-claude', 'building-a-business-case-for-claude', 'getting-it-approval-for-claude', 'setting-up-claude-for-your-team', 'ai-usage-policy-template', 'why-claude-feels-inconsistent', 'measuring-ai-roi', 'claude-adoption-plateau', 'cs-manager-ai-workflow', 'ops-manager-ai-workflow']
+// Max 5 pinned per tab (Cassie rule #18). "Pinned" means: the true first-read for someone
+// landing on this tab. Everything else stays in the pool — demoted, not removed.
+const PINNED_ALL       = ['new-to-ai-start-here', 'what-to-share-with-claude', 'how-to-write-a-good-prompt', 'claude-common-mistakes', 'claude-code-vs-web-app']
+const PINNED_OPERATOR  = ['first-week-with-claude', 'ask-your-org-guide', 'building-a-business-case-for-claude', 'setting-up-claude-for-your-team', 'claude-adoption-plateau']
 const PINNED_FOUNDER   = ['founder-ai-workflow', 'solo-founder-project-setup', 'solo-founder-operating-system', 'validating-startup-idea-with-claude']
 const PINNED_DEV       = ['your-first-claude-api-call', 'securing-your-claude-app', 'building-a-rag-pipeline-from-scratch', 'auditing-your-eval-suite', 'prompt-caching-implementation']
 const PINNED_PROD      = ['claude-plus-notion', 'claude-plus-airtable', 'claude-plus-figma', 'claude-for-writing-and-editing']
@@ -114,6 +121,7 @@ const ANGLE_LABEL: Record<string, string> = {
   def: 'Concept', process: 'How it works', failure: 'What goes wrong',
   role: 'Decision guide', 'field-note': 'In practice',
   cross: 'Cross-concept', absence: "What's missing", history: 'History',
+  update: 'Feature update',
 }
 
 export default function ArticlesFilteredView({ articles }: { articles: Article[] }) {

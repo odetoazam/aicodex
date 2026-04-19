@@ -3,26 +3,34 @@ import type { Metadata } from 'next'
 import { marked } from 'marked'
 import { CLUSTER_MAP, ANGLE_LABELS } from '@/lib/clusters'
 import { ARTICLE_PATHS } from '@/lib/paths'
-import { getArticle, getArticlesForTerm, getArticlesByCluster } from '@/lib/db'
+import { NEXT_READS } from '@/lib/next-reads'
+import { getArticle, getArticlesForTerm, getArticlesByCluster, getArticlesBySlugs } from '@/lib/db'
 import type { Article } from '@/lib/types'
 import ArticleActions from '@/components/ArticleActions'
 import ReadSentinel from '@/components/ReadSentinel'
 import ScrollProgress from '@/components/ScrollProgress'
+import NewsletterCTA from '@/components/NewsletterCTA'
 
 export const dynamic = 'force-dynamic'
 
 marked.setOptions({ breaks: true })
+
+function metaDesc(text: string | null | undefined, max = 155): string | undefined {
+  if (!text) return undefined
+  if (text.length <= max) return text
+  return text.substring(0, max).replace(/\s+\S*$/, '') + '...'
+}
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await getArticle(params.slug)
   if (!article) return { title: 'Article not found' }
   return {
     title: `${article.title} — AI Codex`,
-    description: article.excerpt ?? undefined,
+    description: metaDesc(article.excerpt),
   }
 }
 
-function ArticleCard({ article, label }: { article: Article; label?: string }) {
+function ArticleCard({ article, label, reason }: { article: Article; label?: string; reason?: string }) {
   const config = CLUSTER_MAP[article.cluster]
   const angleLabel = ANGLE_LABELS[article.angle] ?? article.angle
   return (
@@ -66,7 +74,14 @@ function ArticleCard({ article, label }: { article: Article; label?: string }) {
         }}>
           {article.title}
         </p>
-        {article.excerpt && (
+        {reason ? (
+          <p style={{
+            fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)',
+            lineHeight: 1.55, margin: 0, fontStyle: 'italic',
+          }}>
+            {reason}
+          </p>
+        ) : article.excerpt ? (
           <p style={{
             fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)',
             lineHeight: 1.55, margin: 0,
@@ -74,7 +89,7 @@ function ArticleCard({ article, label }: { article: Article; label?: string }) {
           }}>
             {article.excerpt}
           </p>
-        )}
+        ) : null}
       </div>
     </Link>
   )
@@ -123,7 +138,7 @@ const TOOL_CALLOUTS: Record<string, ToolCallout> = {
 function getRelatedTools(article: Article): ToolCallout[] {
   const slug = article.slug.toLowerCase()
   const term = (article.term_slug ?? '').toLowerCase()
-  const cluster = article.cluster.toLowerCase()
+  const cluster = (article.cluster ?? '').toLowerCase()
   const tools: ToolCallout[] = []
 
   const matches = (keywords: string[]) =>
@@ -172,6 +187,45 @@ function stripLinksFromHeadings(html: string): string {
   )
 }
 
+function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
+interface TocEntry {
+  id: string
+  text: string
+  level: 2 | 3
+}
+
+function extractHeadingsAndInjectIds(html: string): { html: string; toc: TocEntry[] } {
+  const toc: TocEntry[] = []
+  const idCount: Record<string, number> = {}
+
+  const result = html.replace(
+    /<(h[23])([^>]*)>([\s\S]*?)<\/\1>/g,
+    (_, tag, attrs, content) => {
+      const level = parseInt(tag[1]) as 2 | 3
+      const plainText = content.replace(/<[^>]+>/g, '').trim()
+      let id = slugifyHeading(plainText)
+      // Deduplicate IDs
+      if (idCount[id] !== undefined) {
+        idCount[id]++
+        id = `${id}-${idCount[id]}`
+      } else {
+        idCount[id] = 0
+      }
+      toc.push({ id, text: plainText, level })
+      return `<${tag}${attrs} id="${id}">${content}</${tag}>`
+    }
+  )
+  return { html: result, toc }
+}
+
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const article = await getArticle(params.slug)
 
@@ -188,29 +242,50 @@ export default async function ArticlePage({ params }: { params: { slug: string }
     )
   }
 
-  const [termArticles, clusterArticles] = await Promise.all([
+  // Determine curated next-reads for this article
+  const curatedNextReads = NEXT_READS[article.slug] ?? null
+  const curatedSlugs = curatedNextReads?.map(r => r.slug) ?? []
+
+  const [termArticles, clusterArticles, curatedArticles] = await Promise.all([
     getArticlesForTerm(article.term_id),
-    getArticlesByCluster(article.cluster, article.slug, 4),
+    article.cluster ? getArticlesByCluster(article.cluster, article.slug, 4) : Promise.resolve([]),
+    curatedSlugs.length > 0 ? getArticlesBySlugs(curatedSlugs) : Promise.resolve([]),
   ])
 
   const otherTermArticles = termArticles.filter(a => a.slug !== article.slug)
-  const clusterConfig = CLUSTER_MAP[article.cluster]
+  const clusterConfig = article.cluster ? CLUSTER_MAP[article.cluster] : undefined
   const angleLabel = ANGLE_LABELS[article.angle] ?? article.angle
 
   const rawHtml = marked(article.body ?? '') as string
-  const bodyHtml = stripLinksFromHeadings(rawHtml)
+  const strippedHtml = stripLinksFromHeadings(rawHtml)
+  const { html: htmlWithIds, toc } = extractHeadingsAndInjectIds(strippedHtml)
+  const bodyHtml = htmlWithIds
     .replace(/<a href="(https?:\/\/[^"]+)"/g, '<a href="$1" target="_blank" rel="noopener noreferrer"')
+  const showToc = toc.length >= 3
 
-  // Build "continue reading" cards: other angles on this term first, then cluster articles
-  // Filter cluster articles to exclude ones already shown as same-term articles
-  const termArticleSlugs = new Set(termArticles.map(a => a.slug))
-  const freshClusterArticles = clusterArticles.filter(a => !termArticleSlugs.has(a.slug))
+  // Build "what to read next" cards:
+  // — If curated: use those articles with their reasons
+  // — Else: fall back to same-term + cluster algorithm (existing behavior)
+  type NextCard = { article: Article; reason?: string; label?: string }
+  let nextCards: NextCard[]
 
-  // Up to 2 from same term, fill remaining with cluster
-  const sameTermCards = otherTermArticles.slice(0, 2)
-  const remaining = 3 - sameTermCards.length
-  const clusterCards = freshClusterArticles.slice(0, remaining)
-  const continueCards = [...sameTermCards, ...clusterCards]
+  if (curatedArticles.length > 0) {
+    // Map articles back to their reasons, preserving order
+    nextCards = curatedArticles.map(a => {
+      const entry = curatedNextReads?.find(r => r.slug === a.slug)
+      return { article: a, reason: entry?.reason }
+    })
+  } else {
+    const termArticleSlugs = new Set(termArticles.map(a => a.slug))
+    const freshClusterArticles = clusterArticles.filter(a => !termArticleSlugs.has(a.slug))
+    const sameTermCards = otherTermArticles.slice(0, 2)
+    const remaining = 3 - sameTermCards.length
+    const clusterCards = freshClusterArticles.slice(0, remaining)
+    nextCards = [
+      ...sameTermCards.map(a => ({ article: a, label: a.term_name })),
+      ...clusterCards.map(a => ({ article: a })),
+    ]
+  }
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -218,10 +293,29 @@ export default async function ArticlePage({ params }: { params: { slug: string }
     headline: article.title,
     description: article.excerpt ?? undefined,
     author: { '@type': 'Organization', name: 'AI Codex', url: 'https://www.aicodex.to' },
-    publisher: { '@type': 'Organization', name: 'AI Codex', url: 'https://www.aicodex.to' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'AI Codex',
+      url: 'https://www.aicodex.to',
+      logo: { '@type': 'ImageObject', url: 'https://www.aicodex.to/icon.svg' },
+    },
     url: `https://www.aicodex.to/articles/${article.slug}`,
     datePublished: article.created_at ?? undefined,
+    dateModified: article.created_at ?? undefined,
+    image: { '@type': 'ImageObject', url: 'https://www.aicodex.to/og-default.png', width: 1200, height: 630 },
+    articleSection: article.cluster ?? undefined,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://www.aicodex.to/articles/${article.slug}` },
+    speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', 'h2'] },
+  }
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Articles', item: 'https://www.aicodex.to/articles' },
+      ...(article.cluster ? [{ '@type': 'ListItem', position: 2, name: article.cluster, item: `https://www.aicodex.to/articles` }] : []),
+      { '@type': 'ListItem', position: article.cluster ? 3 : 2, name: article.title, item: `https://www.aicodex.to/articles/${article.slug}` },
+    ],
   }
 
   return (
@@ -230,6 +324,10 @@ export default async function ArticlePage({ params }: { params: { slug: string }
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
       {/* Breadcrumb */}
@@ -247,20 +345,34 @@ export default async function ArticlePage({ params }: { params: { slug: string }
       {(() => {
         const pathInfo = ARTICLE_PATHS[article.slug]
         if (!pathInfo) return null
+        const pct = Math.round((pathInfo.stepNumber / pathInfo.totalSteps) * 100)
         return (
           <div style={{
             marginBottom: '32px',
-            padding: '12px 18px',
             borderRadius: '8px',
             border: '1px solid var(--border-base)',
             background: 'var(--bg-surface)',
             borderLeft: `3px solid ${pathInfo.accent}`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '16px',
-            flexWrap: 'wrap' as const,
+            overflow: 'hidden',
           }}>
+            {/* Progress bar */}
+            <div style={{ height: '3px', background: 'var(--bg-subtle)', position: 'relative' }}>
+              <div style={{
+                position: 'absolute', left: 0, top: 0, bottom: 0,
+                width: `${pct}%`,
+                background: pathInfo.accent,
+                opacity: 0.7,
+                transition: 'width 300ms ease',
+              }} />
+            </div>
+            <div style={{
+              padding: '10px 18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '16px',
+              flexWrap: 'wrap' as const,
+            }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' as const }}>
               <Link href={pathInfo.pathHref} style={{ textDecoration: 'none' }}>
                 <span style={{
@@ -300,6 +412,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
               ) : (
                 <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--border-base)' }}>Next →</span>
               )}
+            </div>
             </div>
           </div>
         )
@@ -348,9 +461,28 @@ export default async function ArticlePage({ params }: { params: { slug: string }
             </h1>
 
             {article.excerpt && (
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-lg)', color: 'var(--text-muted)', lineHeight: 1.65, marginBottom: '16px', maxWidth: '60ch' }}>
-                {article.excerpt}
-              </p>
+              <div style={{
+                margin: '20px 0 20px',
+                padding: '14px 18px',
+                borderRadius: '6px',
+                borderLeft: `3px solid ${clusterConfig?.color ?? 'var(--accent)'}`,
+                background: `${clusterConfig?.bg ?? 'var(--bg-subtle)'}`,
+                maxWidth: '64ch',
+              }}>
+                <p style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '10px', fontWeight: 600,
+                  letterSpacing: '0.08em', textTransform: 'uppercase' as const,
+                  color: clusterConfig?.color ?? 'var(--accent)', margin: '0 0 6px',
+                }}>
+                  In brief
+                </p>
+                <p style={{
+                  fontFamily: 'var(--font-sans)', fontSize: '15px',
+                  color: 'var(--text-secondary)', lineHeight: 1.65, margin: 0,
+                }}>
+                  {article.excerpt}
+                </p>
+              </div>
             )}
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
@@ -368,6 +500,36 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           {/* Divider */}
           <div style={{ height: '1px', background: 'var(--border-base)', marginBottom: '32px' }} />
 
+          {/* Mobile-only Table of Contents */}
+          {showToc && (
+            <div className="article-toc-mobile" style={{ padding: '16px 20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '32px' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '12px' }}>
+                Contents
+              </p>
+              <nav>
+                <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
+                  {toc.map((item) => (
+                    <li key={item.id} style={{ paddingLeft: item.level === 3 ? '12px' : '0' }}>
+                      <a
+                        href={`#${item.id}`}
+                        style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: item.level === 3 ? '12px' : '13px',
+                          color: item.level === 3 ? 'var(--text-muted)' : 'var(--text-secondary)',
+                          textDecoration: 'none',
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {item.level === 3 && <span style={{ color: 'var(--border-base)', marginRight: '6px' }}>↳</span>}
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </div>
+          )}
+
           {/* Save / read actions */}
           <ArticleActions slug={article.slug} />
 
@@ -384,7 +546,38 @@ export default async function ArticlePage({ params }: { params: { slug: string }
         {/* Sidebar */}
         <aside style={{ position: 'sticky', top: '80px' }}>
 
+          {/* Table of Contents — desktop sidebar */}
+          {showToc && (
+            <div className="article-toc-sidebar" style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '16px', maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '14px' }}>
+                Contents
+              </p>
+              <nav>
+                <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' as const, gap: '9px' }}>
+                  {toc.map((item) => (
+                    <li key={item.id} style={{ paddingLeft: item.level === 3 ? '10px' : '0', borderLeft: item.level === 3 ? '2px solid var(--border-muted)' : 'none' }}>
+                      <a
+                        href={`#${item.id}`}
+                        style={{
+                          fontFamily: 'var(--font-sans)',
+                          fontSize: item.level === 3 ? '12px' : '13px',
+                          color: item.level === 3 ? 'var(--text-muted)' : 'var(--text-secondary)',
+                          textDecoration: 'none',
+                          lineHeight: 1.45,
+                          display: 'block',
+                        }}
+                      >
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </div>
+          )}
+
           {/* Term */}
+          {article.term_slug && (
           <div style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '16px' }}>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '10px' }}>
               Term
@@ -398,8 +591,10 @@ export default async function ArticlePage({ params }: { params: { slug: string }
               </span>
             </Link>
           </div>
+          )}
 
           {/* Cluster */}
+          {article.cluster && (
           <div style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '16px' }}>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '10px' }}>
               Cluster
@@ -414,6 +609,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
               </span>
             </Link>
           </div>
+          )}
 
           {/* Other angles on this term */}
           {otherTermArticles.length > 0 && (
@@ -448,18 +644,22 @@ export default async function ArticlePage({ params }: { params: { slug: string }
               Explore
             </p>
             <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
+              {article.term_slug && (
               <Link
                 href={`/glossary/${article.term_slug}`}
                 style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', textDecoration: 'none' }}
               >
                 {article.term_name} definition →
               </Link>
+              )}
+              {article.cluster && (
               <Link
                 href={`/glossary?cluster=${encodeURIComponent(article.cluster)}`}
                 style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', textDecoration: 'none' }}
               >
                 All {article.cluster.split(' ')[0]} terms →
               </Link>
+              )}
               <Link
                 href="/articles"
                 style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', textDecoration: 'none' }}
@@ -581,16 +781,26 @@ export default async function ArticlePage({ params }: { params: { slug: string }
         )
       })()}
 
-      {/* Continue reading */}
-      {continueCards.length > 0 && (
+      {/* Email capture */}
+      <NewsletterCTA variant="article" />
+
+      {/* What to read next */}
+      {nextCards.length > 0 && (
         <div style={{ marginTop: '80px', paddingTop: '48px', borderTop: '1px solid var(--border-base)' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '28px' }}>
-            <h2 style={{
-              fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600,
-              color: 'var(--text-primary)', margin: 0,
-            }}>
-              Continue reading
-            </h2>
+            <div>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600,
+                color: 'var(--text-primary)', margin: '0 0 4px',
+              }}>
+                What to read next
+              </h2>
+              {curatedNextReads && (
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', margin: 0 }}>
+                  Picked for where you are now
+                </p>
+              )}
+            </div>
             <Link href="/articles" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', textDecoration: 'none' }}>
               All articles →
             </Link>
@@ -598,21 +808,19 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: `repeat(${continueCards.length}, 1fr)`,
+              gridTemplateColumns: `repeat(${nextCards.length}, 1fr)`,
               gap: '16px',
             }}
             className="continue-grid"
           >
-            {continueCards.map(a => {
-              const isSameTerm = a.term_id === article.term_id
-              return (
-                <ArticleCard
-                  key={a.slug}
-                  article={a}
-                  label={isSameTerm ? a.term_name : undefined}
-                />
-              )
-            })}
+            {nextCards.map(({ article: a, reason, label }) => (
+              <ArticleCard
+                key={a.slug}
+                article={a}
+                label={label}
+                reason={reason}
+              />
+            ))}
           </div>
         </div>
       )}

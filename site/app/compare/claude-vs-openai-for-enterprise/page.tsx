@@ -15,6 +15,16 @@ const jsonLd = {
   publisher: { '@type': 'Organization', name: 'AI Codex', url: 'https://www.aicodex.to' },
   url: 'https://www.aicodex.to/compare/claude-vs-openai-for-enterprise',
   mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://www.aicodex.to/compare/claude-vs-openai-for-enterprise' },
+  speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', 'h2'] },
+}
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Compare', item: 'https://www.aicodex.to/compare' },
+    { '@type': 'ListItem', position: 2, name: 'Claude vs OpenAI for Enterprise', item: 'https://www.aicodex.to/compare/claude-vs-openai-for-enterprise' },
+  ],
 }
 
 const ACCENT_CLAUDE = '#D4845A'
@@ -102,6 +112,7 @@ export default function CompareEnterpriseCardPage() {
   return (
     <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(48px, 8vw, 96px) 0 var(--section-y)' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* Breadcrumb */}
       <div style={{ marginBottom: '32px', display: 'flex', gap: '8px', alignItems: 'center' }}>

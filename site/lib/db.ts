@@ -166,6 +166,21 @@ export async function getArticlesByCluster(cluster: string, excludeSlug: string,
   return data ?? []
 }
 
+export async function getArticlesBySlugs(slugs: string[]): Promise<Article[]> {
+  if (slugs.length === 0) return []
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('published', true)
+    .in('slug', slugs)
+
+  if (error) { console.error('getArticlesBySlugs:', error); return [] }
+  // Return in the same order as requested slugs
+  const bySlug = new Map((data ?? []).map(a => [a.slug, a]))
+  return slugs.map(s => bySlug.get(s)).filter(Boolean) as Article[]
+}
+
 export async function getFieldNotes(limit = 5): Promise<Article[]> {
   const supabase = await createClient()
   const { data, error } = await supabase

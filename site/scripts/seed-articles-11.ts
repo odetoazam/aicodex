@@ -45,6 +45,8 @@ Tasks with real-world consequences that are hard to reverse: anything involving 
 
 The zones are not about capability — Claude can do Zone 3 tasks competently. They are about accountability. Zone 3 items are the ones that, if wrong, create real problems.
 
+**A note for regulated industries:** If most of your firm's work falls in Zone 3 territory — legal, financial, medical, consulting with client deliverables — the three-zone model still applies, but Zone 3 is not "off-limits." It means you need explicit sign-off from the relevant function head on which Claude workflows are approved, and those approvals should go through your legal and compliance team rather than being decided by IT alone. The usage policy is the starting framework; the specific approved workflows are a separate document.
+
 ## The five things every policy must cover
 
 **1. Data you cannot share with Claude**
@@ -76,6 +78,10 @@ Do not include:
 One page. Bullet points. Plain language. Date it and sign it from whoever has authority in your organisation. Put it somewhere people will actually find it — not buried in a wiki nobody visits.
 
 A good usage policy is not a legal shield. It is a practical guide that helps people make decisions confidently. The less time anyone spends thinking "can I use Claude for this?" the more time they spend actually using it well.
+
+---
+
+*If you want to skip straight to a template you can copy and send to your legal team, [the usage policy template](/articles/ai-usage-policy-template) has three variants: general company, professional services, and healthcare-adjacent. For the data privacy and security side, the [admin security guide](/articles/claude-admin-security-privacy) covers what Anthropic retains, Enterprise data handling, and connector-specific security implications.*
 `,
   },
 

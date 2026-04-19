@@ -31,6 +31,8 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/compare/claude-vs-gpt4-writing`, changeFrequency: 'monthly', priority: 0.8 },
   { url: `${BASE}/compare/claude-vs-gpt4-document-analysis`, changeFrequency: 'monthly', priority: 0.8 },
   { url: `${BASE}/compare/claude-haiku-vs-sonnet`, changeFrequency: 'monthly', priority: 0.8 },
+  { url: `${BASE}/compare/claude-vs-openai-for-enterprise`, changeFrequency: 'monthly', priority: 0.8 },
+  { url: `${BASE}/compare/claude-vs-gemini-for-business`, changeFrequency: 'monthly', priority: 0.8 },
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
