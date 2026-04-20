@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import GlossaryBrowser from './GlossaryBrowser'
 import { getAllTerms } from '@/lib/db'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Glossary — AI Codex',

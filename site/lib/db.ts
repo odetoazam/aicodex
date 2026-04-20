@@ -1,10 +1,10 @@
-import { createClient } from './supabase/server'
+import { getPublicClient } from './supabase/public'
 import type { Term, Article, NewsletterIssue } from './types'
 
 // ── Terms ──────────────────────────────────────────────────
 
 export async function getAllTerms(): Promise<Term[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('terms')
     .select('*')
@@ -16,7 +16,7 @@ export async function getAllTerms(): Promise<Term[]> {
 }
 
 export async function getTerm(slug: string): Promise<Term | null> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('terms')
     .select('*')
@@ -29,7 +29,7 @@ export async function getTerm(slug: string): Promise<Term | null> {
 }
 
 export async function getTermsByCluster(cluster: string): Promise<Term[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('terms')
     .select('*')
@@ -43,9 +43,8 @@ export async function getTermsByCluster(cluster: string): Promise<Term[]> {
 
 export async function getRelatedTerms(slugsOrNames: string[]): Promise<Pick<Term, 'slug' | 'name' | 'cluster'>[]> {
   if (!slugsOrNames.length) return []
-  // related_terms may store names ("Knowledge Graph") or slugs ("knowledge-graph") — normalize both
   const normalized = slugsOrNames.map(s => s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''))
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('terms')
     .select('slug, name, cluster')
@@ -57,7 +56,7 @@ export async function getRelatedTerms(slugsOrNames: string[]): Promise<Pick<Term
 }
 
 export async function searchTerms(query: string): Promise<Term[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('terms')
     .select('*')
@@ -71,7 +70,7 @@ export async function searchTerms(query: string): Promise<Term[]> {
 }
 
 export async function getTermSlugs(): Promise<string[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('terms')
     .select('slug')
@@ -82,7 +81,7 @@ export async function getTermSlugs(): Promise<string[]> {
 }
 
 export async function getClusterCounts(): Promise<Record<string, number>> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('terms')
     .select('cluster')
@@ -100,7 +99,7 @@ export async function getClusterCounts(): Promise<Record<string, number>> {
 // ── Articles ───────────────────────────────────────────────
 
 export async function getAllArticles(): Promise<Article[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -112,7 +111,7 @@ export async function getAllArticles(): Promise<Article[]> {
 }
 
 export async function getArticle(slug: string): Promise<Article | null> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -125,7 +124,7 @@ export async function getArticle(slug: string): Promise<Article | null> {
 }
 
 export async function getArticlesForTerm(termId: string): Promise<Article[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -138,7 +137,7 @@ export async function getArticlesForTerm(termId: string): Promise<Article[]> {
 }
 
 export async function getFeaturedArticles(limit = 3): Promise<Article[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -152,7 +151,7 @@ export async function getFeaturedArticles(limit = 3): Promise<Article[]> {
 }
 
 export async function getArticlesByCluster(cluster: string, excludeSlug: string, limit = 4): Promise<Article[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -168,7 +167,7 @@ export async function getArticlesByCluster(cluster: string, excludeSlug: string,
 
 export async function getArticlesBySlugs(slugs: string[]): Promise<Article[]> {
   if (slugs.length === 0) return []
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -176,13 +175,12 @@ export async function getArticlesBySlugs(slugs: string[]): Promise<Article[]> {
     .in('slug', slugs)
 
   if (error) { console.error('getArticlesBySlugs:', error); return [] }
-  // Return in the same order as requested slugs
   const bySlug = new Map((data ?? []).map(a => [a.slug, a]))
   return slugs.map(s => bySlug.get(s)).filter(Boolean) as Article[]
 }
 
 export async function getFieldNotes(limit = 5): Promise<Article[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -198,7 +196,7 @@ export async function getFieldNotes(limit = 5): Promise<Article[]> {
 // ── Newsletter ─────────────────────────────────────────────
 
 export async function getNewsletterIssues(): Promise<NewsletterIssue[]> {
-  const supabase = await createClient()
+  const supabase = getPublicClient()
   const { data, error } = await supabase
     .from('newsletter_issues')
     .select('*')
@@ -208,11 +206,9 @@ export async function getNewsletterIssues(): Promise<NewsletterIssue[]> {
   return data ?? []
 }
 
-// ── Newsletter signup (client-side) ───────────────────────
-
 export async function subscribeToNewsletter(email: string): Promise<{ success: boolean; error?: string }> {
-  const supabase = createClient() // Note: uses browser client for this
-  const { error } = await (await supabase)
+  const supabase = getPublicClient()
+  const { error } = await supabase
     .from('newsletter_subscribers')
     .insert({ email, subscribed_at: new Date().toISOString() })
 

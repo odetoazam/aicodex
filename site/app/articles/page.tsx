@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { getAllArticles } from '@/lib/db'
 import ArticlesFilteredView from '@/components/ArticlesFilteredView'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Articles — AI Codex',

@@ -2,10 +2,15 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { CLUSTER_MAP, AUDIENCE_LABELS, ANGLE_LABELS } from '@/lib/clusters'
 import RelatedTermCard from '@/components/RelatedTermCard'
-import { getTerm, getRelatedTerms, getArticlesForTerm } from '@/lib/db'
+import { getTerm, getRelatedTerms, getArticlesForTerm, getTermSlugs } from '@/lib/db'
 import { OFFICIAL_RESOURCES, getSourceLabel } from '@/lib/resources'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const slugs = await getTermSlugs()
+  return slugs.map(s => ({ slug: s }))
+}
 
 function metaDescription(text: string, max = 155): string {
   if (!text || text.length <= max) return text

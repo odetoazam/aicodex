@@ -4,7 +4,7 @@ import { getArticlesBySlugs } from '@/lib/db'
 import { CLUSTER_MAP, ANGLE_LABELS } from '@/lib/clusters'
 import type { Article } from '@/lib/types'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Claude + Tool guides — AI Codex',

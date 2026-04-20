@@ -4,14 +4,19 @@ import { marked } from 'marked'
 import { CLUSTER_MAP, ANGLE_LABELS } from '@/lib/clusters'
 import { ARTICLE_PATHS } from '@/lib/paths'
 import { NEXT_READS } from '@/lib/next-reads'
-import { getArticle, getArticlesForTerm, getArticlesByCluster, getArticlesBySlugs } from '@/lib/db'
+import { getArticle, getArticlesForTerm, getArticlesByCluster, getArticlesBySlugs, getTermSlugs, getAllArticles } from '@/lib/db'
 import type { Article } from '@/lib/types'
 import ArticleActions from '@/components/ArticleActions'
 import ReadSentinel from '@/components/ReadSentinel'
 import ScrollProgress from '@/components/ScrollProgress'
 import NewsletterCTA from '@/components/NewsletterCTA'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const articles = await getAllArticles()
+  return articles.map(a => ({ slug: a.slug }))
+}
 
 marked.setOptions({ breaks: true })
 
