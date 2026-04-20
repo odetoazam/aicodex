@@ -9,6 +9,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/learn/claude`, changeFrequency: 'monthly', priority: 0.85 },
   { url: `${BASE}/learn/for-your-team`, changeFrequency: 'monthly', priority: 0.85 },
   { url: `${BASE}/learn/claude-for-admins`, changeFrequency: 'monthly', priority: 0.85 },
+  { url: `${BASE}/learn/claude-code`, changeFrequency: 'monthly', priority: 0.85 },
   { url: `${BASE}/learn/developers`, changeFrequency: 'monthly', priority: 0.85 },
   // Legacy paths — still accessible, not in main index
   { url: `${BASE}/learn/ai-for-your-company`, changeFrequency: 'yearly', priority: 0.4 },
@@ -24,6 +25,9 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/tools/cost-calculator`, changeFrequency: 'monthly', priority: 0.8 },
   { url: `${BASE}/tools/system-prompt-builder`, changeFrequency: 'monthly', priority: 0.8 },
   { url: `${BASE}/tools/scorecard`, changeFrequency: 'monthly', priority: 0.75 },
+  { url: `${BASE}/tools/prompt-library`, changeFrequency: 'monthly', priority: 0.75 },
+  // Integrations
+  { url: `${BASE}/integrations`, changeFrequency: 'monthly', priority: 0.8 },
   // Compare
   { url: `${BASE}/compare`, changeFrequency: 'monthly', priority: 0.85 },
   { url: `${BASE}/compare/claude-vs-gpt4-customer-support`, changeFrequency: 'monthly', priority: 0.8 },

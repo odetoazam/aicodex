@@ -15,9 +15,23 @@ function metaDescription(text: string, max = 155): string {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const term = await getTerm(params.slug)
   if (!term) return { title: 'Term not found' }
+  const url = `https://www.aicodex.to/glossary/${term.slug}`
+  const desc = metaDescription(term.definition)
   return {
     title: `${term.name} — AI Glossary — AI Codex`,
-    description: metaDescription(term.definition),
+    description: desc,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${term.name} — AI Glossary`,
+      description: desc,
+      url,
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${term.name} — AI Glossary`,
+      description: desc,
+    },
   }
 }
 

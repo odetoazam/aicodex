@@ -14,8 +14,7 @@ Structured sequences of articles for specific situations.
 - [Setting Up Claude for Your Company](/learn/claude-for-admins): 10-step path for IT leads and admins. Plans, permissions, Projects, Skills, governance.
 - [Setting up Claude Code for Your Team](/learn/claude-code): 6-step path for teams using Claude Code. CLAUDE.md, hooks, settings.json, templates, team decisions, agent layer.
 - [Build with AI](/learn/build-with-ai): 10-step path for founders building AI products. Validation, prompting, build vs. buy, deploying, fundraising.
-- [Building with the Claude API](/learn/developers): 17-step path for developers. API, streaming, RAG, evals, tool use, prompt caching, cost optimization, auth, rate limiting.
-- [Claude for Customer Success Teams](/learn/claude-for-cs): 8-step path for CS managers. Daily workflows, QBR prep, system prompts, Intercom integration.
+- [Building with the Claude API](/learn/developers): 20-step path for developers. API, streaming, RAG, evals, tool use, prompt caching, cost optimization, auth, rate limiting.
 
 ## Glossary
 

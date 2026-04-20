@@ -24,9 +24,24 @@ function metaDesc(text: string | null | undefined, max = 155): string | undefine
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const article = await getArticle(params.slug)
   if (!article) return { title: 'Article not found' }
+  const url = `https://www.aicodex.to/articles/${article.slug}`
+  const desc = metaDesc(article.excerpt)
   return {
     title: `${article.title} — AI Codex`,
-    description: metaDesc(article.excerpt),
+    description: desc,
+    alternates: { canonical: url },
+    openGraph: {
+      title: article.title,
+      description: desc ?? undefined,
+      url,
+      type: 'article',
+      publishedTime: article.created_at ?? undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: desc ?? undefined,
+    },
   }
 }
 
@@ -302,7 +317,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
     url: `https://www.aicodex.to/articles/${article.slug}`,
     datePublished: article.created_at ?? undefined,
     dateModified: article.created_at ?? undefined,
-    image: { '@type': 'ImageObject', url: 'https://www.aicodex.to/og-default.png', width: 1200, height: 630 },
+    image: { '@type': 'ImageObject', url: `https://www.aicodex.to/articles/${article.slug}/opengraph-image`, width: 1200, height: 630 },
     articleSection: article.cluster ?? undefined,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://www.aicodex.to/articles/${article.slug}` },
     speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', 'h2'] },
