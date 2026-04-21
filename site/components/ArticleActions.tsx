@@ -48,15 +48,30 @@ export default function ArticleActions({ slug }: Props) {
   }, [slug])
 
   async function toggleFavorite() {
-    if (!loggedIn) return
+    if (!loggedIn || favLoading) return
     setFavLoading(true)
-    const method = isFavorited ? 'DELETE' : 'POST'
-    const res = await fetch('/api/favorites', {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug }),
-    })
-    if (res.ok) setIsFavorited(!isFavorited)
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { setFavLoading(false); return }
+
+    let err = null
+    if (isFavorited) {
+      const { error } = await supabase
+        .from('user_favorites')
+        .delete()
+        .eq('user_id', session.user.id)
+        .eq('article_slug', slug)
+      err = error
+    } else {
+      const { error } = await supabase
+        .from('user_favorites')
+        .upsert(
+          { user_id: session.user.id, article_slug: slug },
+          { onConflict: 'user_id,article_slug', ignoreDuplicates: true }
+        )
+      err = error
+    }
+
+    if (!err) setIsFavorited(!isFavorited)
     setFavLoading(false)
   }
 
