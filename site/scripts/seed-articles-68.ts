@@ -188,7 +188,11 @@ The clearest parallel sits in how they think about workflows. McKinsey draws a l
 
 They also introduce a distinction worth keeping: humans *in* the loop versus humans *above* the loop. In the loop means AI handles some steps, humans handle others. Above the loop means AI handles the core process and humans confirm the outcome. Their example — agents reviewing arbitration case files, assembling timelines, and drafting decisions, with a human reviewing the final call — is a Phase 4 system working as designed.
 
-The same insight sits underneath both frameworks. Organizational value from AI flows from systems getting smarter, not from individuals getting faster. The 80 percent seeing no bottom-line impact have people using AI in isolation and organizations still building toward Phase 2. The path runs through structure.
+The workforce question gets specific too. As agents take on execution, three roles emerge: broad generalists who orchestrate agents across domains, deep specialists who handle exceptions and safeguard quality, and frontline workers who spend less time on systems and more time with people. Every role shifts from doing the work to steering the work. McKinsey found that employees without technical backgrounds can learn to manage agentic workflows as quickly as trained engineers — the constraint is not the skill, it is the structure they are given to work inside.
+
+One warning they issue deserves repeating verbatim: the risk is ending up with "more pilots than Lufthansa." Organizations that move through Phase 1 without committing to Phase 2 accumulate experiments. Each one looks like progress. None of them compound. The difference between a company at Phase 2 and a company with fifty Phase 1 experiments is not the number of tools in use — it is whether any shared structure exists underneath them.
+
+The same insight sits underneath both frameworks. Organizational value from AI flows from systems getting smarter, not from individuals getting faster. McKinsey's data: only 1 percent of organizations currently operate as decentralized agentic networks. Eighty-nine percent are still structured around industrial-era hierarchies. The gap between where most organizations are and where the technology is — that gap is the opportunity. The path runs through structure.
 
 ---
 
