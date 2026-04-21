@@ -43,6 +43,8 @@ const DEV_SLUGS = new Set([
   'migrating-to-claude-4-7',
   'claude-code-parallel-agents',
   'claude-code-antipatterns',
+  'claude-code-routines',
+  'claude-code-agent-teams',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -76,6 +78,7 @@ const PRODUCTIVITY_SLUGS = new Set([
   'claude-plus-intercom',
   'claude-plus-confluence',
   'claude-for-word',
+  'claude-design',
 ])
 
 const AGENCIES_SLUGS = new Set([
@@ -180,10 +183,10 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
   const q = query.trim().toLowerCase()
   const searchResults = q.length >= 2
     ? articles.filter(a =>
-        a.title.toLowerCase().includes(q) ||
+        (a.title ?? '').toLowerCase().includes(q) ||
         (a.excerpt ?? '').toLowerCase().includes(q) ||
-        a.slug.replace(/-/g, ' ').includes(q) ||
-        a.cluster.toLowerCase().includes(q)
+        (a.slug ?? '').replace(/-/g, ' ').includes(q) ||
+        (a.cluster ?? '').toLowerCase().includes(q)
       )
     : []
 
