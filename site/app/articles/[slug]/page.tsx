@@ -10,6 +10,7 @@ import ArticleActions from '@/components/ArticleActions'
 import ReadSentinel from '@/components/ReadSentinel'
 import ScrollProgress from '@/components/ScrollProgress'
 import NewsletterCTA from '@/components/NewsletterCTA'
+import TableOfContents from '@/components/TableOfContents'
 
 export const revalidate = 3600
 
@@ -523,30 +524,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           {/* Mobile-only Table of Contents */}
           {showToc && (
             <div className="article-toc-mobile" style={{ padding: '16px 20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '32px' }}>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '12px' }}>
-                Contents
-              </p>
-              <nav>
-                <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
-                  {toc.map((item) => (
-                    <li key={item.id} style={{ paddingLeft: item.level === 3 ? '12px' : '0' }}>
-                      <a
-                        href={`#${item.id}`}
-                        style={{
-                          fontFamily: 'var(--font-sans)',
-                          fontSize: item.level === 3 ? '12px' : '13px',
-                          color: item.level === 3 ? 'var(--text-muted)' : 'var(--text-secondary)',
-                          textDecoration: 'none',
-                          lineHeight: 1.4,
-                        }}
-                      >
-                        {item.level === 3 && <span style={{ color: 'var(--border-base)', marginRight: '6px' }}>↳</span>}
-                        {item.text}
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
+              <TableOfContents toc={toc} accentColor={clusterConfig?.color ?? 'var(--accent)'} variant="mobile" />
             </div>
           )}
 
@@ -569,30 +547,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           {/* Table of Contents — desktop sidebar */}
           {showToc && (
             <div className="article-toc-sidebar" style={{ padding: '20px', borderRadius: '8px', border: '1px solid var(--border-base)', background: 'var(--bg-surface)', marginBottom: '16px', maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' as const, color: 'var(--text-muted)', marginBottom: '14px' }}>
-                Contents
-              </p>
-              <nav>
-                <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' as const, gap: '9px' }}>
-                  {toc.map((item) => (
-                    <li key={item.id} style={{ paddingLeft: item.level === 3 ? '10px' : '0', borderLeft: item.level === 3 ? '2px solid var(--border-muted)' : 'none' }}>
-                      <a
-                        href={`#${item.id}`}
-                        style={{
-                          fontFamily: 'var(--font-sans)',
-                          fontSize: item.level === 3 ? '12px' : '13px',
-                          color: item.level === 3 ? 'var(--text-muted)' : 'var(--text-secondary)',
-                          textDecoration: 'none',
-                          lineHeight: 1.45,
-                          display: 'block',
-                        }}
-                      >
-                        {item.text}
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </nav>
+              <TableOfContents toc={toc} accentColor={clusterConfig?.color ?? 'var(--accent)'} variant="sidebar" />
             </div>
           )}
 

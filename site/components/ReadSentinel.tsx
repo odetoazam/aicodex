@@ -38,7 +38,7 @@ export default function ReadSentinel({ slug }: Props) {
           window.dispatchEvent(new CustomEvent('article:read', { detail: { slug } }))
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0 }
     )
 
     observer.observe(sentinelRef.current)

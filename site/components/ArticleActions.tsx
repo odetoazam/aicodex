@@ -13,6 +13,7 @@ export default function ArticleActions({ slug }: Props) {
   const [isFavorited, setIsFavorited] = useState(false)
   const [isRead, setIsRead] = useState(false)
   const [favLoading, setFavLoading] = useState(false)
+  const [readLoading, setReadLoading] = useState(false)
   const supabase = createClient()
 
   // Load auth + state
@@ -59,6 +60,21 @@ export default function ArticleActions({ slug }: Props) {
     setFavLoading(false)
   }
 
+  async function markAsRead() {
+    if (!loggedIn || isRead || readLoading) return
+    setReadLoading(true)
+    const res = await fetch('/api/progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug }),
+    })
+    if (res.ok) {
+      setIsRead(true)
+      window.dispatchEvent(new CustomEvent('article:read', { detail: { slug } }))
+    }
+    setReadLoading(false)
+  }
+
   return (
     <>
       {/* Action bar — shown above article or in header area */}
@@ -85,8 +101,8 @@ export default function ArticleActions({ slug }: Props) {
               {isFavorited ? 'Saved' : 'Save'}
             </button>
 
-            {/* Read indicator */}
-            {isRead && (
+            {/* Read indicator / mark as read button */}
+            {isRead ? (
               <span style={{
                 display: 'flex', alignItems: 'center', gap: '5px',
                 padding: '6px 10px', borderRadius: '6px',
@@ -95,6 +111,35 @@ export default function ArticleActions({ slug }: Props) {
               }}>
                 <span style={{ color: '#4caf7d' }}>✓</span> Read
               </span>
+            ) : (
+              <button
+                onClick={markAsRead}
+                disabled={readLoading}
+                title="Mark this article as read"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '5px',
+                  padding: '6px 10px', borderRadius: '6px',
+                  border: '1px solid var(--border-muted)',
+                  background: 'transparent',
+                  fontFamily: 'var(--font-sans)', fontSize: '12px',
+                  color: 'var(--text-muted)',
+                  cursor: readLoading ? 'default' : 'pointer',
+                  opacity: readLoading ? 0.5 : 1,
+                  transition: 'border-color 120ms ease, color 120ms ease',
+                }}
+                onMouseEnter={e => {
+                  if (!readLoading) {
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = '#4caf7d'
+                    ;(e.currentTarget as HTMLButtonElement).style.color = '#4caf7d'
+                  }
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border-muted)'
+                  ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--text-muted)'
+                }}
+              >
+                <span>○</span> Mark as read
+              </button>
             )}
           </>
         ) : (
