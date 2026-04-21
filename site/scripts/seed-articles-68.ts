@@ -176,6 +176,22 @@ The first question worth asking: what phase is your team actually in right now? 
 
 ---
 
+## What McKinsey found
+
+McKinsey surveyed companies investing heavily in AI. More than 80 percent said they were seeing no bottom-line impact from those investments.
+
+The technology works. The gap is organizational. Leaders on the edge of transformation keep asking the same set of questions: how do roles change, what skills will matter, how do we bring people along without losing them. The technology moved faster than the structures surrounding it.
+
+Their framework for closing that gap — what they call the five pillars of the agentic organization — maps cleanly onto the progression described here. Business model, workflow, team structure, leadership capability, culture. These are the organizational consequences of moving through the phases. The phases describe what the system becomes. The five pillars describe what the organization must become alongside it.
+
+The clearest parallel sits in how they think about workflows. McKinsey draws a line between point solutions — one task, made faster — and end-to-end workflow reimagination, where the entire process gets restructured from scratch. That distance maps precisely to the move from Phase 2 to Phase 4. Point solutions are Phase 2: shared context exists, individual tasks improve. End-to-end reimagination is Phase 4: the system executes across the whole workflow, and humans shift to oversight.
+
+They also introduce a distinction worth keeping: humans *in* the loop versus humans *above* the loop. In the loop means AI handles some steps, humans handle others. Above the loop means AI handles the core process and humans confirm the outcome. Their example — agents reviewing arbitration case files, assembling timelines, and drafting decisions, with a human reviewing the final call — is a Phase 4 system working as designed.
+
+The same insight sits underneath both frameworks. Organizational value from AI flows from systems getting smarter, not from individuals getting faster. The 80 percent seeing no bottom-line impact have people using AI in isolation and organizations still building toward Phase 2. The path runs through structure.
+
+---
+
 ## Further reading
 
 - [Running your first AI pilot](/articles/running-your-first-ai-pilot) — practical guide for moving from Phase 1 to Phase 2
