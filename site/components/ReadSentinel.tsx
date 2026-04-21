@@ -27,14 +27,14 @@ export default function ReadSentinel({ slug }: Props) {
 
         markedRef.current = true
 
-        const res = await fetch('/api/progress', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ slug }),
-        })
+        const { error } = await supabase
+          .from('user_progress')
+          .upsert(
+            { user_id: session.user.id, article_slug: slug },
+            { onConflict: 'user_id,article_slug', ignoreDuplicates: true }
+          )
 
-        if (res.ok) {
-          // Notify ArticleActions so it can show "✓ Read" without a reload
+        if (!error) {
           window.dispatchEvent(new CustomEvent('article:read', { detail: { slug } }))
         }
       },

@@ -63,12 +63,17 @@ export default function ArticleActions({ slug }: Props) {
   async function markAsRead() {
     if (!loggedIn || isRead || readLoading) return
     setReadLoading(true)
-    const res = await fetch('/api/progress', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug }),
-    })
-    if (res.ok) {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { setReadLoading(false); return }
+
+    const { error } = await supabase
+      .from('user_progress')
+      .upsert(
+        { user_id: session.user.id, article_slug: slug },
+        { onConflict: 'user_id,article_slug', ignoreDuplicates: true }
+      )
+
+    if (!error) {
       setIsRead(true)
       window.dispatchEvent(new CustomEvent('article:read', { detail: { slug } }))
     }
