@@ -391,9 +391,9 @@ The cost difference is substantial:
 
 - **Haiku:** ~$0.25 / million input tokens, $1.25 / million output tokens
 - **Sonnet:** ~$3 / million input tokens, $15 / million output tokens
-- **Opus:** ~$15 / million input tokens, $75 / million output tokens
+- **Opus:** ~$5 / million input tokens, $25 / million output tokens
 
-Opus costs 5x more than Sonnet and 60x more than Haiku. For a production application processing thousands of requests, model routing — sending simple requests to Haiku and complex ones to Sonnet or Opus — is one of the highest-leverage cost optimisations you can make.
+Opus (4.7) costs roughly twice as much as Sonnet on input and is about 20× more expensive than Haiku. For a production application processing thousands of requests, model routing — sending simple requests to Haiku and complex ones to Sonnet or Opus — is one of the highest-leverage cost optimisations you can make.
 
 ## The simple rule
 

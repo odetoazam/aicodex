@@ -51,7 +51,7 @@ The Haiku result is the more striking one. Haiku alone has real limits on comple
 
 ## How to set it up
 
-The advisor tool is declared like any other tool in the messages API. It requires the beta header.
+The advisor tool is declared like any other tool in the messages API. It requires the beta header. The examples below use Claude Opus 4.7 — launched April 16, 2026 at the same $5/$25 per MTok as Opus 4.6, with improved agentic coding capabilities.
 
 \`\`\`python
 import anthropic
@@ -66,7 +66,7 @@ response = client.beta.messages.create(
         {
             "type": "advisor_20260301",
             "name": "advisor",
-            "model": "claude-opus-4-6",
+            "model": "claude-opus-4-7",
         },
         # your other tools here
     ],
@@ -89,7 +89,7 @@ response = client.beta.messages.create(
         {
             "type": "advisor_20260301",
             "name": "advisor",
-            "model": "claude-opus-4-6",
+            "model": "claude-opus-4-7",
         }
     ],
     messages=[...]
@@ -146,6 +146,8 @@ You send a task. Anthropic handles the iteration. You get back results via serve
 **Server-sent event streaming.** The agent streams progress as it works — steps completed, tool calls made, intermediate outputs. You get observability without building it.
 
 **Automatic error handling.** Managed Agents handles retries and recovery from common failure modes in the agent loop.
+
+**Agent memory (public beta).** Persist information across sessions using the built-in memory system — available under the same `managed-agents-2026-04-01` header. See [Using agent memory](https://platform.claude.com/docs/en/managed-agents/memory) for the integration guide.
 
 ## The API shape
 

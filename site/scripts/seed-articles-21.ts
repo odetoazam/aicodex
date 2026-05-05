@@ -135,6 +135,14 @@ def build_messages_with_cache(history: list[dict], new_user_message: str) -> lis
 
 This pattern caches everything up to the current turn. On the next request, Claude reads the cached history instead of reprocessing it.
 
+## Automatic caching
+
+Since February 2026, a simpler alternative is available: add `cache_control` directly to the request body and the API automatically caches the last cacheable block, advancing the cache point forward as conversations grow — no manual breakpoint placement required.
+
+This is the lower-friction path for most workloads. Use block-level `cache_control` (shown above) when you need precise control over which blocks are cached or want different TTLs on different blocks.
+
+See [Automatic caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching#automatic-caching) in the docs for the implementation.
+
 ## Verifying it works
 
 Check \`usage\` in the response:
@@ -164,7 +172,7 @@ print(response.usage)
 
 **Order matters.** Caching is prefix-based. If you reorder your system prompt blocks between requests, Claude cannot match the cached prefix and writes a new one. Keep cached content at the top and stable.
 
-**The 5-minute TTL.** Ephemeral caches expire after 5 minutes of inactivity. For low-traffic routes, you may see more cache misses than expected. If this is a problem, structure your application to send a cheap keep-alive request to refresh the cache, or batch requests to maintain cache temperature.
+**Cache TTL options.** The default ephemeral cache expires after 5 minutes of inactivity. A 1-hour cache duration is also generally available — no beta header required. The longer TTL eliminates miss issues for low-traffic routes entirely. See [Prompt caching — cache duration](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) for the `cache_control` syntax. If staying with 5-minute caches, structure your application to send a cheap keep-alive request to refresh the cache between sparse requests.
 
 **Model versions matter.** Cache keys include the model. Switching from \`claude-sonnet-4-6\` to \`claude-opus-4-6\` invalidates the cache. Plan model upgrades with this in mind — traffic might see a temporary cost spike.
 
@@ -245,7 +253,7 @@ def choose_model(task_type: str, complexity_score: float) -> str:
     elif complexity_score < 0.7:
         return "claude-sonnet-4-6"
     else:
-        return "claude-opus-4-6"
+        return "claude-opus-4-7"
 \`\`\`
 
 The complexity score can be based on input length, number of constraints, presence of ambiguity signals — whatever correlates with difficulty in your specific domain. Start simple and calibrate with evals.

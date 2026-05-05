@@ -144,22 +144,38 @@ A rough guide to token counts: 1 token ≈ 4 characters in English. 1000 tokens 
 client = anthropic.Anthropic(max_retries=3)
 \`\`\`
 
-**529 Overloaded** — Anthropic's servers are under load. Treat like a 429 — wait and retry.
+**529 Overloaded** — rarely seen now (overload conditions typically return 429 instead). Handle the same way if it occurs: wait and retry with backoff.
 
 **InvalidRequestError** — you sent a malformed request. Common causes: messages array starts with \`assistant\`, consecutive same-role messages, \`max_tokens\` set to 0, or a model name that does not exist. Read the error message — it is usually specific.
 
 ## Structured output
 
-Claude does not have a native structured output mode, but it follows instructions reliably. Ask for JSON explicitly and tell it the shape:
+Claude has native structured output support via `output_config.format` — guaranteed schema conformance, no prompt engineering required. Available on Sonnet 4.5, Opus 4.5, Haiku 4.5, and later models with no beta header needed:
 
 \`\`\`python
 message = client.messages.create(
     model="claude-sonnet-4-6",
     max_tokens=512,
-    system="Always respond with valid JSON. No explanation, no markdown — raw JSON only.",
+    output_config={
+        "format": {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "contact",
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "name":    {"type": "string"},
+                        "email":   {"type": "string"},
+                        "company": {"type": "string"}
+                    },
+                    "required": ["name", "email", "company"]
+                }
+            }
+        }
+    },
     messages=[{
         "role": "user",
-        "content": 'Extract: {"name": string, "email": string, "company": string} from: "Hi, I\'m Alex Chen from Vercel, alex@vercel.com"'
+        "content": 'Extract name, email, and company from: "Hi, I\'m Alex Chen from Vercel, alex@vercel.com"'
     }]
 )
 
@@ -167,7 +183,7 @@ import json
 data = json.loads(message.content[0].text)
 \`\`\`
 
-For production use, wrap the parse in a try/except and consider asking Claude to double-check its output before responding. Alternatively, use a library like Instructor that wraps the API and handles retries on parse failure.
+The response is guaranteed to match the schema — no `try/except` on the parse required. If you are on a platform where structured outputs are not yet available, the prompt-based fallback still works: set a system prompt instructing Claude to respond with raw JSON only, wrap the parse in a try/except, and retry on failure.
 
 ## Cost awareness from day one
 
