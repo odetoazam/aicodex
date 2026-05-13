@@ -62,7 +62,7 @@ const DEV_STEPS = [
   'nextjs-chatbot-claude-full-tutorial',
 ]
 
-// Admin path — 10 steps
+// Admin path — 15 steps
 const ADMIN_STEPS = [
   'claude-admin-zero-to-one',
   'choosing-your-claude-plan',
@@ -76,6 +76,10 @@ const ADMIN_STEPS = [
   'cowork-dispatch-guide',
   'managed-agents-for-your-org',
   'claude-admin-ongoing-maintenance',
+  // Advanced: building the internal AI data layer
+  'internal-mcp-server-explained',
+  'ai-agent-access-control',
+  'building-ai-skills-for-your-team',
 ]
 
 // Claude Code path — 6 steps
@@ -86,6 +90,18 @@ const CLAUDE_CODE_STEPS = [
   'claude-code-for-your-team',
   'claude-md-maintenance',
   'ai-agent-harness-explained',
+]
+
+// Internal AI Stack path — 8 steps
+const INTERNAL_AI_STACK_STEPS = [
+  'internal-mcp-server-explained',
+  'ai-data-access-token-economics',
+  'live-api-vs-etl-for-ai',
+  'ai-agent-cold-start-caching',
+  'data-warehouse-for-ai-agents',
+  'ai-agent-access-control',
+  'building-ai-skills-for-your-team',
+  'internal-ai-stack-architecture',
 ]
 
 // Build-with-AI path — 10 steps (page still accessible, not in main index)
@@ -125,21 +141,23 @@ function buildMap(
   return map
 }
 
-const FOR_YOURSELF_MAP  = buildMap(FOR_YOURSELF_STEPS, 'Claude for Your Work', '/learn/claude', '#D4845A')
-const FOR_YOUR_TEAM_MAP = buildMap(FOR_YOUR_TEAM_STEPS, 'Rolling Out Claude to Your Team', '/learn/for-your-team', '#4CAF7D')
-const DEV_MAP           = buildMap(DEV_STEPS, 'Developer Path', '/learn/developers', '#7B8FD4')
-const BWAI_MAP          = buildMap(BWAI_STEPS, 'Build with AI', '/learn/build-with-ai', '#4CAF7D', 0)
-const ADMIN_MAP         = buildMap(ADMIN_STEPS, 'Setting up Claude for your company', '/learn/claude-for-admins', '#5B8DD9')
-const CLAUDE_CODE_MAP   = buildMap(CLAUDE_CODE_STEPS, 'Setting up Claude Code for your team', '/learn/claude-code', '#5DA698')
+const FOR_YOURSELF_MAP       = buildMap(FOR_YOURSELF_STEPS, 'Claude for Your Work', '/learn/claude', '#D4845A')
+const FOR_YOUR_TEAM_MAP      = buildMap(FOR_YOUR_TEAM_STEPS, 'Rolling Out Claude to Your Team', '/learn/for-your-team', '#4CAF7D')
+const DEV_MAP                = buildMap(DEV_STEPS, 'Developer Path', '/learn/developers', '#7B8FD4')
+const BWAI_MAP               = buildMap(BWAI_STEPS, 'Build with AI', '/learn/build-with-ai', '#4CAF7D', 0)
+const ADMIN_MAP              = buildMap(ADMIN_STEPS, 'Setting up Claude for your company', '/learn/claude-for-admins', '#5B8DD9')
+const CLAUDE_CODE_MAP        = buildMap(CLAUDE_CODE_STEPS, 'Setting up Claude Code for your team', '/learn/claude-code', '#5DA698')
+const INTERNAL_AI_STACK_MAP  = buildMap(INTERNAL_AI_STACK_STEPS, 'Building Your Internal AI Stack', '/learn/internal-ai-stack', '#4A7BA7')
 
 /** Path → slug list map — used by /learn page for progress computation */
 export const PATH_SLUGS: Record<string, string[]> = {
-  '/learn/claude':           FOR_YOURSELF_STEPS,
-  '/learn/for-your-team':    FOR_YOUR_TEAM_STEPS,
-  '/learn/claude-for-admins': ADMIN_STEPS,
-  '/learn/claude-code':      CLAUDE_CODE_STEPS,
-  '/learn/build-with-ai':    BWAI_STEPS,
-  '/learn/developers':       DEV_STEPS,
+  '/learn/claude':              FOR_YOURSELF_STEPS,
+  '/learn/for-your-team':       FOR_YOUR_TEAM_STEPS,
+  '/learn/claude-for-admins':   ADMIN_STEPS,
+  '/learn/claude-code':         CLAUDE_CODE_STEPS,
+  '/learn/build-with-ai':       BWAI_STEPS,
+  '/learn/developers':          DEV_STEPS,
+  '/learn/internal-ai-stack':   INTERNAL_AI_STACK_STEPS,
 }
 
 /**
@@ -153,8 +171,9 @@ export const PATH_SLUGS: Record<string, string[]> = {
 export const ARTICLE_PATHS: Record<string, PathMembership> = {
   ...FOR_YOURSELF_MAP,
   ...BWAI_MAP,
-  ...FOR_YOUR_TEAM_MAP, // wins over for-yourself on conflicts
-  ...ADMIN_MAP,         // admin path wins on its articles
-  ...CLAUDE_CODE_MAP,   // claude code path wins on its articles
-  ...DEV_MAP,           // developer path wins on conflicts
+  ...FOR_YOUR_TEAM_MAP,        // wins over for-yourself on conflicts
+  ...ADMIN_MAP,                // admin path wins on its articles
+  ...CLAUDE_CODE_MAP,          // claude code path wins on its articles
+  ...INTERNAL_AI_STACK_MAP,    // internal AI stack wins on its articles
+  ...DEV_MAP,                  // developer path wins on conflicts
 }

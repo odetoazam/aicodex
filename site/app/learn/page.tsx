@@ -37,12 +37,12 @@ const TRACKS = [
     href: '/learn/claude-for-admins',
     eyebrow: 'For IT & operations leads',
     title: 'Setting up Claude for your company',
-    description: 'For the person asked to deploy Claude org-wide. Three stages — evaluation, deployment, ongoing management — with the exact decisions you need to make at each step.',
+    description: 'For the person asked to deploy Claude org-wide. Three stages — evaluation, deployment, ongoing management — with the exact decisions you need to make at each step, plus the internal data architecture to support it long-term.',
     accent: '#5B8DD9',
     accentBg: 'rgba(91,141,217,0.1)',
     icon: '◫',
-    steps: 12,
-    time: '~69 min',
+    steps: 15,
+    time: '~85 min',
   },
 ]
 
@@ -55,6 +55,17 @@ const CLAUDE_CODE_PATH = {
   accentBg: 'rgba(93,166,152,0.1)',
   steps: 6,
   time: '~44 min',
+}
+
+const INTERNAL_AI_STACK_PATH = {
+  href: '/learn/internal-ai-stack',
+  eyebrow: 'For engineering leads & ops teams',
+  title: 'Building your internal AI stack',
+  description: 'Eight guides on the architecture that makes AI agents actually work at scale: a single internal MCP server, the right data access patterns, caching that eliminates cold start, access control that works, and the skills layer that turns repeated workflows into one-command automation.',
+  accent: '#4A7BA7',
+  accentBg: 'rgba(74,123,167,0.1)',
+  steps: 8,
+  time: '~74 min',
 }
 
 const BWAI_PATH = {
@@ -413,8 +424,61 @@ export default async function LearnPage() {
         </Link>
       </div>
 
+      {/* Internal AI Stack path */}
+      <div style={{ marginTop: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'var(--text-muted)', flexShrink: 0 }}>
+            FOR ENGINEERING LEADS &amp; OPS TEAMS
+          </p>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+        </div>
+        <Link href={INTERNAL_AI_STACK_PATH.href} style={{ textDecoration: 'none', display: 'block' }}>
+          <div
+            className="track-card"
+            style={{
+              padding: '24px 28px', borderRadius: '12px',
+              border: `1px solid var(--border-muted)`,
+              borderLeft: `3px solid ${INTERNAL_AI_STACK_PATH.accent}`,
+              background: 'var(--bg-subtle)',
+              display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+              gap: '24px', transition: 'background 150ms ease',
+            }}
+          >
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+                letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                color: INTERNAL_AI_STACK_PATH.accent, margin: '0 0 8px',
+              }}>
+                {INTERNAL_AI_STACK_PATH.eyebrow}
+              </p>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600,
+                color: 'var(--text-primary)', marginBottom: '8px', lineHeight: 1.2,
+              }}>
+                {INTERNAL_AI_STACK_PATH.title}
+              </h2>
+              <p style={{
+                fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)',
+                lineHeight: 1.6, margin: 0, maxWidth: '58ch',
+              }}>
+                {INTERNAL_AI_STACK_PATH.description}
+              </p>
+            </div>
+            <ProgressMeta
+              href={INTERNAL_AI_STACK_PATH.href}
+              steps={INTERNAL_AI_STACK_PATH.steps}
+              time={INTERNAL_AI_STACK_PATH.time}
+              accent={INTERNAL_AI_STACK_PATH.accent}
+              progress={prog(INTERNAL_AI_STACK_PATH.href)}
+            />
+          </div>
+        </Link>
+      </div>
+
       {/* Divider */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', marginTop: '32px' }}>
         <div style={{ flex: 1, height: '1px', background: 'var(--border-base)' }} />
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.06em', flexShrink: 0 }}>
           FOR DEVELOPERS
