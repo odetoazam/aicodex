@@ -448,4 +448,46 @@ export const NEXT_READS: Record<string, NextRead[]> = {
     { slug: 'claude-code-for-your-team', reason: 'Parallel agents changes how teams coordinate on Claude Code — the team setup guide covers the shared patterns.' },
   ],
 
+  // ── Internal MCP series ──────────────────────────────────────────────────
+
+  'internal-mcp-server-explained': [
+    { slug: 'ai-data-access-token-economics', reason: 'Once you understand what the MCP server does, the token cost of how data flows through it is the next thing to get right.' },
+    { slug: 'internal-ai-stack-architecture', reason: 'The full five-layer stack this server sits inside — how everything connects and what the mature version looks like.' },
+  ],
+
+  'ai-data-access-token-economics': [
+    { slug: 'ai-agent-cold-start-caching', reason: 'The biggest single win on token cost: a nightly cron that pre-fetches context so session startup costs near zero.' },
+    { slug: 'live-api-vs-etl-for-ai', reason: 'The decision framework for when live API beats warehouse and when warehouse beats live — the routing logic behind the cost tiers.' },
+  ],
+
+  'ai-agent-cold-start-caching': [
+    { slug: 'ai-agent-access-control', reason: 'Once sessions are fast and cheap, access control is the next layer to build in — before you scale.' },
+    { slug: 'ai-data-access-token-economics', reason: 'Cold start is one piece of the token cost picture — the full economics of how data fetching drives cost.' },
+  ],
+
+  'ai-agent-access-control': [
+    { slug: 'internal-mcp-server-explained', reason: 'ACL middleware is built into the MCP server — revisit the architecture to see how the permission layer fits in.' },
+    { slug: 'building-ai-skills-for-your-team', reason: 'Once access control shapes what each role sees, skills are how you encode what each role should do.' },
+  ],
+
+  'live-api-vs-etl-for-ai': [
+    { slug: 'data-warehouse-for-ai-agents', reason: 'Once you know when to use the warehouse, this covers which warehouse fits AI agent query patterns best.' },
+    { slug: 'ai-agent-cold-start-caching', reason: 'Pre-fetch caching is where the live-vs-warehouse decision plays out in practice — what gets cached, what stays live.' },
+  ],
+
+  'data-warehouse-for-ai-agents': [
+    { slug: 'live-api-vs-etl-for-ai', reason: 'The routing logic that decides which queries go to the warehouse and which go to live APIs.' },
+    { slug: 'internal-ai-stack-architecture', reason: 'The warehouse is Layer 2 in the full internal AI stack — see how it connects to the rest.' },
+  ],
+
+  'building-ai-skills-for-your-team': [
+    { slug: 'internal-ai-stack-architecture', reason: 'Skills are Layer 4 of the internal AI stack — how they connect to the MCP server, the warehouse, and the cache.' },
+    { slug: 'internal-mcp-server-explained', reason: 'Skills call tools through the MCP server — this covers the routing and access control layer they depend on.' },
+  ],
+
+  'internal-ai-stack-architecture': [
+    { slug: 'internal-mcp-server-explained', reason: 'The MCP server is the control layer of the stack — the implementation details behind the architecture overview.' },
+    { slug: 'building-ai-skills-for-your-team', reason: 'Skills are how the stack delivers value to individual teams — how to build and publish reusable workflows.' },
+  ],
+
 }

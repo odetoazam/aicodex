@@ -8,6 +8,14 @@ import type { Article } from '@/lib/types'
 // ── Persona slug maps ────────────────────────────────────────────────────────
 
 const DEV_SLUGS = new Set([
+  'internal-mcp-server-explained',
+  'ai-data-access-token-economics',
+  'ai-agent-cold-start-caching',
+  'ai-agent-access-control',
+  'live-api-vs-etl-for-ai',
+  'data-warehouse-for-ai-agents',
+  'building-ai-skills-for-your-team',
+  'internal-ai-stack-architecture',
   'your-first-claude-api-call',
   'streaming-claude-responses-implementation',
   'building-a-rag-pipeline-from-scratch',
@@ -45,6 +53,10 @@ const DEV_SLUGS = new Set([
   'claude-code-antipatterns',
   'claude-code-routines',
   'claude-code-agent-teams',
+  'claude-managed-agents-memory',
+  'mcp-production-agents',
+  'claude-rate-limits-api',
+  'claude-security',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -79,6 +91,8 @@ const PRODUCTIVITY_SLUGS = new Set([
   'claude-plus-confluence',
   'claude-for-word',
   'claude-design',
+  'claude-everyday-connectors',
+  'claude-for-creative-work',
 ])
 
 const AGENCIES_SLUGS = new Set([
@@ -89,6 +103,15 @@ const AGENCIES_SLUGS = new Set([
   'what-to-tell-clients-about-ai',
   'claude-code-client-setup',
   'pricing-claude-consulting-work',
+])
+
+// Articles that live in DEV_SLUGS but are also relevant for operators
+// (team leads, admins, anyone evaluating or implementing AI infrastructure)
+const OPERATOR_ALSO_SLUGS = new Set([
+  'internal-mcp-server-explained',
+  'ai-agent-access-control',
+  'building-ai-skills-for-your-team',
+  'internal-ai-stack-architecture',
 ])
 
 // Pinned for each persona view
@@ -155,9 +178,9 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
     pinnedSlugs = PINNED_AGENCIES
     pool = articles.filter(a => persona(a) === 'agencies')
   } else {
-    // operator
+    // operator — also includes cross-audience articles from DEV_SLUGS
     pinnedSlugs = PINNED_OPERATOR
-    pool = articles.filter(a => persona(a) === 'operator')
+    pool = articles.filter(a => persona(a) === 'operator' || OPERATOR_ALSO_SLUGS.has(a.slug))
   }
 
   const pinnedSet  = new Set(pinnedSlugs)
