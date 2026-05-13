@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
 import TimelineView from '@/components/TimelineView'
+import { getTimelineEvents } from '@/lib/db'
 
 export const metadata: Metadata = {
   title: 'AI Timeline — AI Codex',
   description: 'Major launches, model releases, and product updates across the AI landscape. What shipped, when, and why it matters.',
 }
 
-export default function TimelinePage() {
+export default async function TimelinePage() {
+  const events = await getTimelineEvents()
+
   return (
     <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(48px, 8vw, 96px) 0 var(--section-y)' }}>
 
@@ -36,7 +39,7 @@ export default function TimelinePage() {
         </p>
       </div>
 
-      <TimelineView />
+      <TimelineView events={events} />
     </div>
   )
 }

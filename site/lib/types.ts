@@ -77,3 +77,22 @@ export type ClusterConfig = {
   description: string
   icon: string
 }
+
+export type TimelineOrg = 'Anthropic' | 'OpenAI' | 'Google' | 'Meta' | 'Microsoft' | 'Industry'
+export type TimelineAudience = 'for-you' | 'for-admins' | 'for-builders'
+export type TimelineSignificance = 'major' | 'notable' | 'context'
+
+export type TimelineEvent = {
+  id: string
+  event_date: string  // ISO date string: '2026-04-17'
+  org: TimelineOrg
+  title: string
+  description: string
+  significance: TimelineSignificance
+  glossary_slug: string | null
+  href: string | null
+  article_slug: string | null
+  audience: TimelineAudience[]
+  published: boolean
+  created_at: string
+}

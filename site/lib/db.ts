@@ -1,5 +1,5 @@
 import { getPublicClient } from './supabase/public'
-import type { Term, Article, NewsletterIssue } from './types'
+import type { Term, Article, NewsletterIssue, TimelineEvent } from './types'
 
 // ── Terms ──────────────────────────────────────────────────
 
@@ -203,6 +203,20 @@ export async function getNewsletterIssues(): Promise<NewsletterIssue[]> {
     .order('issue_number', { ascending: false })
 
   if (error) { console.error('getNewsletterIssues:', error); return [] }
+  return data ?? []
+}
+
+// ── Timeline ───────────────────────────────────────────────
+
+export async function getTimelineEvents(): Promise<TimelineEvent[]> {
+  const supabase = getPublicClient()
+  const { data, error } = await supabase
+    .from('timeline_events')
+    .select('*')
+    .eq('published', true)
+    .order('event_date', { ascending: false })
+
+  if (error) { console.error('getTimelineEvents:', error); return [] }
   return data ?? []
 }
 
