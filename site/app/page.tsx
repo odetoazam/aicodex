@@ -11,12 +11,23 @@ import type { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'AI Codex — Learn to operate with AI',
-  description: 'The organizing layer for AI at work. Plain-English explanations, structured learning paths, and practical guides for operators.',
+  title: 'AI Codex — The practitioner\'s guide to AI deployment',
+  description: 'Free guides for Forward Deployed Engineers and Agent Operators — the two roles defining enterprise AI. Technical playbooks, career paths, and the operational detail that vendor docs skip.',
 }
 
-// Three primary intent buckets — each may have 1 or 2 specific paths
+// Four primary intent buckets — each may have 1 or 2 specific paths
 const PRIMARY_PATHS = [
+  {
+    id: 'fde-operator',
+    title: 'Deploying AI for companies?',
+    description: 'Two roles are defining enterprise AI right now. Agent Operators run AI systems inside their own company. Forward Deployed Engineers build them for clients. Technical guides and career paths for both.',
+    accent: '#4A7BA7',
+    accentBg: 'rgba(74,123,167,0.07)',
+    paths: [
+      { cta: 'Agent Operator guide', href: '/articles/what-is-an-agent-operator', meta: '8 guides' },
+      { cta: 'FDE career path', href: '/articles/what-is-a-forward-deployed-engineer', meta: '4 guides' },
+    ],
+  },
   {
     id: 'individual',
     title: 'Using Claude at work?',
@@ -34,19 +45,19 @@ const PRIMARY_PATHS = [
     accent: '#7B8FD4',
     accentBg: 'rgba(123,143,212,0.07)',
     paths: [
-      { cta: 'Developer path', href: '/learn/developers', meta: '17 guides · ~121 min' },
+      { cta: 'Developer path', href: '/learn/developers', meta: '20 guides · ~144 min' },
       { cta: 'Founder / builder path', href: '/learn/build-with-ai', meta: '10 steps · ~64 min' },
     ],
   },
   {
     id: 'team',
-    title: 'Deploying for your team?',
-    description: 'Whether you\'re a team lead doing a department rollout or IT handling org-wide deployment — two paths, starting in the right order.',
+    title: 'Rolling out to your team?',
+    description: 'Whether you\'re a team lead doing a department rollout or IT handling org-wide deployment — structured paths with the decisions you need to make, in order.',
     accent: '#4CAF7D',
     accentBg: 'rgba(76,175,125,0.07)',
     paths: [
       { cta: 'Team lead path', href: '/learn/for-your-team', meta: '8 steps · ~41 min' },
-      { cta: 'IT / admin path', href: '/learn/claude-for-admins', meta: '12 steps · ~69 min' },
+      { cta: 'IT / admin path', href: '/learn/claude-for-admins', meta: '15 steps · ~85 min' },
     ],
   },
 ]
@@ -137,12 +148,12 @@ export default async function HomePage() {
             color: 'var(--text-primary)',
             lineHeight: 1.05,
             letterSpacing: '-0.02em',
-            maxWidth: '14ch',
+            maxWidth: '16ch',
             marginBottom: '24px',
           }}
         >
-          Learn to operate{' '}
-          <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>with</em> AI.
+          The practitioner&apos;s guide to{' '}
+          <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>deploying</em> AI.
         </h1>
 
         <p
@@ -150,13 +161,14 @@ export default async function HomePage() {
             fontFamily: 'var(--font-sans)',
             fontSize: 'var(--text-lg)',
             color: 'var(--text-muted)',
-            maxWidth: '50ch',
+            maxWidth: '52ch',
             lineHeight: 1.65,
             marginBottom: '40px',
           }}
         >
-          The plain-English layer on top of AI — so you can make confident decisions,
-          understand what you're working with, and actually ship something.
+          Forward Deployed Engineers build AI systems inside companies.
+          Agent Operators run them. Both roles are exploding — and neither
+          has a good free resource yet. This is it.
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' as const }}>
@@ -213,8 +225,8 @@ export default async function HomePage() {
           Where do you want to start?
         </p>
 
-        {/* 3 primary intent cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }} className="entry-grid">
+        {/* 4 primary intent cards — 2x2 grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }} className="entry-grid">
           {PRIMARY_PATHS.map(pp => (
             <div
               key={pp.id}
@@ -328,8 +340,89 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Career context callout ───────────────────────── */}
+      {/* ── FDE + Agent Operator callout ─────────────────── */}
       <section style={{ width: 'var(--container)', margin: '0 auto', paddingBottom: 'var(--section-y)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }} className="callout-grid">
+          <Link
+            href="/articles/what-is-a-forward-deployed-engineer"
+            style={{
+              display: 'flex',
+              flexDirection: 'column' as const,
+              gap: '10px',
+              padding: '28px 32px',
+              borderRadius: '10px',
+              border: '1px solid var(--border-base)',
+              borderLeft: '4px solid #4A7BA7',
+              background: 'rgba(74,123,167,0.04)',
+              textDecoration: 'none',
+            }}
+            className="career-callout"
+          >
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600,
+              letterSpacing: '0.07em', textTransform: 'uppercase' as const,
+              color: '#4A7BA7', margin: 0,
+            }}>
+              New role · exploding fast
+            </p>
+            <h2 style={{
+              fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600,
+              color: 'var(--text-primary)', lineHeight: 1.2, margin: 0,
+            }}>
+              What is a Forward Deployed Engineer?
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '14px',
+              color: 'var(--text-muted)', lineHeight: 1.65, margin: 0,
+            }}>
+              Anthropic and OpenAI both launched billion-dollar deployment companies in the same week. Both built around the same type of engineer. Here&apos;s what they do, what they earn, and how to become one.
+            </p>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: '#4A7BA7', fontWeight: 500 }}>
+              Read the guide →
+            </span>
+          </Link>
+
+          <Link
+            href="/articles/what-is-an-agent-operator"
+            style={{
+              display: 'flex',
+              flexDirection: 'column' as const,
+              gap: '10px',
+              padding: '28px 32px',
+              borderRadius: '10px',
+              border: '1px solid var(--border-base)',
+              borderLeft: '4px solid #4CAF7D',
+              background: 'rgba(76,175,125,0.04)',
+              textDecoration: 'none',
+            }}
+            className="career-callout"
+          >
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600,
+              letterSpacing: '0.07em', textTransform: 'uppercase' as const,
+              color: '#4CAF7D', margin: 0,
+            }}>
+              500K–1M new jobs predicted
+            </p>
+            <h2 style={{
+              fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600,
+              color: 'var(--text-primary)', lineHeight: 1.2, margin: 0,
+            }}>
+              What is an Agent Operator?
+            </h2>
+            <p style={{
+              fontFamily: 'var(--font-sans)', fontSize: '14px',
+              color: 'var(--text-muted)', lineHeight: 1.65, margin: 0,
+            }}>
+              Aaron Levie predicts 500,000 to 1 million companies will hire someone to own their AI agents internally. Most already have this person — they just don&apos;t have a name for what they&apos;re doing yet.
+            </p>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: '#4CAF7D', fontWeight: 500 }}>
+              Read the guide →
+            </span>
+          </Link>
+        </div>
+
+        {/* Keep the original career impact article below, smaller */}
         <Link
           href="/articles/ai-impact-on-knowledge-work"
           style={{
@@ -337,47 +430,29 @@ export default async function HomePage() {
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '32px',
-            padding: '32px 36px',
+            padding: '20px 28px',
             borderRadius: '10px',
             border: '1px solid var(--border-base)',
-            borderLeft: '4px solid var(--accent)',
             background: 'var(--bg-subtle)',
             textDecoration: 'none',
+            marginTop: '12px',
           }}
           className="career-callout"
         >
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: '11px',
-              fontWeight: 600,
-              letterSpacing: '0.07em',
-              textTransform: 'uppercase' as const,
-              color: 'var(--accent)',
-              marginBottom: '10px',
+              fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600,
+              letterSpacing: '0.07em', textTransform: 'uppercase' as const,
+              color: 'var(--text-muted)', marginBottom: '6px',
             }}>
-              Start here
+              Context
             </p>
             <h2 style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'var(--text-xl)',
-              fontWeight: 600,
-              color: 'var(--text-primary)',
-              lineHeight: 1.2,
-              marginBottom: '10px',
+              fontFamily: 'var(--font-serif)', fontSize: 'var(--text-base)', fontWeight: 600,
+              color: 'var(--text-primary)', lineHeight: 1.2, marginBottom: '0',
             }}>
               What AI Is Actually Doing to Your Job
             </h2>
-            <p style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: '14px',
-              color: 'var(--text-muted)',
-              lineHeight: 1.65,
-              margin: 0,
-              maxWidth: '60ch',
-            }}>
-              Block is eliminating middle management. Altman and Amodei predict the first billion-dollar one-person company. 36% of B2B companies already cut their SDR teams. The future of work is playing out role by role, with specific data, right now.
-            </p>
           </div>
           <span style={{
             fontFamily: 'var(--font-sans)',
