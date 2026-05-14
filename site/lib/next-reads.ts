@@ -495,6 +495,7 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   'what-is-a-forward-deployed-engineer': [
     { slug: 'how-to-become-forward-deployed-engineer', reason: 'The step-by-step path: the four-part skill stack, three transition paths, and what the interview actually looks like.' },
     { slug: 'fde-portfolio-projects', reason: 'The five specific projects that signal FDE readiness to hiring managers — buildable, not generic.' },
+    { slug: 'what-is-an-agent-operator', reason: 'The internal counterpart to the FDE role — what the operator side of the same AI deployment wave looks like.' },
   ],
 
   'how-to-become-forward-deployed-engineer': [
@@ -510,6 +511,49 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   'fde-for-career-counselors': [
     { slug: 'what-is-a-forward-deployed-engineer', reason: 'The full definition article for sharing with students — covers what FDEs build, compensation, and the hiring landscape.' },
     { slug: 'how-to-become-forward-deployed-engineer', reason: 'The step-by-step path for students to follow — the four-part skill stack and three transition timelines.' },
+  ],
+
+  // ── Agent Operator cluster ───────────────────────────────────────────────
+
+  'what-is-an-agent-operator': [
+    { slug: 'agent-operator-first-90-days', reason: 'The concrete 90-day playbook for actually starting — what to build first, in what order, without doing everything at once.' },
+    { slug: 'how-to-evaluate-your-agents', reason: 'The first real accountability question: how do you know if the agents you\'re responsible for are actually working?' },
+    { slug: 'what-is-a-forward-deployed-engineer', reason: 'The external-facing version of the same role — helps clarify where Agent Operator ends and FDE begins.' },
+  ],
+
+  'agent-operator-first-90-days': [
+    { slug: 'how-to-evaluate-your-agents', reason: 'Day 31 is when you start building test cases — this is the complete guide to doing evaluation without code.' },
+    { slug: 'wiring-internal-systems-to-agents', reason: 'Day 61 is when you connect your first live data source — here\'s the four-level framework for doing it without an engineer.' },
+  ],
+
+  'how-to-evaluate-your-agents': [
+    { slug: 'when-agents-break', reason: 'What to do when your test set finds a failure — the five failure modes and the 45-minute diagnostic workflow.' },
+    { slug: 'agent-operator-first-90-days', reason: 'How evaluation fits into the broader 90-day build and stabilize cycle.' },
+  ],
+
+  'when-agents-break': [
+    { slug: 'how-to-evaluate-your-agents', reason: 'The test set that catches failures before users do — how to build and run one without code.' },
+    { slug: 'agent-change-management', reason: 'One bad public failure can undo months of adoption progress — here\'s how to manage the human side of reliability.' },
+  ],
+
+  'wiring-internal-systems-to-agents': [
+    { slug: 'agent-operator-first-90-days', reason: 'How live data connections fit into the broader 90-day build sequence — when to tackle them and when to wait.' },
+    { slug: 'agent-operator-cost-control', reason: 'How you load context directly drives your token costs — what to load and what to leave out.' },
+  ],
+
+  'agent-change-management': [
+    { slug: 'agent-operator-first-90-days', reason: 'The pilot-first rollout sequence that prevents the trust and speed resistance problems before they start.' },
+    { slug: 'agent-operator-roi-reporting', reason: 'Once adoption is working, here\'s how to show leadership what it\'s actually delivered.' },
+  ],
+
+  'agent-operator-cost-control': [
+    { slug: 'how-to-evaluate-your-agents', reason: 'High failure rates drive retry costs — fixing reliability is also cost reduction.' },
+    { slug: 'agent-operator-roi-reporting', reason: 'The cost number belongs in your ROI report — here\'s how to frame it so it lands with your CFO.' },
+  ],
+
+  'agent-operator-roi-reporting': [
+    { slug: 'agent-operator-first-90-days', reason: 'The 90-day playbook that generates the data you\'ll need to report — baseline tracking starts on day one.' },
+    { slug: 'agent-change-management', reason: 'Adoption numbers are part of the ROI story — what to measure on the human side.' },
   ],
 
 }

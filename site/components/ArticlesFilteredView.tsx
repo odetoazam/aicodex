@@ -60,6 +60,10 @@ const DEV_SLUGS = new Set([
   'what-is-a-forward-deployed-engineer',
   'how-to-become-forward-deployed-engineer',
   'fde-portfolio-projects',
+  'how-to-evaluate-your-agents',
+  'when-agents-break',
+  'wiring-internal-systems-to-agents',
+  'agent-operator-cost-control',
 ])
 
 const FOUNDER_SLUGS = new Set([
