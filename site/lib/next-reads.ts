@@ -490,4 +490,26 @@ export const NEXT_READS: Record<string, NextRead[]> = {
     { slug: 'building-ai-skills-for-your-team', reason: 'Skills are how the stack delivers value to individual teams — how to build and publish reusable workflows.' },
   ],
 
+  // ── FDE cluster ──────────────────────────────────────────────────────────
+
+  'what-is-a-forward-deployed-engineer': [
+    { slug: 'how-to-become-forward-deployed-engineer', reason: 'The step-by-step path: the four-part skill stack, three transition paths, and what the interview actually looks like.' },
+    { slug: 'fde-portfolio-projects', reason: 'The five specific projects that signal FDE readiness to hiring managers — buildable, not generic.' },
+  ],
+
+  'how-to-become-forward-deployed-engineer': [
+    { slug: 'fde-portfolio-projects', reason: 'The concrete portfolio projects that prove each part of the skill stack — what to build and why.' },
+    { slug: 'internal-mcp-server-explained', reason: 'MCP servers are the core FDE technical deliverable — this covers the architecture in depth.' },
+  ],
+
+  'fde-portfolio-projects': [
+    { slug: 'how-to-become-forward-deployed-engineer', reason: 'The full transition path context — which projects matter most depends on which path you\'re on.' },
+    { slug: 'internal-mcp-server-explained', reason: 'Project 1 requires building an MCP server — this is the deep-dive on the architecture patterns.' },
+  ],
+
+  'fde-for-career-counselors': [
+    { slug: 'what-is-a-forward-deployed-engineer', reason: 'The full definition article for sharing with students — covers what FDEs build, compensation, and the hiring landscape.' },
+    { slug: 'how-to-become-forward-deployed-engineer', reason: 'The step-by-step path for students to follow — the four-part skill stack and three transition timelines.' },
+  ],
+
 }

@@ -57,6 +57,9 @@ const DEV_SLUGS = new Set([
   'mcp-production-agents',
   'claude-rate-limits-api',
   'claude-security',
+  'what-is-a-forward-deployed-engineer',
+  'how-to-become-forward-deployed-engineer',
+  'fde-portfolio-projects',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -112,6 +115,13 @@ const OPERATOR_ALSO_SLUGS = new Set([
   'ai-agent-access-control',
   'building-ai-skills-for-your-team',
   'internal-ai-stack-architecture',
+])
+
+// Articles that live in DEV_SLUGS but are also relevant for founders
+// (builder/founder audience who may be evaluating or pursuing FDE work)
+const FOUNDER_ALSO_SLUGS = new Set([
+  'what-is-a-forward-deployed-engineer',
+  'how-to-become-forward-deployed-engineer',
 ])
 
 // Pinned for each persona view
@@ -170,7 +180,7 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
     pool = articles.filter(a => persona(a) === 'developer')
   } else if (active === 'founder') {
     pinnedSlugs = PINNED_FOUNDER
-    pool = articles.filter(a => persona(a) === 'founder')
+    pool = articles.filter(a => persona(a) === 'founder' || FOUNDER_ALSO_SLUGS.has(a.slug))
   } else if (active === 'productivity') {
     pinnedSlugs = PINNED_PROD
     pool = articles.filter(a => persona(a) === 'productivity')
