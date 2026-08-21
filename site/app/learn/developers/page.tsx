@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import AcademyTrackCallout from '@/components/AcademyTrackCallout'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -573,6 +574,8 @@ export default function LearnDevelopersPage() {
           background: var(--bg-subtle) !important;
         }
       `}</style>
+      <AcademyTrackCallout trackId="developer" />
+
     </div>
   )
 }

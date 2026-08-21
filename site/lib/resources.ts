@@ -70,12 +70,12 @@ export const OFFICIAL_RESOURCES: Record<string, ExternalResource[]> = {
     { label: 'Anthropic alignment research', url: 'https://www.anthropic.com/research', source: 'blog' },
   ],
   'anthropic': [
-    { label: 'Anthropic Academy', url: 'https://www.anthropic.com/learn', source: 'academy' },
+    { label: 'Claude Academy', url: 'https://academy.claude.com', source: 'academy' },
     { label: 'Anthropic research', url: 'https://www.anthropic.com/research', source: 'blog' },
   ],
   'claude': [
     { label: 'Claude for work', url: 'https://www.anthropic.com/claude/work', source: 'docs' },
-    { label: 'Claude Academy', url: 'https://www.anthropic.com/learn', source: 'academy' },
+    { label: 'Claude Academy — Claude 101', url: 'https://academy.claude.com/courses/claude-101', source: 'academy' },
   ],
   'claude-agent-sdk': [
     { label: 'Agent SDK docs', url: 'https://docs.anthropic.com/en/docs/agents-and-tools/agent-sdk', source: 'docs' },
@@ -113,7 +113,7 @@ export const OFFICIAL_RESOURCES: Record<string, ExternalResource[]> = {
 const SOURCE_LABELS: Record<ExternalResource['source'], string> = {
   docs:    'Anthropic Docs',
   support: 'Anthropic Support',
-  academy: 'Anthropic Academy',
+  academy: 'Claude Academy',
   blog:    'Anthropic',
 }
 

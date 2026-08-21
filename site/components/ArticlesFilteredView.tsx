@@ -8,6 +8,10 @@ import type { Article } from '@/lib/types'
 // ── Persona slug maps ────────────────────────────────────────────────────────
 
 const DEV_SLUGS = new Set([
+  'claude-opus-5',
+  'claude-sonnet-5',
+  'claude-inference-hooks',
+  'mcp-spec-2026-07-28',
   'internal-mcp-server-explained',
   'ai-data-access-token-economics',
   'ai-agent-cold-start-caching',
@@ -63,7 +67,24 @@ const DEV_SLUGS = new Set([
   'how-to-evaluate-your-agents',
   'when-agents-break',
   'wiring-internal-systems-to-agents',
-  'agent-operator-cost-control',
+  'claude-agents-command',
+  'claude-managed-agents-multiagent',
+  'karpathy-joins-anthropic',
+  'fde-for-career-counselors',
+  'why-anthropic-openai-copied-palantir',
+  'claude-code-may-2026-updates',
+  'claude-opus-4-8',
+  'claude-code-dynamic-workflows',
+  'claude-subscription-credit-changes',
+  'claude-fable-5',
+  'claude-managed-agents-self-hosted',
+  'when-your-ai-model-disappears',
+  'computer-use-browser-use-ga',
+  'claude-code-august-2026-updates',
+  'managed-agents-budgets-guardrails',
+  'fde-scoping-an-engagement',
+  'fde-when-client-data-is-bad',
+  'fde-handoff-that-survives',
 ])
 
 const FOUNDER_SLUGS = new Set([
@@ -81,6 +102,7 @@ const FOUNDER_SLUGS = new Set([
 ])
 
 const PRODUCTIVITY_SLUGS = new Set([
+  'claude-science',
   'managing-email-with-claude',
   'weekly-review-with-claude',
   'meeting-prep-with-claude',
@@ -100,6 +122,7 @@ const PRODUCTIVITY_SLUGS = new Set([
   'claude-design',
   'claude-everyday-connectors',
   'claude-for-creative-work',
+  'claude-for-microsoft-365',
 ])
 
 const AGENCIES_SLUGS = new Set([
@@ -119,6 +142,11 @@ const OPERATOR_ALSO_SLUGS = new Set([
   'ai-agent-access-control',
   'building-ai-skills-for-your-team',
   'internal-ai-stack-architecture',
+  'claude-subscription-credit-changes',
+  'when-your-ai-model-disappears',
+  'claude-inference-hooks',
+  'claude-code-august-2026-updates',
+  'managed-agents-budgets-guardrails',
 ])
 
 // Articles that live in DEV_SLUGS but are also relevant for founders
@@ -126,15 +154,18 @@ const OPERATOR_ALSO_SLUGS = new Set([
 const FOUNDER_ALSO_SLUGS = new Set([
   'what-is-a-forward-deployed-engineer',
   'how-to-become-forward-deployed-engineer',
+  'why-anthropic-openai-copied-palantir',
+  'fde-scoping-an-engagement',
+  'fde-handoff-that-survives',
 ])
 
 // Pinned for each persona view
 // Max 5 pinned per tab (Cassie rule #18). "Pinned" means: the true first-read for someone
 // landing on this tab. Everything else stays in the pool — demoted, not removed.
-const PINNED_ALL       = ['new-to-ai-start-here', 'what-to-share-with-claude', 'how-to-write-a-good-prompt', 'claude-common-mistakes', 'claude-code-vs-web-app']
-const PINNED_OPERATOR  = ['first-week-with-claude', 'ask-your-org-guide', 'building-a-business-case-for-claude', 'setting-up-claude-for-your-team', 'claude-adoption-plateau']
+const PINNED_ALL       = ['new-to-ai-start-here', 'claude-academy-guide', 'what-claude-academy-doesnt-teach', 'what-to-share-with-claude', 'when-your-ai-model-disappears']
+const PINNED_OPERATOR  = ['first-week-with-claude', 'claude-academy-guide', 'building-a-business-case-for-claude', 'ai-platform-landscape-2026', 'claude-compliance-api']
 const PINNED_FOUNDER   = ['founder-ai-workflow', 'solo-founder-project-setup', 'solo-founder-operating-system', 'validating-startup-idea-with-claude']
-const PINNED_DEV       = ['your-first-claude-api-call', 'securing-your-claude-app', 'building-a-rag-pipeline-from-scratch', 'auditing-your-eval-suite', 'prompt-caching-implementation']
+const PINNED_DEV       = ['claude-opus-5', 'computer-use-browser-use-ga', 'managed-agents-budgets-guardrails', 'your-first-claude-api-call', 'auditing-your-eval-suite']
 const PINNED_PROD      = ['claude-plus-notion', 'claude-plus-airtable', 'claude-plus-figma', 'claude-for-writing-and-editing']
 const PINNED_AGENCIES  = ['claude-for-agencies', 'pricing-claude-consulting-work', 'what-to-tell-clients-about-ai', 'claude-code-client-setup', 'client-handoff-with-claude']
 
@@ -233,7 +264,7 @@ export default function ArticlesFilteredView({ articles }: { articles: Article[]
       <div style={{ marginBottom: '32px', position: 'relative', maxWidth: '480px' }}>
         <input
           type="search"
-          placeholder="Search 148 articles…"
+          placeholder={`Search ${articles.length} articles…`}
           value={query}
           onChange={e => setQuery(e.target.value)}
           style={{

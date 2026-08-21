@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About — AI Codex',
-  description: 'The knowledge graph for building with AI — what this is and why it exists.',
+  description: 'Claude Academy teaches the product. AI Codex covers the job around it — what breaks, what it costs, who to argue with, and what the role becomes. Written by an operator running AI in a regulated industry.',
 }
 
 export default function AboutPage() {
@@ -49,7 +49,31 @@ export default function AboutPage() {
         </p>
 
         <p>
-          AI Codex is something different. It&rsquo;s a structured knowledge graph — not a blog, not a newsletter, not a flat glossary. Every term connects to the decisions it informs. Every article names the failure modes, not just the capabilities.
+          AI Codex is a structured knowledge graph — not a blog, not a newsletter, not a flat glossary. Every term connects to the decisions it informs. Every article names the failure modes, not just the capabilities.
+        </p>
+
+        <h2
+          style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'var(--text-xl)',
+            color: 'var(--text-primary)',
+            marginTop: '16px',
+            marginBottom: '0',
+          }}
+        >
+          What about Claude Academy?
+        </h2>
+
+        <p>
+          Anthropic launched <a href="https://academy.claude.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>Claude Academy</a> in August 2026 — 355 free courses, tutorials, and use cases. It is the best product training any AI company has published, and if you use Claude for work, go take it. We link to it throughout the site and maintain a <Link href="/academy" style={{ color: 'var(--accent)' }}>course map</Link> for anyone trying to figure out where to start.
+        </p>
+
+        <p>
+          A vendor course teaches you the product. It will not tell you when to use a competitor, what breaks at month six, how to get budget approved after security has already said no once, or what happens to the system you built when the model underneath it gets retired. Those problems consume more of an AI deployment than the product training does, and nobody is incentivised to write them down except the people living through them.
+        </p>
+
+        <p>
+          That is the division of labour. Anthropic teaches the product. This site covers the job around it.
         </p>
 
         <h2

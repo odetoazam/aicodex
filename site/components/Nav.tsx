@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { label: 'Tools', href: '/tools' },
   { label: 'Glossary', href: '/glossary' },
   { label: 'Timeline', href: '/timeline' },
+  { label: 'Academy', href: '/academy' },
 ]
 
 function getInitials(user: User): string {

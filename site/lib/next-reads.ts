@@ -432,7 +432,7 @@ export const NEXT_READS: Record<string, NextRead[]> = {
 
   'claude-opus-4-7': [
     { slug: 'migrating-to-claude-4-7', reason: 'There are 5 API breaking changes in Opus 4.7 — this is the migration checklist.' },
-    { slug: 'choosing-the-right-claude-model', reason: 'Opus 4.7 is now the flagship — how it fits against Sonnet 4.6 and Haiku for your use case.' },
+    { slug: 'choosing-the-right-claude-model', reason: 'Opus 4.7 has since been superseded twice — here is where it sits against Opus 5 and Sonnet 5 today.' },
     { slug: 'claude-cost-optimization', reason: 'The new tokenizer changes your cost math — worth re-running your estimates.' },
   ],
 
@@ -443,9 +443,9 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   ],
 
   'claude-code-parallel-agents': [
+    { slug: 'claude-agents-command', reason: 'The terminal-native equivalent — same parallel task idea, no GUI required.' },
     { slug: 'claude-code-antipatterns', reason: 'The new parallel session workflow comes with its own anti-patterns — what to avoid as you scale up.' },
-    { slug: 'claude-code-project-setup', reason: 'Parallel sessions work better when each project is configured correctly from the start.' },
-    { slug: 'claude-code-for-your-team', reason: 'Parallel agents changes how teams coordinate on Claude Code — the team setup guide covers the shared patterns.' },
+    { slug: 'claude-code-agent-teams', reason: 'When parallel sessions aren\'t enough — structured multi-agent teams for complex coordinated work.' },
   ],
 
   // ── Internal MCP series ──────────────────────────────────────────────────
@@ -516,14 +516,21 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   // ── Agent Operator cluster ───────────────────────────────────────────────
 
   'what-is-an-agent-operator': [
+    { slug: 'ai-agent-manager-vs-agent-operator', reason: 'Confused about the title? Agent Operator, AI Agent Manager, AI Ops Manager — here\'s the clean map of what to actually call yourself, and which term gets you hired and paid correctly.' },
     { slug: 'agent-operator-first-90-days', reason: 'The concrete 90-day playbook for actually starting — what to build first, in what order, without doing everything at once.' },
     { slug: 'how-to-evaluate-your-agents', reason: 'The first real accountability question: how do you know if the agents you\'re responsible for are actually working?' },
-    { slug: 'what-is-a-forward-deployed-engineer', reason: 'The external-facing version of the same role — helps clarify where Agent Operator ends and FDE begins.' },
+  ],
+
+  'ai-agent-manager-vs-agent-operator': [
+    { slug: 'what-is-an-agent-operator', reason: 'The deep version of the internal role and Aaron Levie\'s 500,000-job prediction.' },
+    { slug: 'agent-operator-first-90-days', reason: 'Once you know what to call the job, this is how to actually do it — the first 90 days in order.' },
+    { slug: 'what-is-a-forward-deployed-engineer', reason: 'If you meant the external role — building agents for client companies — that\'s a different career entirely.' },
   ],
 
   'agent-operator-first-90-days': [
     { slug: 'how-to-evaluate-your-agents', reason: 'Day 31 is when you start building test cases — this is the complete guide to doing evaluation without code.' },
     { slug: 'wiring-internal-systems-to-agents', reason: 'Day 61 is when you connect your first live data source — here\'s the four-level framework for doing it without an engineer.' },
+    { slug: 'cowork-skills-graveyard', reason: 'The skill library you\'re building in days 30–60 will mostly go unused without this — here\'s why and what to do instead.' },
   ],
 
   'how-to-evaluate-your-agents': [
@@ -534,6 +541,7 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   'when-agents-break': [
     { slug: 'how-to-evaluate-your-agents', reason: 'The test set that catches failures before users do — how to build and run one without code.' },
     { slug: 'agent-change-management', reason: 'One bad public failure can undo months of adoption progress — here\'s how to manage the human side of reliability.' },
+    { slug: 'claude-cowork-adoption-metrics', reason: 'MCP tool success rate is one of the six metrics that surfaces silent failures before users blame Claude.' },
   ],
 
   'wiring-internal-systems-to-agents': [
@@ -549,11 +557,155 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   'agent-operator-cost-control': [
     { slug: 'how-to-evaluate-your-agents', reason: 'High failure rates drive retry costs — fixing reliability is also cost reduction.' },
     { slug: 'agent-operator-roi-reporting', reason: 'The cost number belongs in your ROI report — here\'s how to frame it so it lands with your CFO.' },
+    { slug: 'claude-cowork-adoption-metrics', reason: 'Cache hit rate and cost per active user are two of the six metrics that tell you if you\'re overpaying.' },
   ],
 
   'agent-operator-roi-reporting': [
     { slug: 'agent-operator-first-90-days', reason: 'The 90-day playbook that generates the data you\'ll need to report — baseline tracking starts on day one.' },
     { slug: 'agent-change-management', reason: 'Adoption numbers are part of the ROI story — what to measure on the human side.' },
+    { slug: 'claude-cowork-adoption-metrics', reason: 'The six operational metrics that feed your ROI story — WAU, session depth, cache hit rate, and more.' },
+  ],
+
+  // ── Batch 77 — May 2026 platform wave ────────────────────────────────────
+
+  'claude-agents-command': [
+    { slug: 'claude-code-agent-teams', reason: 'Agent teams go deeper — this is when to move from parallel solo tasks to structured multi-agent coordination.' },
+    { slug: 'claude-code-parallel-agents', reason: 'The desktop GUI equivalent of claude agents — same idea, different surface.' },
+    { slug: 'claude-code-antipatterns', reason: 'Multi-agent terminal work has its own failure modes — worth reading before you scale up.' },
+  ],
+
+  'karpathy-joins-anthropic': [
+    { slug: 'ai-platform-landscape-2026', reason: 'How this hire fits into the broader competitive picture between Claude, Codex, and Cursor.' },
+    { slug: 'claude-opus-4-7', reason: 'The current frontier model — what Anthropic\'s research investment is producing right now.' },
+    { slug: 'choosing-the-right-claude-model', reason: 'Practical model selection for teams making platform decisions today.' },
+  ],
+
+  'ai-platform-landscape-2026': [
+    { slug: 'building-a-business-case-for-claude', reason: 'Once you\'ve chosen Claude, here\'s how to make the internal case for the investment.' },
+    { slug: 'claude-team-vs-enterprise-for-it', reason: 'After picking the platform, the next question is which Claude plan — this covers it.' },
+    { slug: 'getting-it-approval-for-claude', reason: 'The IT conversation that has to happen before you can standardize on any platform.' },
+  ],
+
+  // ── Batch 78–79 — May 2026 ────────────────────────────────────────────────
+
+  'claude-inference-hooks': [
+    { slug: 'claude-compliance-api', reason: 'The after-the-fact half of the same job — audit what happened, once hooks have decided what was allowed.' },
+    { slug: 'claude-admin-security-privacy', reason: 'The baseline security posture to have in place before you add an inline control on top.' },
+    { slug: 'claude-team-vs-enterprise-for-it', reason: 'Inference hooks are Enterprise-only — here\'s the rest of what that plan boundary decides.' },
+  ],
+
+  'claude-enterprise-cost-controls': [
+    { slug: 'measuring-ai-roi', reason: 'Cost is only half the equation — how to measure the value side without inventing a number.' },
+    { slug: 'claude-admin-controls-2026', reason: 'The April admin release these cost controls build on — groups, spend caps, managed Code policies.' },
+    { slug: 'agent-operator-cost-control', reason: 'What changes when the spend is coming from agents running on their own rather than people typing.' },
+  ],
+
+  'mcp-spec-2026-07-28': [
+    { slug: 'internal-mcp-server-explained', reason: 'If you\'re about to migrate a server, start with what it\'s actually for and whether you need it.' },
+    { slug: 'mcp-production-agents', reason: 'The auth patterns this revision changes — static keys out, OAuth against your real IdP in.' },
+    { slug: 'mcp-role', reason: 'The plain-language version of what MCP is, for the colleague you have to explain the migration to.' },
+  ],
+
+  'claude-compliance-api': [
+    { slug: 'claude-admin-controls-2026', reason: 'The full admin controls picture — spend caps, user groups, SCIM — that compliance sits inside.' },
+    { slug: 'claude-team-vs-enterprise-for-it', reason: 'The Compliance API is Enterprise-only — here\'s what else Enterprise gives you vs. Team.' },
+    { slug: 'getting-it-approval-for-claude', reason: 'The compliance story is often the difference between IT saying yes and IT stalling — here\'s the full conversation.' },
+  ],
+
+  'why-anthropic-openai-copied-palantir': [
+    { slug: 'what-is-a-forward-deployed-engineer', reason: 'The definitive guide to the FDE role — what these ventures are actually hiring for.' },
+    { slug: 'how-to-become-forward-deployed-engineer', reason: 'If this story made you want to get into FDE work, here\'s the actual career path.' },
+    { slug: 'ai-platform-landscape-2026', reason: 'The competitive picture between the labs making these deployment bets.' },
+  ],
+
+  'claude-for-small-business': [
+    { slug: 'what-to-share-with-claude', reason: 'Before you connect QuickBooks and HubSpot, here\'s what data Claude does and doesn\'t store.' },
+    { slug: 'first-week-with-claude', reason: 'A structured first-week plan for getting real value quickly once the connectors are set up.' },
+    { slug: 'running-your-first-ai-pilot', reason: 'If you want to test this with your team before full rollout, here\'s how to structure a small pilot.' },
+  ],
+
+  'agent-operator-job-market-2026': [
+    { slug: 'ai-agent-manager-vs-agent-operator', reason: 'Which of these titles should be on your resume? The map of every role name and which one recruiters actually search for.' },
+    { slug: 'agent-operator-first-90-days', reason: 'The 90-day build sequence that creates the experience these job postings are looking for.' },
+    { slug: 'how-to-evaluate-your-agents', reason: 'Eval design is the most commonly tested skill in Agent Operator interviews — start here.' },
+  ],
+
+  'claude-code-may-2026-updates': [
+    { slug: 'claude-code-antipatterns', reason: 'The failure modes that become more likely as you start using Auto mode and /code-review --fix.' },
+    { slug: 'claude-agents-command', reason: 'The parallel terminal mode that shipped last week alongside these version updates.' },
+    { slug: 'claude-code-routines', reason: 'Running Claude Code unattended on Anthropic\'s infrastructure — the natural next step after Auto mode.' },
+  ],
+
+  // ── Batch 85 — Cowork adoption & skills ────────────────────────────────────
+
+  'claude-cowork-adoption-metrics': [
+    { slug: 'cowork-skills-graveyard', reason: 'Once you see that skill invocation counts are low, here\'s why — and what to fix.' },
+    { slug: 'agent-operator-roi-reporting', reason: 'These six metrics feed directly into the ROI report your leadership actually wants to see.' },
+    { slug: 'claude-adoption-plateau', reason: 'What to do when WAU flattens and the standard advice isn\'t working.' },
+  ],
+
+  'cowork-skills-graveyard': [
+    { slug: 'claude-cowork-adoption-metrics', reason: 'The skills audit is one of six metrics that tell you whether your Cowork rollout is working.' },
+    { slug: 'agent-operator-first-90-days', reason: 'How skill building fits into the broader 90-day build sequence — when to add skills and when to hold.' },
+    { slug: 'when-agents-break', reason: 'Silent tool failure is what makes skills feel unreliable — how to diagnose and fix it.' },
+  ],
+
+  // ── Batch 93 — Claude Academy positioning & August 2026 shipping ───────────
+
+  'claude-academy-guide': [
+    { slug: 'what-claude-academy-doesnt-teach', reason: 'Once you have picked a track, this is the shape of what the track leaves you to solve alone.' },
+    { slug: 'claude-certifications-guide', reason: 'The paid, proctored exams are a separate thing from the free courses — and most people cannot sit them.' },
+    { slug: 'first-week-with-claude', reason: 'The practical week-one plan to run alongside Claude 101, so the training turns into habit.' },
+  ],
+
+  'what-claude-academy-doesnt-teach': [
+    { slug: 'claude-academy-guide', reason: 'The other half — which of the 355 free resources are actually worth your hours, by role.' },
+    { slug: 'claude-adoption-plateau', reason: 'Gap #2 in detail: what to do when weekly active users flatten around 30% and the standard advice stops working.' },
+    { slug: 'when-your-ai-model-disappears', reason: 'Gap #5 in detail: what a retirement notice actually costs you when you built on that model.' },
+  ],
+
+  'claude-certifications-guide': [
+    { slug: 'claude-academy-guide', reason: 'The free courses that prepare you for every one of these exams — no third-party prep needed.' },
+    { slug: 'fde-portfolio-projects', reason: 'If you cannot sit the exams, this is what to build instead. Hiring managers screen on shipped systems.' },
+    { slug: 'agent-operator-job-market-2026', reason: 'What these roles actually pay and what the postings ask for — which is not a certification.' },
+  ],
+
+  'computer-use-browser-use-ga': [
+    { slug: 'auditing-your-eval-suite', reason: 'GA transitions change response shapes. An unaudited suite will pass things it should catch.' },
+    { slug: 'mcp-production-agents', reason: 'The other half of the production agent surface — how MCP fits alongside the new toolsets.' },
+    { slug: 'managed-agents-budgets-guardrails', reason: 'The same month\'s Managed Agents changes: budgets, advisor, and geo pinning.' },
+  ],
+
+  'claude-code-august-2026-updates': [
+    { slug: 'claude-code-antipatterns', reason: 'Several of these get more likely, not less, once the approval prompts stop.' },
+    { slug: 'claude-code-for-your-team', reason: 'The team-level settings to decide on now that the default changed underneath everyone.' },
+    { slug: 'claude-code-june-2026-updates', reason: 'What shipped in the two months before this — artifacts support and the Tag integration.' },
+  ],
+
+  'managed-agents-budgets-guardrails': [
+    { slug: 'agent-operator-cost-control', reason: 'Session budgets are one lever. This is the full picture of where agent spend actually goes.' },
+    { slug: 'claude-advisor-tool', reason: 'The advisor strategy in detail — 2.7 points better on SWE-bench for 11.9% less per task.' },
+    { slug: 'when-agents-break', reason: 'The new per-tool statistics panel is how you find silent tool failure in minutes instead of hours.' },
+  ],
+
+  // ── Batch 94 — the FDE engagement ─────────────────────────────────────────
+
+  'fde-scoping-an-engagement': [
+    { slug: 'fde-when-client-data-is-bad', reason: 'Week two, every time: the discovery findings turn out worse than the brief. This is the recovery.' },
+    { slug: 'fde-handoff-that-survives', reason: 'Scope the ending at the same time as the beginning — what you promise in week one determines what you can hand over.' },
+    { slug: 'running-your-first-ai-pilot', reason: 'The pilot should answer a question, not be a small deployment. This is how to design one that does.' },
+  ],
+
+  'fde-when-client-data-is-bad': [
+    { slug: 'fde-scoping-an-engagement', reason: 'The six checks belong in discovery week, before you agree to anything.' },
+    { slug: 'when-agents-break', reason: 'Silent wrongness is the failure mode bad data produces — how to diagnose it once it is live.' },
+    { slug: 'live-api-vs-etl-for-ai', reason: 'Once you know the data is stale, this is the architectural decision that follows.' },
+  ],
+
+  'fde-handoff-that-survives': [
+    { slug: 'when-your-ai-model-disappears', reason: 'The deprecation you are handing over responsibility for — three models went in the first half of 2026 alone.' },
+    { slug: 'auditing-your-eval-suite', reason: 'The eval set is the artifact that keeps the system honest after you leave. It has to be trustworthy first.' },
+    { slug: 'documenting-claude-setup-for-client-handoff', reason: 'The documentation layer underneath the runbook — what to write down about the configuration itself.' },
   ],
 
 }

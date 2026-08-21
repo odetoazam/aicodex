@@ -16,6 +16,7 @@ export interface PathMembership {
 
 // Track 1: For yourself — 8 practical steps
 const FOR_YOURSELF_STEPS = [
+  'what-to-share-with-claude',
   'how-to-write-a-good-prompt',
   'what-ai-cant-do',
   'claude-common-mistakes',
@@ -24,6 +25,7 @@ const FOR_YOURSELF_STEPS = [
   'claude-projects-role',
   'hallucination-failure',
   'claude-prompt-debugging',
+  'managing-email-with-claude',
 ]
 
 // Track 2: For your team — 8 steps (merged from ai-for-your-company + getting-your-team-started)
@@ -65,9 +67,12 @@ const DEV_STEPS = [
 // Admin path — 15 steps
 const ADMIN_STEPS = [
   'claude-admin-zero-to-one',
+  'claude-team-vs-enterprise-for-it',
   'choosing-your-claude-plan',
   'claude-admin-setup',
   'ai-usage-policy-for-teams',
+  'claude-admin-controls-2026',
+  'ask-your-org-guide',
   'claude-projects-org-structure',
   'skills-setup-guide',
   'connectors-best-practices',
@@ -76,10 +81,6 @@ const ADMIN_STEPS = [
   'cowork-dispatch-guide',
   'managed-agents-for-your-org',
   'claude-admin-ongoing-maintenance',
-  // Advanced: building the internal AI data layer
-  'internal-mcp-server-explained',
-  'ai-agent-access-control',
-  'building-ai-skills-for-your-team',
 ]
 
 // Claude Code path — 6 steps
@@ -102,6 +103,34 @@ const INTERNAL_AI_STACK_STEPS = [
   'ai-agent-access-control',
   'building-ai-skills-for-your-team',
   'internal-ai-stack-architecture',
+]
+
+// Forward Deployed Engineer path — 11 steps
+// (role → market → career → portfolio → technical playbook → the engagement itself)
+const FDE_STEPS = [
+  'what-is-a-forward-deployed-engineer',
+  'why-anthropic-openai-copied-palantir',
+  'how-to-become-forward-deployed-engineer',
+  'fde-portfolio-projects',
+  'internal-mcp-server-explained',
+  'mcp-production-agents',
+  'ai-agent-access-control',
+  'internal-ai-stack-architecture',
+  'fde-scoping-an-engagement',
+  'fde-when-client-data-is-bad',
+  'fde-handoff-that-survives',
+]
+
+// AI Agent Manager path — 8 steps (the internal role: role → 90 days → wiring → evals → break → change → cost → ROI)
+const AGENT_MANAGER_STEPS = [
+  'what-is-an-agent-operator',
+  'agent-operator-first-90-days',
+  'wiring-internal-systems-to-agents',
+  'how-to-evaluate-your-agents',
+  'when-agents-break',
+  'agent-change-management',
+  'agent-operator-cost-control',
+  'agent-operator-roi-reporting',
 ]
 
 // Build-with-AI path — 10 steps (page still accessible, not in main index)
@@ -148,6 +177,8 @@ const BWAI_MAP               = buildMap(BWAI_STEPS, 'Build with AI', '/learn/bui
 const ADMIN_MAP              = buildMap(ADMIN_STEPS, 'Setting up Claude for your company', '/learn/claude-for-admins', '#5B8DD9')
 const CLAUDE_CODE_MAP        = buildMap(CLAUDE_CODE_STEPS, 'Setting up Claude Code for your team', '/learn/claude-code', '#5DA698')
 const INTERNAL_AI_STACK_MAP  = buildMap(INTERNAL_AI_STACK_STEPS, 'Building Your Internal AI Stack', '/learn/internal-ai-stack', '#4A7BA7')
+const FDE_MAP                = buildMap(FDE_STEPS, 'Becoming a Forward Deployed Engineer', '/learn/forward-deployed-engineer', '#6E78D6')
+const AGENT_MANAGER_MAP      = buildMap(AGENT_MANAGER_STEPS, 'Becoming an AI Agent Manager', '/learn/agent-manager', '#C28A3E')
 
 /** Path → slug list map — used by /learn page for progress computation */
 export const PATH_SLUGS: Record<string, string[]> = {
@@ -158,6 +189,8 @@ export const PATH_SLUGS: Record<string, string[]> = {
   '/learn/build-with-ai':       BWAI_STEPS,
   '/learn/developers':          DEV_STEPS,
   '/learn/internal-ai-stack':   INTERNAL_AI_STACK_STEPS,
+  '/learn/forward-deployed-engineer': FDE_STEPS,
+  '/learn/agent-manager':       AGENT_MANAGER_STEPS,
 }
 
 /**
@@ -169,6 +202,11 @@ export const PATH_SLUGS: Record<string, string[]> = {
  * Claude Code path wins on claude-code-project-setup and ai-agent-harness-explained.
  */
 export const ARTICLE_PATHS: Record<string, PathMembership> = {
+  // FDE + Agent Manager placed first: their unique articles get these banners,
+  // but shared technical articles (MCP server, access control, stack architecture)
+  // are overridden below by Internal AI Stack, their home path.
+  ...FDE_MAP,
+  ...AGENT_MANAGER_MAP,
   ...FOR_YOURSELF_MAP,
   ...BWAI_MAP,
   ...FOR_YOUR_TEAM_MAP,        // wins over for-yourself on conflicts

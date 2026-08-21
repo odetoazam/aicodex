@@ -4,6 +4,7 @@ import { marked } from 'marked'
 import { CLUSTER_MAP, ANGLE_LABELS } from '@/lib/clusters'
 import { ARTICLE_PATHS } from '@/lib/paths'
 import { NEXT_READS } from '@/lib/next-reads'
+import { academyLinksFor, url as academyUrl } from '@/lib/academy'
 import { getArticle, getArticlesForTerm, getArticlesByCluster, getArticlesBySlugs, getTermSlugs, getAllArticles } from '@/lib/db'
 import type { Article } from '@/lib/types'
 import ArticleActions from '@/components/ArticleActions'
@@ -143,9 +144,9 @@ const TOOL_CALLOUTS: Record<string, ToolCallout> = {
     cta: 'Check your score →',
   },
   compareGPT4: {
-    label: 'Claude vs GPT-4',
-    description: 'Side-by-side comparison across code quality, context, debugging, and cost.',
-    href: '/compare/claude-vs-gpt4-coding',
+    label: 'Claude vs GPT-5.6',
+    description: 'Verified specs, pricing, and where the coding benchmarks disagree.',
+    href: '/compare/claude-vs-gpt5-coding',
     cta: 'See comparison →',
   },
   compareModels: {
@@ -268,7 +269,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   const curatedSlugs = curatedNextReads?.map(r => r.slug) ?? []
 
   const [termArticles, clusterArticles, curatedArticles] = await Promise.all([
-    getArticlesForTerm(article.term_id),
+    article.term_id ? getArticlesForTerm(article.term_id) : Promise.resolve([]),
     article.cluster ? getArticlesByCluster(article.cluster, article.slug, 4) : Promise.resolve([]),
     curatedSlugs.length > 0 ? getArticlesBySlugs(curatedSlugs) : Promise.resolve([]),
   ])
@@ -508,13 +509,17 @@ export default async function ArticlePage({ params }: { params: { slug: string }
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)' }}>
               <span>{article.read_time} min read</span>
-              <span>·</span>
-              <Link
-                href={`/glossary/${article.term_slug}`}
-                style={{ color: clusterConfig?.color ?? 'var(--accent)', textDecoration: 'none', borderBottom: `1px solid ${clusterConfig?.color ?? 'var(--accent)'}33` }}
-              >
-                {article.term_name}
-              </Link>
+              {article.term_slug && (
+                <>
+                  <span>·</span>
+                  <Link
+                    href={`/glossary/${article.term_slug}`}
+                    style={{ color: clusterConfig?.color ?? 'var(--accent)', textDecoration: 'none', borderBottom: `1px solid ${clusterConfig?.color ?? 'var(--accent)'}33` }}
+                  >
+                    {article.term_name}
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -645,6 +650,31 @@ export default async function ArticlePage({ params }: { params: { slug: string }
           </div>
         </aside>
       </div>
+
+      {/* Official Anthropic training — Claude Academy. Deliberately compact:
+          this appears on a majority of articles, so it has to read as a
+          footnote rather than compete with the Related tools block. */}
+      {(() => {
+        const courses = academyLinksFor(article.slug)
+        if (courses.length === 0) return null
+        return (
+          <div style={{ marginTop: '56px', paddingTop: '20px', borderTop: '1px solid var(--border-base)' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.7, margin: 0, maxWidth: '72ch' }}>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Official training on this:</span>{' '}
+              {courses.map((c, i) => (
+                <span key={c.path}>
+                  {i > 0 && ' · '}
+                  <a href={academyUrl(c)} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>
+                    {c.title}
+                  </a>
+                  {c.meta ? ` (${c.meta})` : ''}
+                </span>
+              ))}
+              {' '}on <Link href="/academy" style={{ color: 'var(--accent)' }}>Claude Academy</Link>, free.
+            </p>
+          </div>
+        )
+      })()}
 
       {/* Related tools callout */}
       {(() => {

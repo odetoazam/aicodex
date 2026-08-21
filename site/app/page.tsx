@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'AI Codex — The practitioner\'s guide to AI deployment',
-  description: 'Free guides for Forward Deployed Engineers and Agent Operators — the two roles defining enterprise AI. Technical playbooks, career paths, and the operational detail that vendor docs skip.',
+  description: 'Claude Academy teaches the product. AI Codex covers the job: what breaks in production, how to get budget approved, when not to use Claude, and the two roles defining enterprise AI — Forward Deployed Engineer and AI Agent Manager.',
 }
 
 // Four primary intent buckets — each may have 1 or 2 specific paths
@@ -20,12 +20,12 @@ const PRIMARY_PATHS = [
   {
     id: 'fde-operator',
     title: 'Deploying AI for companies?',
-    description: 'Two roles are defining enterprise AI right now. Agent Operators run AI systems inside their own company. Forward Deployed Engineers build them for clients. Technical guides and career paths for both.',
+    description: 'Two roles are defining enterprise AI right now. AI Agent Managers run AI systems inside their own company. Forward Deployed Engineers build them for clients. Full learning paths for both.',
     accent: '#4A7BA7',
     accentBg: 'rgba(74,123,167,0.07)',
     paths: [
-      { cta: 'Agent Operator guide', href: '/articles/what-is-an-agent-operator', meta: '8 guides' },
-      { cta: 'FDE career path', href: '/articles/what-is-a-forward-deployed-engineer', meta: '4 guides' },
+      { cta: 'AI Agent Manager path', href: '/learn/agent-manager', meta: '8 guides · ~67 min' },
+      { cta: 'FDE career path', href: '/learn/forward-deployed-engineer', meta: '11 guides · ~111 min' },
     ],
   },
   {
@@ -35,7 +35,7 @@ const PRIMARY_PATHS = [
     accent: '#D4845A',
     accentBg: 'rgba(212,132,90,0.07)',
     paths: [
-      { cta: 'Start the path', href: '/learn/claude', meta: '8 steps · ~40 min' },
+      { cta: 'Start the path', href: '/learn/claude', meta: '10 steps · ~54 min' },
     ],
   },
   {
@@ -64,6 +64,13 @@ const PRIMARY_PATHS = [
 
 // Lightweight secondary destinations below the fold
 const SECONDARY_LINKS = [
+  {
+    label: 'Claude Academy guide',
+    sub: 'Which of Anthropic\u2019s 355 free resources are worth your time, by role',
+    href: '/academy',
+    accent: '#4A7BA7',
+    cta: 'See the map \u2192',
+  },
   {
     label: 'Glossary',
     sub: '150+ AI terms in plain English',
@@ -166,9 +173,9 @@ export default async function HomePage() {
             marginBottom: '40px',
           }}
         >
-          Forward Deployed Engineers build AI systems inside companies.
-          Agent Operators run them. Both roles are exploding — and neither
-          has a good free resource yet. This is it.
+          Anthropic&rsquo;s courses teach you the product. This covers the job around it —
+          what breaks in month six, how to defend the spend, when to pick something else,
+          and what Forward Deployed Engineers and AI Agent Managers actually get hired to do.
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' as const }}>
@@ -296,8 +303,8 @@ export default async function HomePage() {
         {/* Prominent guided start strip */}
         <GuidedStartTrigger variant="strip" />
 
-        {/* Secondary: glossary + tools */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginTop: '12px' }} className="secondary-grid">
+        {/* Secondary: academy + glossary + tools */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '12px' }} className="secondary-grid">
           {SECONDARY_LINKS.map(sl => (
             <Link
               key={sl.href}
@@ -408,13 +415,13 @@ export default async function HomePage() {
               fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600,
               color: 'var(--text-primary)', lineHeight: 1.2, margin: 0,
             }}>
-              What is an Agent Operator?
+              What is an AI Agent Manager?
             </h2>
             <p style={{
               fontFamily: 'var(--font-sans)', fontSize: '14px',
               color: 'var(--text-muted)', lineHeight: 1.65, margin: 0,
             }}>
-              Aaron Levie predicts 500,000 to 1 million companies will hire someone to own their AI agents internally. Most already have this person — they just don&apos;t have a name for what they&apos;re doing yet.
+              Aaron Levie predicts 500,000 to 1 million companies will hire someone to own their AI agents internally. Most already have this person — they&apos;re just still arguing over whether to call them an AI Agent Manager, AI Ops Manager, or Agent Operator.
             </p>
             <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: '#4CAF7D', fontWeight: 500 }}>
               Read the guide →
@@ -465,6 +472,56 @@ export default async function HomePage() {
             Read →
           </span>
         </Link>
+      </section>
+
+      {/* ── Claude Academy complement ─────────────────────── */}
+      <section style={{ width: 'var(--container)', margin: '0 auto', paddingBottom: 'var(--section-y)' }}>
+        <div style={{
+          border: '1px solid var(--border-base)',
+          borderLeft: '3px solid #4A7BA7',
+          borderRadius: '10px',
+          padding: 'clamp(28px, 4vw, 40px)',
+          background: 'rgba(74,123,167,0.05)',
+        }}>
+          <p style={{
+            fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 500,
+            letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+            color: '#4A7BA7', margin: '0 0 16px',
+          }}>
+            New — August 20, 2026
+          </p>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)', fontSize: 'var(--text-2xl)', fontWeight: 600,
+            color: 'var(--text-primary)', lineHeight: 1.2, margin: '0 0 16px', maxWidth: '24ch',
+          }}>
+            Anthropic launched Claude Academy. Go take it.
+          </h2>
+          <p style={{
+            fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)',
+            color: 'var(--text-secondary)', lineHeight: 1.7, maxWidth: '64ch', margin: '0 0 24px',
+          }}>
+            355 free courses, tutorials, and use cases — the best product training any AI company
+            has published. We mapped the whole catalog: which six resources matter for your role,
+            in what order, and the operating problems each track leaves you to solve alone.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' as const }}>
+            <Link href="/academy" style={{
+              display: 'inline-flex', alignItems: 'center', background: '#4A7BA7', color: '#fff',
+              textDecoration: 'none', padding: '12px 22px', borderRadius: '8px',
+              fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500,
+            }}>
+              See the course map →
+            </Link>
+            <Link href="/articles/what-claude-academy-doesnt-teach" style={{
+              display: 'inline-flex', alignItems: 'center', border: '1px solid var(--border-base)',
+              color: 'var(--text-primary)', textDecoration: 'none', padding: '12px 22px',
+              borderRadius: '8px', fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500,
+              background: 'var(--bg-surface)',
+            }}>
+              What it doesn&rsquo;t teach you
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* ── Featured Articles ─────────────────────────────── */}

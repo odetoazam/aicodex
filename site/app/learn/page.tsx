@@ -15,12 +15,12 @@ const TRACKS = [
     href: '/learn/claude',
     eyebrow: 'For individuals',
     title: 'Claude for your work',
-    description: 'For anyone using Claude personally who wants to get noticeably better at it. How to prompt well, what Claude is actually good at, the mistakes everyone makes first, and how to build a workflow that sticks.',
+    description: 'For anyone using Claude personally who wants to get noticeably better at it. What is safe to paste in, how to prompt well, what Claude is actually good at, the mistakes everyone makes first, and a workflow that survives past week three.',
     accent: '#D4845A',
     accentBg: 'rgba(212,132,90,0.1)',
     icon: '◈',
-    steps: 8,
-    time: '~40 min',
+    steps: 10,
+    time: '~54 min',
   },
   {
     href: '/learn/for-your-team',
@@ -77,6 +77,28 @@ const BWAI_PATH = {
   accentBg: 'rgba(76,175,125,0.1)',
   steps: 10,
   time: '~64 min',
+}
+
+const FDE_PATH = {
+  href: '/learn/forward-deployed-engineer',
+  eyebrow: 'For aspiring & working FDEs',
+  title: 'Becoming a Forward Deployed Engineer',
+  description: 'The role, the market, and the path in — then the technical playbook of what FDEs actually build, and the three parts of the engagement nobody writes down: scoping it, surviving the client\'s data, and handing it over so it still runs in month six.',
+  accent: '#6E78D6',
+  accentBg: 'rgba(110,120,214,0.1)',
+  steps: 11,
+  time: '~111 min',
+}
+
+const AGENT_MANAGER_PATH = {
+  href: '/learn/agent-manager',
+  eyebrow: 'For the person who owns AI internally',
+  title: 'Becoming an AI Agent Manager',
+  description: 'The operational playbook for the person responsible for running AI agents inside their own company — AI Agent Manager, AI Ops Manager, Agent Operator. First 90 days through ROI reporting, in the order you hit them, no developer background assumed.',
+  accent: '#C28A3E',
+  accentBg: 'rgba(194,138,62,0.12)',
+  steps: 8,
+  time: '~67 min',
 }
 
 const DEV_PATH = {
@@ -202,6 +224,24 @@ export default async function LearnPage() {
         </p>
       </div>
 
+      {/* Claude Academy pointer */}
+      <div style={{
+        padding: '18px 22px',
+        borderRadius: '8px',
+        background: 'rgba(74,123,167,0.06)',
+        border: '1px solid rgba(74,123,167,0.22)',
+        borderLeft: '3px solid #4A7BA7',
+        marginBottom: '16px',
+      }}>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', margin: '0 0 6px', lineHeight: 1.55 }}>
+          <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>Haven&rsquo;t done the product training yet?</span>{' '}
+          Anthropic&rsquo;s Claude Academy is free and covers the products better than we do. Take it first — these paths pick up where it stops.
+        </p>
+        <Link href="/academy" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 500, color: '#4A7BA7', textDecoration: 'none' }}>
+          Which courses to take, by role →
+        </Link>
+      </div>
+
       {/* New-user nudge */}
       <div style={{
         padding: '14px 20px',
@@ -304,6 +344,63 @@ export default async function LearnPage() {
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* The two roles defining enterprise AI */}
+      <div style={{ marginBottom: '56px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500, letterSpacing: '0.06em', color: 'var(--text-muted)', flexShrink: 0 }}>
+            THE TWO ROLES DEFINING ENTERPRISE AI
+          </p>
+          <div style={{ height: '1px', flex: 1, background: 'var(--border-muted)' }} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {[AGENT_MANAGER_PATH, FDE_PATH].map((path) => (
+            <Link key={path.href} href={path.href} style={{ textDecoration: 'none', display: 'block' }}>
+              <div
+                className="track-card"
+                style={{
+                  padding: '24px 28px', borderRadius: '12px',
+                  border: `1px solid var(--border-base)`,
+                  borderLeft: `3px solid ${path.accent}`,
+                  background: 'var(--bg-surface)',
+                  display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+                  gap: '24px', transition: 'background 150ms ease',
+                }}
+              >
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 500,
+                    letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                    color: path.accent, margin: '0 0 8px',
+                  }}>
+                    {path.eyebrow}
+                  </p>
+                  <h2 style={{
+                    fontFamily: 'var(--font-serif)', fontSize: 'var(--text-lg)', fontWeight: 600,
+                    color: 'var(--text-primary)', marginBottom: '8px', lineHeight: 1.2,
+                  }}>
+                    {path.title}
+                  </h2>
+                  <p style={{
+                    fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)',
+                    lineHeight: 1.6, margin: 0, maxWidth: '58ch',
+                  }}>
+                    {path.description}
+                  </p>
+                </div>
+                <ProgressMeta
+                  href={path.href}
+                  steps={path.steps}
+                  time={path.time}
+                  accent={path.accent}
+                  progress={prog(path.href)}
+                />
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Build with AI */}

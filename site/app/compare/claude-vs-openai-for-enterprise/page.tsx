@@ -1,316 +1,148 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import ComparisonPage, { comparisonLd, type SpecRow } from '@/components/ComparisonPage'
 
-export const metadata: Metadata = {
-  title: 'Claude vs OpenAI for Enterprise — AI Codex',
-  description: 'A practical comparison of Claude and OpenAI for enterprise deployments. Security, compliance, admin controls, instruction following, and what actually matters at scale.',
-}
+const TITLE = 'Claude vs OpenAI for Enterprise'
+const DESC =
+  'Claude and OpenAI as enterprise vendors in 2026. Governance surfaces, compliance and audit access, deployment options, model retirement history, and the procurement questions that decide this long before anyone looks at a benchmark.'
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'Claude vs OpenAI for Enterprise',
-  description: 'A practical comparison of Claude and OpenAI for enterprise deployments. Security, compliance, admin controls, instruction following, and what actually matters at scale.',
-  author: { '@type': 'Organization', name: 'AI Codex', url: 'https://www.aicodex.to' },
-  publisher: { '@type': 'Organization', name: 'AI Codex', url: 'https://www.aicodex.to' },
-  url: 'https://www.aicodex.to/compare/claude-vs-openai-for-enterprise',
-  mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://www.aicodex.to/compare/claude-vs-openai-for-enterprise' },
-  speakable: { '@type': 'SpeakableSpecification', cssSelector: ['h1', 'h2'] },
-}
+export const metadata: Metadata = { title: `${TITLE} — AI Codex`, description: DESC }
 
-const breadcrumbLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Compare', item: 'https://www.aicodex.to/compare' },
-    { '@type': 'ListItem', position: 2, name: 'Claude vs OpenAI for Enterprise', item: 'https://www.aicodex.to/compare/claude-vs-openai-for-enterprise' },
-  ],
-}
-
-const ACCENT_CLAUDE = '#D4845A'
-const ACCENT_OAI = '#5B8DD9'
-
-interface CompareRow {
-  dimension: string
-  claude: { verdict: 'better' | 'similar' | 'worse'; text: string }
-  openai: { verdict: 'better' | 'similar' | 'worse'; text: string }
-}
-
-const ROWS: CompareRow[] = [
+const SPECS: SpecRow[] = [
   {
-    dimension: 'Data privacy defaults',
-    claude: { verdict: 'better', text: 'Claude Enterprise does not use your data to train models by default. Clear data-processing agreements, SOC 2 Type II certified, HIPAA BAA available for eligible plans.' },
-    openai: { verdict: 'similar', text: 'Enterprise tier also does not train on your data by default. SOC 2 Type II certified. HIPAA compliance available. Azure OpenAI adds additional compliance certifications if that matters to your legal team.' },
+    label: 'Pre-inference controls',
+    claude: 'Inference hooks, in beta since August 5, 2026: every governed prompt across claude.ai, Cowork, and Claude Code is sent to a security server your organization runs, which returns allow or deny before the model sees it. Shadow mode, rollout percentage, and role exclusions for staged deployment.',
+    other: 'Controls are largely policy and post-hoc. Confirm directly whether an equivalent inline deny exists for your contract — do not assume parity here.',
   },
   {
-    dimension: 'Context window',
-    claude: { verdict: 'better', text: '200k token context window. Handles a full contract stack, a large codebase, or a year of support tickets in a single request without chunking.' },
-    openai: { verdict: 'worse', text: 'GPT-4o has a 128k context window. Functional for most tasks, but you will hit limits on very large document analysis or long agentic workflows.' },
+    label: 'Audit and compliance access',
+    claude: 'Compliance API returns activity, chats, files, and projects, and since August 11, 2026 the transcripts of Cowork and Claude Code sessions running on employees’ own machines. Plus 28 enterprise security integrations shipped May 2026.',
+    other: 'Enterprise logging and admin APIs through OpenAI and Azure. Map the specific endpoints against your retention and eDiscovery requirements rather than reading the feature names as equivalent.',
   },
   {
-    dimension: 'Instruction following',
-    claude: { verdict: 'better', text: 'Reliably follows complex multi-step system prompts at production scale. Behavioral consistency — what you get in testing tends to hold in production across thousands of requests.' },
-    openai: { verdict: 'similar', text: 'GPT-4o follows instructions well. Some teams report more drift on very long or contradictory system prompts compared to Claude. GPT-4 Turbo is more consistent than earlier versions.' },
+    label: 'Identity and access management',
+    claude: 'SCIM-synced user groups, role-based feature access, custom roles, per-user spend caps, and managed Claude Code policies. Admin API user management went GA on August 19, 2026.',
+    other: 'SSO, SCIM, and workspace roles available. Mature, and the surfaces differ in detail.',
   },
   {
-    dimension: 'Safety defaults & refusals',
-    claude: { verdict: 'worse', text: 'More conservative refusal defaults out of the box. Enterprise teams sometimes need to tune system prompts to stop Claude over-refusing on legitimate edge cases — legal, medical, security queries.' },
-    openai: { verdict: 'better', text: 'Slightly more permissive defaults for enterprise use cases. Less likely to refuse ambiguous requests. Some security teams prefer this; others see it as a risk to manage.' },
+    label: 'Data residency',
+    claude: '`inference_geo` pins where inference runs, per agent or per session, at a 1.1x pricing multiplier. Available on Claude 4.6 and later.',
+    other: 'Azure data-zone deployments provide regional guarantees. Strong if you are already an Azure customer.',
   },
   {
-    dimension: 'Admin controls',
-    claude: { verdict: 'similar', text: 'Workspaces, admin console, user management, usage analytics. SSO via SAML 2.0 on Enterprise. Audit logs available. Domain verification for user provisioning.' },
-    openai: { verdict: 'better', text: 'ChatGPT Enterprise and Azure OpenAI both have mature enterprise admin tooling. Azure adds enterprise-grade RBAC, private networking, and Microsoft 365 integration that many IT teams already know.' },
+    label: 'Where you can run it',
+    claude: 'Claude API, Amazon Bedrock, Claude Platform on AWS, Google Cloud Vertex AI, Microsoft Foundry — including on Microsoft’s and Google’s own clouds. Self-hosted sandboxes for Managed Agents and self-hosted environments for Claude Code.',
+    other: 'OpenAI API and Azure, with Codex on AWS Bedrock. Fewer independent surfaces, deeper Azure integration.',
   },
   {
-    dimension: 'On-premise / private cloud',
-    claude: { verdict: 'worse', text: 'No on-premise option. Cloud-only (AWS-hosted). If your compliance requirements mandate that data never leaves your own infrastructure, Claude is not yet an option.' },
-    openai: { verdict: 'better', text: 'Azure OpenAI Service provides a private deployment within your Azure tenant. Data stays in your cloud environment. This is the decisive factor for heavily regulated industries (finance, defence, healthcare).' },
+    label: 'Third-party code you did not write',
+    claude: 'Skill and plugin security scanning on Enterprise since August 6, 2026 — uploads and edits are checked for malicious content before they can run.',
+    other: 'Review the equivalent control for whatever plugin or GPT surface you intend to enable. This is a real attack path and a common gap.',
   },
   {
-    dimension: 'Model tiers for cost control',
-    claude: { verdict: 'better', text: 'Haiku (fast, cheap) → Sonnet (balanced) → Opus (highest quality). Haiku is among the most cost-efficient models available for high-volume enterprise use cases like classification, extraction, and routing.' },
-    openai: { verdict: 'similar', text: 'GPT-4o mini → GPT-4o. GPT-4o mini is competitive on cost for simpler tasks. The gap between tiers is well-documented, which helps with model routing decisions.' },
+    label: 'Cost governance',
+    claude: 'Analytics dashboard by group and user, Analytics API for Datadog and CloudZero, model defaults and entitlements, spend threshold alerts, and hard per-session budgets on Managed Agents.',
+    other: 'Usage dashboards and org-level limits. Verify whether a hard cap exists or only an alert — the difference matters at the end of a quarter.',
   },
   {
-    dimension: 'Agentic workflows',
-    claude: { verdict: 'better', text: 'Strong at multi-step agentic tasks. Claude tends to stay closer to instructions in long agent loops rather than drifting or improvising. The Agent SDK and MCP support are production-ready.' },
-    openai: { verdict: 'similar', text: 'Assistants API, function calling, and Code Interpreter are mature. OpenAI has shipped more agentic product features earlier. If you want a fully managed agent layer rather than building your own, OpenAI has more options.' },
+    label: 'Model retirement track record',
+    claude: 'Sonnet 4 and Opus 4 retired June 2026, Opus 4.1 August 2026. Fable 5 and Mythos 5 were suspended worldwide for nineteen days in June by government order. Deprecations are published in advance.',
+    other: 'o3 scheduled for ChatGPT retirement August 2026; GPT-4.5 retired June 2026. Both vendors retire models on roughly annual cycles.',
   },
   {
-    dimension: 'Ecosystem & integrations',
-    claude: { verdict: 'worse', text: 'Smaller ecosystem than OpenAI. Fewer third-party tools default to Claude. If your workflow depends on a specific integration (Zendesk, Salesforce native), check whether it supports Claude specifically.' },
-    openai: { verdict: 'better', text: 'OpenAI has the largest third-party ecosystem. Most SaaS AI add-ons and integration platforms defaulted to OpenAI first. If ecosystem breadth and plug-and-play integrations matter, OpenAI has the advantage.' },
-  },
-  {
-    dimension: 'Enterprise pricing',
-    claude: { verdict: 'similar', text: 'Enterprise pricing is negotiated. Anthropic does not publish volume tiers publicly. Token-level API pricing is competitive. Teams report Claude is often cost-advantaged at high volume due to Haiku.' },
-    openai: { verdict: 'similar', text: 'Enterprise pricing is also negotiated. Azure OpenAI pricing is published and predictable, which legal and finance teams prefer. Provisioned throughput options give guaranteed capacity.' },
+    label: 'Corporate stability',
+    claude: 'Series H, $65B raised at a $965B valuation (May 2026), confidential IPO filing.',
+    other: 'Confidential S-1 filed June 2026.',
   },
 ]
 
-function VerdictBadge({ verdict }: { verdict: 'better' | 'similar' | 'worse' }) {
-  const map = {
-    better: { label: 'Stronger', bg: 'rgba(76,175,125,0.12)', color: '#4CAF7D' },
-    similar: { label: 'Similar', bg: 'var(--bg-subtle)', color: 'var(--text-muted)' },
-    worse: { label: 'Weaker', bg: 'rgba(91,141,217,0.1)', color: '#5B8DD9' },
-  }
-  const v = map[verdict]
+export default function Page() {
+  const ld = comparisonLd(TITLE, DESC, 'claude-vs-openai-for-enterprise')
   return (
-    <span style={{
-      display: 'inline-block',
-      fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 500,
-      padding: '2px 8px', borderRadius: '4px',
-      background: v.bg, color: v.color,
-    }}>
-      {v.label}
-    </span>
-  )
-}
-
-export default function CompareEnterpriseCardPage() {
-  return (
-    <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(48px, 8vw, 96px) 0 var(--section-y)' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
-
-      {/* Breadcrumb */}
-      <div style={{ marginBottom: '32px', display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <Link href="/compare" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', textDecoration: 'none' }}>
-          Compare
-        </Link>
-        <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>→</span>
-        <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)' }}>
-          Claude vs OpenAI for Enterprise
-        </span>
-      </div>
-
-      {/* Header */}
-      <div style={{ marginBottom: '56px' }}>
-        <p className="eyebrow" style={{ marginBottom: '16px' }}>Comparison</p>
-        <h1 style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'var(--text-2xl)',
-          fontWeight: 600,
-          color: 'var(--text-primary)',
-          lineHeight: 1.15,
-          letterSpacing: '-0.02em',
-          marginBottom: '20px',
-          maxWidth: '28ch',
-        }}>
-          Claude vs OpenAI for Enterprise
-        </h1>
-        <p style={{
-          fontFamily: 'var(--font-sans)',
-          fontSize: 'var(--text-base)',
-          color: 'var(--text-muted)',
-          maxWidth: '56ch',
-          lineHeight: 1.65,
-        }}>
-          A practical breakdown of what separates these two platforms when you're deploying at scale, negotiating a contract, or presenting a vendor recommendation to your security team.
+    <ComparisonPage
+      title={TITLE}
+      otherLabel="OpenAI"
+      otherAccent="#5B8DD9"
+      pricingVendors={['Anthropic', 'OpenAI']}
+      intro={[
+        <p key="1">
+          Enterprise selection is not a model comparison. By the time a deal reaches procurement,
+          both vendors clear the capability bar and the decision turns on governance surfaces,
+          auditability, deployment flexibility, and what happens when something goes wrong.
+        </p>,
+        <p key="2">
+          Anthropic has shipped harder on the governance surface through 2026 — inference hooks,
+          Compliance API coverage down to local sessions, plugin scanning, jurisdiction pinning. If
+          your security review has previously rejected an AI vendor, that is the material difference.
+          If your organisation runs on Azure, OpenAI’s integration depth may still outweigh it.
+        </p>,
+      ]}
+      specs={SPECS}
+      claims={[
+        {
+          source: 'Verifiable from release notes and vendor documentation',
+          items: [
+            'Anthropic shipped inference hooks (Aug 5), plugin security scanning (Aug 6), Compliance API coverage of local Cowork and Claude Code sessions (Aug 11), and Admin API user management GA (Aug 19) — all in 2026.',
+            'Claude models run on the Claude API, Bedrock, Claude Platform on AWS, Google Cloud, and Microsoft Foundry.',
+            'Three Claude models were retired or suspended in the first half of 2026.',
+          ],
+          caveat: 'The shipping cadence is a fact; whether it maps to your specific control requirements is not. Take this list to your security team as a starting question set, not as an answer.',
+        },
+        {
+          source: 'What we deliberately are not claiming',
+          items: [
+            'That one vendor is more secure than the other.',
+            'That either vendor’s certifications satisfy your regulator.',
+            'That published controls behave as documented under your configuration.',
+          ],
+          caveat: 'Nobody outside your organisation can make those claims responsibly, and any comparison page that does is guessing. Security posture is a function of your configuration and your threat model, not the vendor’s feature list.',
+        },
+      ]}
+      evalHeading="The procurement questions that actually settle it"
+      evalIntro={
+        <p>
+          Run these before any technical evaluation. Two of them have ended vendor selections at
+          organisations we have worked with, and both were answerable in week one rather than
+          month four.
         </p>
-      </div>
-
-      {/* TL;DR */}
-      <div style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px',
-        marginBottom: '56px',
-      }} className="compare-tldr-grid">
-        <div style={{
-          padding: '24px',
-          borderRadius: '10px',
-          border: `2px solid ${ACCENT_CLAUDE}30`,
-          background: `${ACCENT_CLAUDE}06`,
-        }}>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: ACCENT_CLAUDE, marginBottom: '10px' }}>
-            Claude — Best for
-          </p>
-          <ul style={{ margin: 0, padding: '0 0 0 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {[
-              'Document-heavy workflows (large context window)',
-              'Agentic tasks that need consistent instruction following',
-              'High-volume use cases where Haiku cuts cost dramatically',
-              'Teams that want strong safety defaults without custom tuning',
-            ].map(item => (
-              <li key={item} style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div style={{
-          padding: '24px',
-          borderRadius: '10px',
-          border: `2px solid ${ACCENT_OAI}30`,
-          background: `${ACCENT_OAI}06`,
-        }}>
-          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: ACCENT_OAI, marginBottom: '10px' }}>
-            OpenAI — Best for
-          </p>
-          <ul style={{ margin: 0, padding: '0 0 0 16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {[
-              'Private cloud / on-premise via Azure OpenAI',
-              'Teams already in the Microsoft ecosystem',
-              'Maximum third-party integration breadth',
-              'Regulated industries requiring data sovereignty guarantees',
-            ].map(item => (
-              <li key={item} style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Comparison table */}
-      <div style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '24px' }}>
-          Dimension-by-dimension breakdown
-        </h2>
-
-        {/* Table header */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: '200px 1fr 1fr', gap: '0',
-          borderRadius: '10px 10px 0 0',
-          background: 'var(--bg-subtle)',
-          border: '1px solid var(--border-base)',
-          borderBottom: 'none',
-        }} className="compare-header">
-          <div style={{ padding: '12px 16px' }}>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>Dimension</span>
-          </div>
-          <div style={{ padding: '12px 16px', borderLeft: '1px solid var(--border-muted)' }}>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 700, color: ACCENT_CLAUDE }}>Claude</span>
-          </div>
-          <div style={{ padding: '12px 16px', borderLeft: '1px solid var(--border-muted)' }}>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 700, color: ACCENT_OAI }}>OpenAI</span>
-          </div>
-        </div>
-
-        {ROWS.map((row, i) => (
-          <div
-            key={row.dimension}
-            style={{
-              display: 'grid', gridTemplateColumns: '200px 1fr 1fr',
-              border: '1px solid var(--border-base)',
-              borderTop: 'none',
-              borderRadius: i === ROWS.length - 1 ? '0 0 10px 10px' : '0',
-              background: i % 2 === 0 ? 'var(--bg-surface)' : 'transparent',
-            }}
-            className="compare-row"
-          >
-            <div style={{ padding: '16px', display: 'flex', alignItems: 'flex-start' }}>
-              <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                {row.dimension}
-              </span>
-            </div>
-            <div style={{ padding: '16px', borderLeft: '1px solid var(--border-muted)' }}>
-              <VerdictBadge verdict={row.claude.verdict} />
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '6px 0 0' }}>
-                {row.claude.text}
-              </p>
-            </div>
-            <div style={{ padding: '16px', borderLeft: '1px solid var(--border-muted)' }}>
-              <VerdictBadge verdict={row.openai.verdict} />
-              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.55, margin: '6px 0 0' }}>
-                {row.openai.text}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* The deciding factor */}
-      <div style={{
-        padding: '32px',
-        borderRadius: '12px',
-        border: '1px solid var(--border-base)',
-        background: 'var(--bg-surface)',
-        marginBottom: '24px',
-      }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-xl)', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '16px' }}>
-          The deciding factor
-        </h2>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
-          <strong>If your IT or legal team requires data to stay in your own cloud infrastructure, OpenAI via Azure wins — full stop.</strong> Azure OpenAI gives you a private deployment in your Azure tenant, and no amount of Claude&apos;s other advantages changes that if it&apos;s a hard compliance requirement.
+      }
+      evalSteps={[
+        { bold: 'Can you block a prompt before the model sees it?', rest: 'If your DLP requirements need inline prevention rather than after-the-fact detection, ask both vendors this directly and get the answer in writing. It is the sharpest current differentiator.' },
+        { bold: 'Can you retrieve a transcript of a session that ran on an employee’s laptop?', rest: 'Local sessions are the blind spot in most AI audit stories. Ask specifically about desktop and CLI sessions, not just the web app.' },
+        { bold: 'What is the hard spend cap, and who can raise it?', rest: 'An alert is not a cap. Establish whether an unattended agent can run up an unbounded bill and what stops it.' },
+        { bold: 'Where does inference physically run, and can you pin it?', rest: 'Get the mechanism and the price multiplier, not a general assurance about regions.' },
+        { bold: 'What is the deprecation notice period, contractually?', rest: 'Both vendors retire models roughly annually. The question is not whether it will happen but how much warning you get and what your migration path costs. This belongs in the contract, not in a blog post.' },
+        { bold: 'Run one real workload end to end, with security in the room.', rest: 'Not a demo. A workload with your actual data, your actual permissions, and the people who will have to sign off watching it. Most objections surface in the first hour of this and never in a slide deck.' },
+      ]}
+      evalFooter={
+        <p>
+          <Link href="/articles/getting-it-approval-for-claude" style={{ color: 'var(--accent)' }}>Getting IT approval</Link> covers
+          the internal path, <Link href="/articles/claude-compliance-api" style={{ color: 'var(--accent)' }}>the Compliance API</Link> covers
+          the audit surface in detail, and <Link href="/articles/when-your-ai-model-disappears" style={{ color: 'var(--accent)' }}>when your model disappears</Link> covers
+          the deprecation risk you are underwriting either way.
         </p>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '16px' }}>
-          For everyone else: Claude tends to be the stronger default for document-heavy, policy-bound, and agentic enterprise use cases. The 200k context window is a genuine advantage. Instruction-following consistency at scale reduces the &quot;it worked in testing, not in production&quot; problems that plague enterprise AI rollouts. And Haiku makes high-volume use cases significantly cheaper to operate.
-        </p>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'var(--text-base)', color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '0' }}>
-          The places where OpenAI wins outside of Azure: ecosystem breadth (more plug-and-play integrations), slightly more permissive defaults for edge-case queries, and more mature managed agent tooling if you want Assistants API rather than building your own orchestration layer.
-        </p>
-      </div>
-
-      {/* What the comparison misses */}
-      <div style={{
-        padding: '24px',
-        borderRadius: '10px',
-        border: '1px solid var(--border-muted)',
-        background: 'var(--bg-subtle)',
-        marginBottom: '40px',
-      }}>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px' }}>
-          What this comparison misses
-        </p>
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.65, margin: 0 }}>
-          Both platforms update their models, pricing, and enterprise features faster than any comparison page can track. Benchmark scores shift with each model release. Enterprise contract terms — data residency, BAA scope, SLA guarantees — are negotiated and may differ from published defaults. Verify specifics with your account team before making a procurement decision.
-        </p>
-      </div>
-
-      {/* Related */}
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-        <Link href="/articles/choosing-the-right-claude-model" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent)', textDecoration: 'none', padding: '8px 16px', border: '1px solid var(--accent)', borderRadius: '6px' }}>
-          Choosing the right Claude model →
-        </Link>
-        <Link href="/articles/claude-admin-zero-to-one" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent)', textDecoration: 'none', padding: '8px 16px', border: '1px solid var(--accent)', borderRadius: '6px' }}>
-          Claude admin setup guide →
-        </Link>
-        <Link href="/compare" style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text-muted)', textDecoration: 'none', padding: '8px 16px', border: '1px solid var(--border-base)', borderRadius: '6px' }}>
-          All comparisons
-        </Link>
-      </div>
-
-    </div>
+      }
+      bottomLine={[
+        {
+          heading: 'Pick Claude',
+          body: <>if governance is the binding constraint. Inference hooks, Compliance API coverage reaching local sessions, plugin scanning, jurisdiction pinning, and hard session budgets are a more developed control surface than the alternative in 2026, and the five deployment surfaces mean you are not underwriting a single cloud relationship.</>,
+        },
+        {
+          heading: 'Pick OpenAI',
+          body: <>if your organisation is deeply committed to Azure and the integration depth is worth more than the control-surface difference, or if your teams are already productive on the tooling and the switching cost is real. Familiarity is a legitimate procurement input, not a weak one.</>,
+        },
+        {
+          heading: 'Plan for both, whichever you sign',
+          body: <>Both vendors retired models in 2026, and one had two models suspended worldwide by government order for nineteen days. An abstraction layer over your model calls is a few days of work and it is the cheapest insurance available against a decision neither you nor your vendor controls.</>,
+        },
+      ]}
+      related={[
+        { href: '/articles/claude-compliance-api', label: 'The Compliance API', sub: 'What it retrieves and what it does not.' },
+        { href: '/articles/claude-inference-hooks', label: 'Inference hooks', sub: 'Blocking a prompt before the model sees it.' },
+        { href: '/articles/getting-it-approval-for-claude', label: 'Getting IT approval', sub: 'The internal path through a security review.' },
+        { href: '/compare/claude-vs-gemini-for-business', label: 'Claude vs Gemini', sub: 'The third vendor in most enterprise shortlists.' },
+      ]}
+      {...ld}
+    />
   )
 }

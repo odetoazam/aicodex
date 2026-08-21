@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AcademyTrackCallout from '@/components/AcademyTrackCallout'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -186,6 +187,8 @@ export default function LearnInternalAIStackPage() {
           border-left-color: ${ACCENT} !important;
         }
       `}</style>
+      <AcademyTrackCallout trackId="fde" />
+
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AcademyTrackCallout from '@/components/AcademyTrackCallout'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -168,6 +169,7 @@ export default function LearnAIForYourCompanyPage() {
           </Link>
         </div>
       </div>
+      <AcademyTrackCallout trackId="admin" />
     </div>
   )
 }

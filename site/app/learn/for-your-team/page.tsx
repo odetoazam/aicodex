@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AcademyTrackCallout from '@/components/AcademyTrackCallout'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -189,6 +190,7 @@ export default function LearnForYourTeamPage() {
           .step-time { align-self: flex-start; }
         }
       `}</style>
+      <AcademyTrackCallout trackId="admin" />
     </div>
   )
 }

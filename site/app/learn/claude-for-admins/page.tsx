@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AcademyTrackCallout from '@/components/AcademyTrackCallout'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -28,6 +29,15 @@ const STAGES = [
         number: 2,
         concept: 'Claude Plans',
         conceptSlug: 'claude-plans',
+        articleSlug: 'claude-team-vs-enterprise-for-it',
+        label: 'Team or Enterprise? The decision most admins get wrong',
+        takeaway: 'The line between the two plans is not seat count — it is SSO, audit access, and the compliance surface. What each tier actually gives you, what the upgrade is really for, and the four questions that settle it before you talk to sales.',
+        time: '8 min',
+      },
+      {
+        number: 3,
+        concept: 'Claude Plans',
+        conceptSlug: 'claude-plans',
         articleSlug: 'choosing-your-claude-plan',
         label: 'Which plan is right for your company?',
         takeaway: 'Free, Pro, Team, and Enterprise — what you actually get at each tier, the decision framework for choosing, and why most admins get this wrong in one of two predictable directions.',
@@ -41,7 +51,7 @@ const STAGES = [
     subtitle: 'Initial deployment',
     steps: [
       {
-        number: 3,
+        number: 4,
         concept: 'Admin Setup',
         conceptSlug: 'claude-plans',
         articleSlug: 'claude-admin-setup',
@@ -50,7 +60,7 @@ const STAGES = [
         time: '7 min',
       },
       {
-        number: 4,
+        number: 5,
         concept: 'AI Usage Policy',
         conceptSlug: 'claude-plans',
         articleSlug: 'ai-usage-policy-for-teams',
@@ -59,8 +69,26 @@ const STAGES = [
         time: '6 min',
       },
       {
-        number: 5,
+        number: 6,
         concept: 'Claude Projects',
+        conceptSlug: 'claude-projects',
+        articleSlug: 'claude-admin-controls-2026',
+        label: 'The admin controls you actually have',
+        takeaway: 'User groups with SCIM sync, role-based feature access, per-user spend caps, managed Claude Code policies, and the Compliance API. What shipped, what it is for, and which of these your first security review will ask about.',
+        time: '7 min',
+      },
+      {
+        number: 7,
+        concept: 'Enterprise Search',
+        conceptSlug: 'enterprise-search',
+        articleSlug: 'ask-your-org-guide',
+        label: 'Ask Your Org — org-wide search across your tools',
+        takeaway: 'A pre-configured Project that searches Slack, Microsoft 365, Google Workspace, and custom MCP connectors and returns one cited answer. Permission-aware. Requires owner setup, which is you.',
+        time: '7 min',
+      },
+      {
+        number: 8,
+        concept: 'Projects',
         conceptSlug: 'claude-projects',
         articleSlug: 'claude-projects-org-structure',
         label: 'Structuring Projects across the whole org',
@@ -68,7 +96,7 @@ const STAGES = [
         time: '7 min',
       },
       {
-        number: 6,
+        number: 9,
         concept: 'Skills',
         conceptSlug: 'skill',
         articleSlug: 'skills-setup-guide',
@@ -77,7 +105,7 @@ const STAGES = [
         time: '5 min',
       },
       {
-        number: 7,
+        number: 10,
         concept: 'Connectors',
         conceptSlug: 'connector',
         articleSlug: 'connectors-best-practices',
@@ -86,7 +114,7 @@ const STAGES = [
         time: '5 min',
       },
       {
-        number: 8,
+        number: 11,
         concept: 'Tokens',
         conceptSlug: 'token',
         articleSlug: 'minimising-token-usage',
@@ -102,7 +130,7 @@ const STAGES = [
     subtitle: 'Ongoing management',
     steps: [
       {
-        number: 9,
+        number: 12,
         concept: 'Evals',
         conceptSlug: 'evals',
         articleSlug: 'evals-role',
@@ -111,7 +139,7 @@ const STAGES = [
         time: '5 min',
       },
       {
-        number: 10,
+        number: 13,
         concept: 'Cowork & Dispatch',
         conceptSlug: 'claude-cowork',
         articleSlug: 'cowork-dispatch-guide',
@@ -120,7 +148,7 @@ const STAGES = [
         time: '6 min',
       },
       {
-        number: 11,
+        number: 14,
         concept: 'Managed Agents',
         conceptSlug: 'managed-agents',
         articleSlug: 'managed-agents-for-your-org',
@@ -129,7 +157,7 @@ const STAGES = [
         time: '5 min',
       },
       {
-        number: 12,
+        number: 15,
         concept: 'Ongoing Maintenance',
         conceptSlug: 'claude-plans',
         articleSlug: 'claude-admin-ongoing-maintenance',
@@ -353,6 +381,7 @@ export default function LearnClaudeForAdminsPage() {
           </Link>
         </div>
       </div>
+      <AcademyTrackCallout trackId="admin" />
     </div>
   )
 }

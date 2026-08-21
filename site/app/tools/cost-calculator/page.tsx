@@ -1,41 +1,13 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { CALCULATOR_MODELS, VERIFIED } from '@/lib/models'
 import type { Metadata } from 'next'
 
-// Claude API pricing (per million tokens) — verify at anthropic.com/pricing
-const MODELS = [
-  {
-    id: 'claude-opus-4',
-    name: 'Claude Opus 4',
-    description: 'Most capable — complex reasoning, research, advanced coding',
-    inputPPM: 15,
-    outputPPM: 75,
-    cacheWritePPM: 18.75,
-    cacheReadPPM: 1.5,
-    color: '#7B8FD4',
-  },
-  {
-    id: 'claude-sonnet-4',
-    name: 'Claude Sonnet 4',
-    description: 'Best balance — production workloads, most common choice',
-    inputPPM: 3,
-    outputPPM: 15,
-    cacheWritePPM: 3.75,
-    cacheReadPPM: 0.3,
-    color: '#D4845A',
-  },
-  {
-    id: 'claude-haiku-4',
-    name: 'Claude Haiku 4',
-    description: 'Fastest & cheapest — high-volume, latency-sensitive tasks',
-    inputPPM: 0.8,
-    outputPPM: 4,
-    cacheWritePPM: 1,
-    cacheReadPPM: 0.08,
-    color: '#4CAF7D',
-  },
-]
+// Model pricing comes from lib/models.ts — the single source of truth shared with
+// every /compare page. Update it there, not here, so the calculator and the
+// comparison tables can never disagree.
+const MODELS = CALCULATOR_MODELS
 
 function fmt(n: number): string {
   if (n < 0.01) return `$${n.toFixed(4)}`
@@ -46,7 +18,7 @@ function fmt(n: number): string {
 }
 
 export default function CostCalculatorPage() {
-  const [modelId, setModelId] = useState('claude-sonnet-4')
+  const [modelId, setModelId] = useState('claude-sonnet-5')
   const [messagesPerDay, setMessagesPerDay] = useState(1000)
   const [avgInputTokens, setAvgInputTokens] = useState(500)
   const [avgOutputTokens, setAvgOutputTokens] = useState(300)
@@ -400,7 +372,9 @@ export default function CostCalculatorPage() {
 
           {/* Assumption note */}
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-            Estimates only. Verify current pricing at anthropic.com/pricing. Does not include Anthropic API platform fees or enterprise pricing.
+            Estimates only. Prices last verified {VERIFIED} against{' '}
+            <a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>Anthropic&rsquo;s official pricing page</a>.{' '}
+            Excludes enterprise agreements, the Batch API discount (50% off both directions), long-context or data-residency multipliers, and server-side tool charges such as web search at $10 per 1,000 searches.
           </p>
         </div>
       </div>

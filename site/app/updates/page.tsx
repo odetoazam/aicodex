@@ -16,6 +16,52 @@ type Update = {
 
 const UPDATES: Update[] = [
   {
+    date: 'August 2026',
+    tag: 'New',
+    title: 'Claude Academy course map, and a clearer position',
+    description: 'Anthropic launched Claude Academy on August 20 — 355 free courses, tutorials, and role use cases. It is the best product training any AI company has published, so we mapped the whole catalog rather than competing with it: which six resources matter for each of five roles, in what order, and what each track leaves you to solve alone. 175 of our articles now carry a link to the official course covering the same ground. The position this settles: Anthropic teaches the product, we cover the job around it — what breaks in month six, what it costs, who has to approve it, and when to pick something else.',
+    links: [
+      { label: 'The course map →', href: '/academy' },
+      { label: 'Which courses are worth your time →', href: '/articles/claude-academy-guide' },
+      { label: "What Academy doesn't teach you →", href: '/articles/what-claude-academy-doesnt-teach' },
+      { label: 'The four certifications →', href: '/articles/claude-certifications-guide' },
+    ],
+  },
+  {
+    date: 'August 2026',
+    tag: 'Feature',
+    title: 'Every comparison page rebuilt, and re-dated',
+    description: 'The comparison pages were still benchmarking GPT-4o and Gemini 1.5. All seven are rebuilt against current models with a visible "last verified" date, and the format changed as well as the facts: verified specs first, then pricing with the caveats that make sticker prices misleading, then performance claims with attribution to whoever published them, then a method to settle the question on your own workload. Where the honest answer is "these are close and the model is not your problem," the page now says so. Three findings worth the click: OpenAI meters long context at roughly double its headline rate while Anthropic does not, Gemini Flash pricing doubles on January 1 2027, and Sonnet 5 is now only 2x Haiku 4.5 rather than 3.75x — which inverts the standard advice about dropping a tier.',
+    links: [
+      { label: 'Claude vs GPT-5.6 for coding →', href: '/compare/claude-vs-gpt5-coding' },
+      { label: 'Haiku vs Sonnet — the gap closed →', href: '/compare/claude-haiku-vs-sonnet' },
+      { label: 'Claude vs OpenAI for enterprise →', href: '/compare/claude-vs-openai-for-enterprise' },
+      { label: 'All comparisons →', href: '/compare' },
+    ],
+  },
+  {
+    date: 'August 2026',
+    tag: 'Fix',
+    title: 'Corrections: cancelled price rise, stale cost calculator',
+    description: 'Two things we had wrong. Our Claude Sonnet 5 article told readers to budget for a 50% price increase on September 1 — Anthropic cancelled that increase on August 10 and made $2/$10 permanent. Corrected. The cost calculator was also still priced against Claude Opus 4 at $15/$75, overstating current flagship cost by three times; it now runs on Opus 5, Sonnet 5, Haiku 4.5, and Fable 5, reading from the same pricing file as the comparison pages so the two can never disagree. We audited all 254 articles for stale model references while we were in there.',
+    links: [
+      { label: 'Claude Sonnet 5 →', href: '/articles/claude-sonnet-5' },
+      { label: 'Cost calculator →', href: '/tools/cost-calculator' },
+    ],
+  },
+  {
+    date: 'August 2026',
+    tag: 'Content',
+    title: 'Anthropic shipping through August',
+    description: 'Computer use went generally available alongside a new browser use toolset, with the Skills API and Files API GA the same day. Auto mode became the default in Claude Code on Pro, Max, and Team plans. Managed Agents gained hard per-session spend budgets, an advisor model the primary thread can consult mid-turn, inference geo pinning, and Skills loaded straight from a GitHub repository. Eleven new timeline events covering August 6 to 20, including Gemini 3.7 Flash.',
+    links: [
+      { label: 'Computer use and browser use GA →', href: '/articles/computer-use-browser-use-ga' },
+      { label: 'Claude Code in August →', href: '/articles/claude-code-august-2026-updates' },
+      { label: 'Managed Agents guardrails →', href: '/articles/managed-agents-budgets-guardrails' },
+      { label: 'Timeline →', href: '/timeline' },
+    ],
+  },
+  {
     date: 'April 2026',
     tag: 'Content',
     title: 'Production deployment guides (batch 22)',

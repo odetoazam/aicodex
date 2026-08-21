@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AcademyTrackCallout from '@/components/AcademyTrackCallout'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -9,6 +10,15 @@ export const metadata: Metadata = {
 const STEPS = [
   {
     number: 1,
+    concept: 'What is safe to share',
+    conceptSlug: 'ai-governance',
+    articleSlug: 'what-to-share-with-claude',
+    label: 'Before anything else: what can you actually paste in?',
+    takeaway: 'The question that quietly stops most people using Claude for real work. What Anthropic does with your data, the vendor test to apply, and the three-line rule to write for your own job so you stop re-deciding every time.',
+    time: '7 min',
+  },
+  {
+    number: 2,
     concept: 'Prompting that works',
     conceptSlug: 'prompt-engineering',
     articleSlug: 'how-to-write-a-good-prompt',
@@ -17,7 +27,7 @@ const STEPS = [
     time: '6 min',
   },
   {
-    number: 2,
+    number: 3,
     concept: 'What Claude is actually good at',
     conceptSlug: 'ai-augmentation',
     articleSlug: 'what-ai-cant-do',
@@ -26,7 +36,7 @@ const STEPS = [
     time: '5 min',
   },
   {
-    number: 3,
+    number: 4,
     concept: 'The mistakes everyone makes first',
     conceptSlug: 'hallucination',
     articleSlug: 'claude-common-mistakes',
@@ -35,7 +45,7 @@ const STEPS = [
     time: '5 min',
   },
   {
-    number: 4,
+    number: 5,
     concept: 'Writing and editing with Claude',
     conceptSlug: 'ai-augmentation',
     articleSlug: 'claude-for-writing-and-editing',
@@ -44,7 +54,7 @@ const STEPS = [
     time: '5 min',
   },
   {
-    number: 5,
+    number: 6,
     concept: 'Research with Claude',
     conceptSlug: 'rag',
     articleSlug: 'using-claude-for-research',
@@ -53,7 +63,7 @@ const STEPS = [
     time: '5 min',
   },
   {
-    number: 6,
+    number: 7,
     concept: 'Projects: Claude that remembers your context',
     conceptSlug: 'claude-projects',
     articleSlug: 'claude-projects-role',
@@ -62,7 +72,7 @@ const STEPS = [
     time: '5 min',
   },
   {
-    number: 7,
+    number: 8,
     concept: 'When to trust the output — and when not to',
     conceptSlug: 'hallucination',
     articleSlug: 'hallucination-failure',
@@ -71,13 +81,22 @@ const STEPS = [
     time: '5 min',
   },
   {
-    number: 8,
+    number: 9,
     concept: 'When something goes wrong: fix the prompt',
     conceptSlug: 'prompt-engineering',
     articleSlug: 'claude-prompt-debugging',
     label: 'Diagnose before you give up',
     takeaway: 'When Claude misses, most people either accept the bad output or give up. The third option: a quick diagnostic process that tells you exactly what to change.',
     time: '5 min',
+  },
+  {
+    number: 10,
+    concept: 'A workflow that sticks',
+    conceptSlug: 'workflow-automation',
+    articleSlug: 'managing-email-with-claude',
+    label: 'Turn it into a habit on something you do daily',
+    takeaway: 'Capability without a recurring workflow fades in about three weeks. Email is the one everybody has — the triage and drafting pattern that survives contact with a real inbox.',
+    time: '7 min',
   },
 ]
 
@@ -223,6 +242,7 @@ export default function LearnClaudePage() {
           .step-time { align-self: flex-start; }
         }
       `}</style>
+      <AcademyTrackCallout trackId="individual" />
     </div>
   )
 }

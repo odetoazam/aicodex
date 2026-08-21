@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AcademyTrackCallout from '@/components/AcademyTrackCallout'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -295,6 +296,8 @@ function StepCard({ step, isLast }: { step: Step; isLast: boolean }) {
           background: var(--bg-subtle) !important;
         }
       `}</style>
+      <AcademyTrackCallout trackId="developer" />
+
     </div>
   )
 }

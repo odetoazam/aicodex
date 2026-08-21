@@ -3,64 +3,64 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'AI Model Comparisons — AI Codex',
-  description: 'Practical comparisons of AI models for real use cases. Claude vs GPT-4, Haiku vs Sonnet, and more — written for operators making real decisions.',
+  description: 'Vendor-neutral model comparisons, verified against current pricing and specs. Claude vs GPT-5.6, Claude vs Gemini, Haiku vs Sonnet — with every performance claim attributed to whoever made it.',
 }
 
 const COMPARISONS = [
   {
-    href: '/compare/claude-vs-gpt4-customer-support',
-    title: 'Claude vs GPT-4 for Customer Support',
-    description: 'Tone, refusal rates, policy adherence, and what actually matters when customers are frustrated. The practical comparison for support automation teams.',
-    tags: ['Claude', 'GPT-4', 'Customer Support'],
-    readTime: '6 min',
+    href: '/compare/claude-vs-gpt5-customer-support',
+    title: 'Claude vs GPT-5.6 for Customer Support',
+    description: 'Cost at real ticket volume, escalation behaviour, and citation guarantees — plus the shadow-mode test to run before either model answers a live customer.',
+    tags: ['Claude', 'GPT-5.6', 'Customer Support'],
+    readTime: '8 min',
     accent: '#D4845A',
   },
   {
-    href: '/compare/claude-vs-gpt4-coding',
-    title: 'Claude vs GPT-4 for Coding',
-    description: 'From one-shot code generation to complex refactors. What developers actually experience when building with each model in production.',
-    tags: ['Claude', 'GPT-4', 'Coding'],
-    readTime: '5 min',
+    href: '/compare/claude-vs-gpt5-coding',
+    title: 'Claude vs GPT-5.6 for Coding',
+    description: 'Verified specs and pricing, where the published benchmarks disagree and who published them, and how to settle it on your own repository in an afternoon.',
+    tags: ['Claude', 'GPT-5.6', 'Coding'],
+    readTime: '8 min',
     accent: '#7B8FD4',
   },
   {
-    href: '/compare/claude-vs-gpt4-writing',
-    title: 'Claude vs GPT-4 for Writing',
-    description: 'Brand voice, long-form prose, editing, and style-guide compliance. Where AI-sounding output is a failure mode and which model avoids it better.',
-    tags: ['Claude', 'GPT-4', 'Writing'],
-    readTime: '6 min',
+    href: '/compare/claude-vs-gpt5-writing',
+    title: 'Claude vs GPT-5.6 for Writing',
+    description: 'Output ceilings, long-document context, and encoding a house style — plus the blind test that settles a question no benchmark can answer.',
+    tags: ['Claude', 'GPT-5.6', 'Writing'],
+    readTime: '8 min',
     accent: '#D4C45A',
   },
   {
-    href: '/compare/claude-vs-gpt4-document-analysis',
-    title: 'Claude vs GPT-4 for Document Analysis',
-    description: 'Contracts, financial reports, multi-document synthesis. Where context window size, retrieval coherence, and hallucination rates actually matter.',
-    tags: ['Claude', 'GPT-4', 'Documents'],
-    readTime: '6 min',
+    href: '/compare/claude-vs-gpt5-document-analysis',
+    title: 'Claude vs GPT-5.6 for Document Analysis',
+    description: 'The one category where the two are not close, and the reason is billing rather than intelligence. Long-context economics, citations, and the “not present” test.',
+    tags: ['Claude', 'GPT-5.6', 'Documents'],
+    readTime: '8 min',
     accent: '#4CAF7D',
   },
   {
     href: '/compare/claude-haiku-vs-sonnet',
-    title: 'Claude Haiku vs Sonnet — When to use which',
-    description: 'The cost-quality tradeoff in practice. A decision framework for the most common model choice developers face, with task-by-task guidance.',
+    title: 'Claude Haiku vs Sonnet — the gap closed in 2026',
+    description: 'Sonnet 5 is now 2x Haiku 4.5, down from 3.75x a year ago. That, plus an 11-month cutoff gap and 5x the context, has inverted the standard advice.',
     tags: ['Haiku', 'Sonnet', 'Model Selection'],
-    readTime: '5 min',
+    readTime: '8 min',
     accent: '#9B7BD4',
   },
   {
     href: '/compare/claude-vs-openai-for-enterprise',
     title: 'Claude vs OpenAI for Enterprise',
-    description: 'The comparison decision-makers search for. Data privacy, admin controls, context window, compliance, and what actually determines the vendor decision at scale.',
+    description: 'Governance surfaces, audit access down to local sessions, deployment flexibility, and the six procurement questions that settle this before any benchmark does.',
     tags: ['Claude', 'OpenAI', 'Enterprise'],
-    readTime: '7 min',
+    readTime: '9 min',
     accent: '#4CAF7D',
   },
   {
     href: '/compare/claude-vs-gemini-for-business',
     title: 'Claude vs Gemini for Business',
-    description: "Anthropic's Claude vs Google Gemini — instruction following, writing quality, Workspace integration, video understanding, and which one wins for your team's actual use case.",
+    description: 'The Workspace integration question, and the Gemini Flash price increase on January 1, 2027 that almost nobody is modelling into a twelve-month TCO.',
     tags: ['Claude', 'Gemini', 'Google'],
-    readTime: '7 min',
+    readTime: '9 min',
     accent: '#4285F4',
   },
 ]
@@ -169,7 +169,7 @@ export default function ComparePage() {
           How we write these comparisons
         </p>
         <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text-muted)', lineHeight: 1.65, margin: 0 }}>
-          These are written from real implementation experience. Where Claude has a genuine weakness, we say so. Where GPT-4 is better for a specific task, we say so too. The goal is to help you pick the right tool.
+          Every page here leads with verified specs and pricing, attributes each performance claim to whoever published it, and gives you a method to settle the question on your own workload. Where Claude is weaker, we say so. Where the honest answer is “these are close and the model is not your problem,” we say that too.
         </p>
       </div>
 
