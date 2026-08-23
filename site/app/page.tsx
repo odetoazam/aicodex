@@ -16,26 +16,30 @@ export const metadata: Metadata = {
 }
 
 // Four primary intent buckets — each may have 1 or 2 specific paths
+// Primary intent buckets, ordered by measured traffic (PostHog, Aug 2026).
+// IT/admin is ~36% of arrivals and leads. The FDE card sits last: it is a real
+// but narrow niche (~3% of traffic, concentrated in one article), and the
+// Agent Manager half has not found search demand.
 const PRIMARY_PATHS = [
   {
-    id: 'fde-operator',
-    title: 'Deploying AI for companies?',
-    description: 'Two roles are defining enterprise AI right now. AI Agent Managers run AI systems inside their own company. Forward Deployed Engineers build them for clients. Full learning paths for both.',
-    accent: '#4A7BA7',
-    accentBg: 'rgba(74,123,167,0.07)',
+    id: 'team',
+    title: 'Rolling out Claude at your company?',
+    description: 'Team or Enterprise, what the admin controls actually give you, the usage policy, and getting it through security. The decisions in the order you have to make them.',
+    accent: '#4CAF7D',
+    accentBg: 'rgba(76,175,125,0.07)',
     paths: [
-      { cta: 'AI Agent Manager path', href: '/learn/agent-manager', meta: '8 guides · ~67 min' },
-      { cta: 'FDE career path', href: '/learn/forward-deployed-engineer', meta: '11 guides · ~111 min' },
+      { cta: 'IT / admin path', href: '/learn/claude-for-admins', meta: '15 steps · ~91 min' },
+      { cta: 'Team lead path', href: '/learn/for-your-team', meta: '8 steps · ~41 min' },
     ],
   },
   {
     id: 'individual',
     title: 'Using Claude at work?',
-    description: 'Better prompting, workflows that stick, and the habits that separate people who get consistent value from Claude from those who don\'t.',
+    description: 'What is safe to paste in, better prompting, and the workflows that survive past week three — the habits that separate people who get consistent value from Claude from those who don\'t.',
     accent: '#D4845A',
     accentBg: 'rgba(212,132,90,0.07)',
     paths: [
-      { cta: 'Start the path', href: '/learn/claude', meta: '10 steps · ~54 min' },
+      { cta: 'Start the path', href: '/learn/claude', meta: '10 steps · ~55 min' },
     ],
   },
   {
@@ -50,14 +54,14 @@ const PRIMARY_PATHS = [
     ],
   },
   {
-    id: 'team',
-    title: 'Rolling out to your team?',
-    description: 'Whether you\'re a team lead doing a department rollout or IT handling org-wide deployment — structured paths with the decisions you need to make, in order.',
-    accent: '#4CAF7D',
-    accentBg: 'rgba(76,175,125,0.07)',
+    id: 'fde',
+    title: 'Going into companies to build it?',
+    description: 'Forward Deployed Engineers get hired to build AI systems inside someone else\'s company. What the role is, the portfolio that gets you interviews, and the three parts of an engagement nobody writes down.',
+    accent: '#4A7BA7',
+    accentBg: 'rgba(74,123,167,0.07)',
     paths: [
-      { cta: 'Team lead path', href: '/learn/for-your-team', meta: '8 steps · ~41 min' },
-      { cta: 'IT / admin path', href: '/learn/claude-for-admins', meta: '15 steps · ~85 min' },
+      { cta: 'FDE career path', href: '/learn/forward-deployed-engineer', meta: '11 guides · ~111 min' },
+      { cta: 'Running AI inside your own company', href: '/learn/agent-manager', meta: '8 guides · ~67 min' },
     ],
   },
 ]

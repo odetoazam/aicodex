@@ -20,7 +20,7 @@ const TRACKS = [
     accentBg: 'rgba(212,132,90,0.1)',
     icon: '◈',
     steps: 10,
-    time: '~54 min',
+    time: '~55 min',
   },
   {
     href: '/learn/for-your-team',
@@ -42,7 +42,7 @@ const TRACKS = [
     accentBg: 'rgba(91,141,217,0.1)',
     icon: '◫',
     steps: 15,
-    time: '~85 min',
+    time: '~91 min',
   },
 ]
 

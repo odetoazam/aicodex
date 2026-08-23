@@ -351,9 +351,9 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   ],
 
   'claude-team-vs-enterprise-for-it': [
-    { slug: 'getting-it-approval-for-claude', reason: 'The comparison answers "what are we actually buying?" — this covers how to frame the approval conversation.' },
-    { slug: 'claude-admin-controls-2026', reason: 'Drill down into the specific admin controls that differ between plans — user groups, spend caps, Compliance API.' },
-    { slug: 'building-a-business-case-for-claude', reason: 'The upstream proposal that brought IT into the conversation in the first place — know how Priya framed it.' },
+    { slug: 'getting-it-approval-for-claude', reason: 'Once you know which plan you need, this is the path through a security review that has already said no once.' },
+    { slug: 'claude-admin-controls-2026', reason: 'What the Enterprise tier actually gives you in controls — the concrete answer to whether the upgrade is worth it.' },
+    { slug: 'agent-operator-cost-control', reason: 'The part nobody budgets for: what the bill does by month six, and the levers that bring it back down.' },
   ],
 
   'claude-adoption-plateau': [
@@ -407,15 +407,15 @@ export const NEXT_READS: Record<string, NextRead[]> = {
   // ── Feature updates (batch 60–62) ────────────────────────────────────────
 
   'ask-your-org-guide': [
-    { slug: 'claude-admin-controls-2026', reason: 'Ask Your Org is one feature — this covers the full batch of admin controls that shipped alongside it.' },
-    { slug: 'getting-it-approval-for-claude', reason: 'An owner has to set up Ask Your Org. If IT hasn\'t approved Claude yet, this is the conversation to have first.' },
-    { slug: 'setting-up-claude-for-your-team', reason: 'Ask Your Org is the org-wide layer; this covers the project and team setup layer underneath it.' },
+    { slug: 'claude-admin-controls-2026', reason: 'The admin surface underneath it — owner setup and permissions have to be right before this works.' },
+    { slug: 'what-to-share-with-claude', reason: 'The question your team will ask the moment you connect Slack and Drive. Worth answering before they ask.' },
+    { slug: 'how-to-evaluate-your-agents', reason: 'Once it is answering org-wide questions, this is how you find out whether the answers are right.' },
   ],
 
   'claude-admin-controls-2026': [
-    { slug: 'ask-your-org-guide', reason: 'The most visible new feature shipping alongside these controls — how to set up org-wide knowledge search.' },
-    { slug: 'getting-it-approval-for-claude', reason: 'These controls help IT say yes — the approval guide covers how to frame the conversation.' },
-    { slug: 'claude-admin-security-privacy', reason: 'New controls sit on top of existing security settings — worth reviewing both together.' },
+    { slug: 'ask-your-org-guide', reason: 'The flagship feature these controls gate — and the one your leadership has probably already asked about.' },
+    { slug: 'claude-compliance-api', reason: 'The audit layer, including transcripts of sessions running on employees own machines.' },
+    { slug: 'when-agents-break', reason: 'What to do when something you deployed starts producing subtly wrong output and nobody can say why.' },
   ],
 
   'claude-session-economics': [
@@ -706,6 +706,20 @@ export const NEXT_READS: Record<string, NextRead[]> = {
     { slug: 'when-your-ai-model-disappears', reason: 'The deprecation you are handing over responsibility for — three models went in the first half of 2026 alone.' },
     { slug: 'auditing-your-eval-suite', reason: 'The eval set is the artifact that keeps the system honest after you leave. It has to be trustworthy first.' },
     { slug: 'documenting-claude-setup-for-client-handoff', reason: 'The documentation layer underneath the runbook — what to write down about the configuration itself.' },
+  ],
+
+  // ── Top-traffic pages that had no curated next step (added Aug 21, 2026) ──
+
+  'what-to-share-with-claude': [
+    { slug: 'ai-usage-policy-for-teams', reason: 'Once you have decided for yourself, this is how you write it down for everyone else.' },
+    { slug: 'claude-admin-security-privacy', reason: 'The admin-side answer — what your organisation can actually configure and audit.' },
+    { slug: 'how-to-write-a-good-prompt', reason: 'With the safety question settled, this is the skill that changes what you get back.' },
+  ],
+
+  'claude-plus-google-sheets': [
+    { slug: 'claude-for-finance-teams', reason: 'The finance workflows this unlocks once the spreadsheet connection is working.' },
+    { slug: 'claude-everyday-connectors', reason: 'The other connectors worth turning on while you are in there.' },
+    { slug: 'what-to-share-with-claude', reason: 'Spreadsheets are where confidential data usually lives. Worth two minutes before you connect one.' },
   ],
 
 }
