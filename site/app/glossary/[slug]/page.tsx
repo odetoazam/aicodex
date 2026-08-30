@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { CLUSTER_MAP, AUDIENCE_LABELS, ANGLE_LABELS } from '@/lib/clusters'
 import RelatedTermCard from '@/components/RelatedTermCard'
@@ -73,18 +74,9 @@ function AudienceTag({ label }: { label: string }) {
 export default async function TermPage({ params }: { params: { slug: string } }) {
   const term = await getTerm(params.slug)
 
-  if (!term) {
-    return (
-      <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(64px, 10vw, 120px) 0', textAlign: 'center' }}>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-2xl)', color: 'var(--text-primary)', marginBottom: '16px' }}>
-          Term not found
-        </h1>
-        <Link href="/glossary" style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontSize: '15px' }}>
-          ← Back to glossary
-        </Link>
-      </div>
-    )
-  }
+  // See the note in app/articles/[slug]/page.tsx — a real 404, not an HTTP 200
+  // page that says "not found".
+  if (!term) notFound()
 
   const [relatedTerms, termArticles] = await Promise.all([
     getRelatedTerms(term.related_terms),

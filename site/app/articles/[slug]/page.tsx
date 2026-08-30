@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { marked } from 'marked'
 import { CLUSTER_MAP, ANGLE_LABELS } from '@/lib/clusters'
 import { ARTICLE_PATHS } from '@/lib/paths'
@@ -250,18 +251,10 @@ function extractHeadingsAndInjectIds(html: string): { html: string; toc: TocEntr
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const article = await getArticle(params.slug)
 
-  if (!article) {
-    return (
-      <div style={{ width: 'var(--container)', margin: '0 auto', padding: 'clamp(64px, 10vw, 120px) 0', textAlign: 'center' }}>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--text-2xl)', color: 'var(--text-primary)', marginBottom: '16px' }}>
-          Article not found
-        </h1>
-        <Link href="/articles" style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontSize: '15px' }}>
-          ← Back to articles
-        </Link>
-      </div>
-    )
-  }
+  // notFound() so a missing slug returns a real 404. Rendering a "not found"
+  // component inline would return HTTP 200, which search engines index as a
+  // thin duplicate page rather than treating the URL as gone.
+  if (!article) notFound()
 
   // Determine curated next-reads for this article
   const curatedNextReads = NEXT_READS[article.slug] ?? null
